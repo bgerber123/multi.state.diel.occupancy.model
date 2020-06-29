@@ -40,7 +40,7 @@ model.type="Null"
 #The null model assumed the probability of occupancy in state 2,3, and 4 are all the same
 
 #Define the logit-value for the probabilty of occurence in each state (2,3,4)
-
+alpha=1.2
 mat=c(log(3),alpha,alpha,alpha)
 mat=exp(mat)
 
