@@ -257,7 +257,7 @@ save.model$models$Full$samples=data.frame(psi=psi.samples,pDay=pDay.samples,pNig
 
 
 
-save(save.model,file=paste("/data.reduced.3.models",q,sep=""))
+save(save.model,file=paste("data.full.3.models",q,sep=""))
 
 
 
