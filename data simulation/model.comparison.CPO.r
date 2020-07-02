@@ -58,7 +58,7 @@ obs.matrix=save.model$obs.matrix #observed data
     
     n.mcmc=dim(det.matrix)[1]
     
-    #the likelihood is calcaulted for each site i
+    #the likelihood is calculated for each site i
     lik.save=matrix(NA, nrow=dim(obs.matrix)[1],ncol=n.mcmc)
     for(k in 1:dim(lik.save)[1]){
       lik.save[k,]=multi.state.likelihood(psi.matrix,det.matrix,obs.matrix[k,])
