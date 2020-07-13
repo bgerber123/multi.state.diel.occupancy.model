@@ -93,7 +93,7 @@ M1.full.no.covs <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M1.full.no.covs,file="M1.full.no.covs")
+save(M1.full.no.covs,file="M1.full.no.covs.out")
 
 #load("AJB Fosa/M1.full.no.covs")
 
@@ -128,7 +128,7 @@ M2.reduced.no.covs <- coda.samples(model.jags, variable.names=params,
                                    n.iter=ni, 
                                    thin=nt,
                                    progress.bar="text")
-save(M2.reduced.no.covs,file="AJB Fosa/M2.reduced.no.covs")
+save(M2.reduced.no.covs,file="AJB Fosa/M2.reduced.no.covs.out")
 
 #load("AJB Fosa/M2.reduced.no.covs")
 
@@ -160,7 +160,7 @@ M3.null.no.covs <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M3.null.no.covs,file="AJB Fosa/M3.null.no.covs")
+save(M3.null.no.covs,file="AJB Fosa/M3.null.no.covs.out")
 
 #load("AJB Fosa/M3.null.no.covs")
 
@@ -203,7 +203,7 @@ M1.full.covs.1 <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M1.full.covs.1,file="AJB Fosa/M1.full.covs.1")
+save(M1.full.covs.1,file="AJB Fosa/M1.full.covs.1.out")
 
 #plot(M1.full.covs.1,ask=TRUE)
 
@@ -242,7 +242,7 @@ M2.red.covs.1 <- coda.samples(model.jags, variable.names=params,
                                n.iter=ni, 
                                thin=nt,
                                progress.bar="text")
-save(M2.red.covs.1,file="AJB Fosa/M2.red.covs.1")
+save(M2.red.covs.1,file="AJB Fosa/M2.red.covs.1.out")
 
 #plot(M2.red.covs.1,ask=TRUE)
 
@@ -276,7 +276,7 @@ M3.null.covs.1 <- coda.samples(model.jags, variable.names=params,
                               n.iter=ni, 
                               thin=nt,
                               progress.bar="text")
-save(M3.null.covs.1,file="AJB Fosa/M3.null.covs.1")
+save(M3.null.covs.1,file="AJB Fosa/M3.null.covs.1.out")
 
 #plot(M3.null.covs.1,ask=TRUE)
 
@@ -311,7 +311,7 @@ M1.full.covs.2 <- coda.samples(model.jags, variable.names=params,
                                n.iter=ni, 
                                thin=nt,
                                progress.bar="text")
-save(M1.full.covs.2,file="AJB Fosa/M1.full.covs.2")
+save(M1.full.covs.2,file="AJB Fosa/M1.full.covs.2.out")
 
 #plot(M1.full.covs.2,ask=TRUE)
 
@@ -345,7 +345,7 @@ M2.red.covs.2 <- coda.samples(model.jags, variable.names=params,
                                n.iter=ni, 
                                thin=nt,
                                progress.bar="text")
-save(M2.red.covs.2,file="AJB Fosa/M2.red.covs.2")
+save(M2.red.covs.2,file="AJB Fosa/M2.red.covs.2.out")
 
 #plot(M2.red.covs.2,ask=TRUE)
 
@@ -380,7 +380,7 @@ M3.null.covs.2 <- coda.samples(model.jags, variable.names=params,
                               n.iter=ni, 
                               thin=nt,
                               progress.bar="text")
-save(M3.null.covs.2,file="AJB Fosa/M3.null.covs.2")
+save(M3.null.covs.2,file="AJB Fosa/M3.null.covs.2.out")
 
 #plot(M3.null.covs.2,ask=TRUE)
 

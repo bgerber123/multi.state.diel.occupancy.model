@@ -98,7 +98,7 @@ M1.full <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M1.full,file="RNP Fosa/M1.full")
+save(M1.full,file="RNP Fosa/M1.full.out")
 
 #load("RNP Fosa/M1.full")
 
@@ -153,7 +153,7 @@ M2.full <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M2.full,file="RNP Fosa/M2.full")
+save(M2.full,file="RNP Fosa/M2.full.out")
 
 #load("RNP Fosa/M2.full")
 
@@ -201,7 +201,7 @@ M3.red <- coda.samples(model.jags, variable.names=params,
                        n.iter=ni, 
                        thin=nt,
                        progress.bar="text")
-save(M3.red,file="RNP Fosa/M3.red")
+save(M3.red,file="RNP Fosa/M3.red.out")
 
 #load("RNP Fosa/M3.red")
 
@@ -249,7 +249,7 @@ M4.red <- coda.samples(model.jags, variable.names=params,
                        n.iter=ni, 
                        thin=nt,
                        progress.bar="text")
-save(M4.red,file="RNP Fosa/M4.red")
+save(M4.red,file="RNP Fosa/M4.red.out")
 
 #load("RNP Fosa/M4.red)
 
@@ -307,7 +307,7 @@ M5.null <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M5.null,file="RNP Fosa/M5.null")
+save(M5.null,file="RNP Fosa/M5.null.out")
 
 #load("RNP Fosa/M5.null")
 
@@ -359,7 +359,7 @@ M6.null <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M6.null,file="RNP Fosa/M6.null")
+save(M6.null,file="RNP Fosa/M6.null.out")
 
 #load("RNP Fosa/M6.null")
 
@@ -405,7 +405,7 @@ M7.null <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M7.null,file="RNP Fosa/M7.null")
+save(M7.null,file="RNP Fosa/M7.null.out")
 
 #load("RNP Fosa/M7.null")
 
@@ -457,7 +457,7 @@ M8.full.nocovs <- coda.samples(model.jags, variable.names=params,
                                thin=nt,
                                progress.bar="text")
 
-save(M8.full.nocovs,file="RNP Fosa/M8.full.nocovs")
+save(M8.full.nocovs,file="RNP Fosa/M8.full.nocovs.out")
 
 #load("RNP Fosa/M8.full.nocovs")
 
@@ -497,7 +497,7 @@ M9.red.nocovs <- coda.samples(model.jags, variable.names=params,
                               n.iter=ni, 
                               thin=nt,
                               progress.bar="text")
-save(M9.red.nocovs,file="RNP Fosa/M9.red.nocovs")
+save(M9.red.nocovs,file="RNP Fosa/M9.red.nocovs.out")
 
 #load("RNP Fosa/M9.red.nocovs")
 
