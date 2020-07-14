@@ -18,10 +18,10 @@
     
     # Define state vector
     for (s in 1:R){
-      phi[s,1] <- psi[1]
-      phi[s,2] <- psi[2]
-      phi[s,3] <- psi[3]
-      phi[s,4] <- psi[4]
+      prob[s,1] <- psi[1]
+      prob[s,2] <- psi[2]
+      prob[s,3] <- psi[3]
+      prob[s,4] <- psi[4]
     }
     
     # Define observation matrix
@@ -48,7 +48,7 @@
     # State-space likelihood
     # State equation: model of true states (z)
     for (s in 1:R){
-     z[s] ~ dcat(phi[s,])
+     z[s] ~ dcat(prob[s,])
     }
     
     # Observation equation

@@ -155,7 +155,7 @@ M2.full <- coda.samples(model.jags, variable.names=params,
                         progress.bar="text")
 save(M2.full,file="RNP Fosa/M2.full.out")
 
-#load("RNP Fosa/M2.full")
+#load("RNP Fosa/M2.full.out")
 
 #plot(M2.full,ask=TRUE)
 
@@ -168,7 +168,7 @@ fit <- combine.mcmc(M2.full)
 
 #To do model selection with CPO, we need to get site-level occurence and detection
 #probabilities.
-M2.full.CPO=CPO.function(fit,y)
+M2.full.CPO=CPO.function(fit,y,"full")
 CPO.out=t(matrix(c("M2.full",M2.full.CPO)))
 write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
@@ -309,7 +309,7 @@ M5.null <- coda.samples(model.jags, variable.names=params,
                         progress.bar="text")
 save(M5.null,file="RNP Fosa/M5.null.out")
 
-#load("RNP Fosa/M5.null")
+#load("RNP Fosa/M5.null.out")
 
 #plot(M5.null)
 
@@ -361,7 +361,7 @@ M6.null <- coda.samples(model.jags, variable.names=params,
                         progress.bar="text")
 save(M6.null,file="RNP Fosa/M6.null.out")
 
-#load("RNP Fosa/M6.null")
+#load("RNP Fosa/M6.null.out")
 
 #plot(M6.null)
 
@@ -430,7 +430,7 @@ write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALS
 #MODEL 8- FULL model - no covs
 K=3 # number of alpha parameters
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K)
+data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
 
 # Initial values- max state in hierachy as starting value
 zst=rep(4,dim(y)[1])
@@ -459,7 +459,7 @@ M8.full.nocovs <- coda.samples(model.jags, variable.names=params,
 
 save(M8.full.nocovs,file="RNP Fosa/M8.full.nocovs.out")
 
-#load("RNP Fosa/M8.full.nocovs")
+#load("RNP Fosa/M8.full.nocovs.out")
 
 #plot(M8.full.nocovs,ask=TRUE)
 
@@ -477,12 +477,11 @@ write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALS
 ########################################
 ########################################
 #MODEL 9- Reduced model - no covs
-K=2 # number of alpha parameters
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K)
+data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
 
 # Parameters monitored
-params <- c("alpha", "pNight", "pDay","prob")
+params <- c("psiNight","psiDay", "pNight", "pDay","prob")
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
                          data = data.input,
@@ -499,7 +498,7 @@ M9.red.nocovs <- coda.samples(model.jags, variable.names=params,
                               progress.bar="text")
 save(M9.red.nocovs,file="RNP Fosa/M9.red.nocovs.out")
 
-#load("RNP Fosa/M9.red.nocovs")
+#load("RNP Fosa/M9.red.nocovs.out")
 
 #plot(M9.red.nocovs,ask=TRUE)
 

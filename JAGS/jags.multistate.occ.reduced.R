@@ -10,10 +10,10 @@
     
     # Define state vector
     for (s in 1:R){
-    phi[s,1] <-  (1-psiDay)*(1-psiNight)                  #1-(psiDay-psiDay*psiNight)-(psiNight-psiDay*psiNight)-psiDay*psiNight 
-    phi[s,2] <-  psiDay*(1-psiNight)  
-    phi[s,3] <-  psiNight*(1-psiDay)
-    phi[s,4] <-  psiDay*psiNight
+    prob[s,1] <-  (1-psiDay)*(1-psiNight)                  #1-(psiDay-psiDay*psiNight)-(psiNight-psiDay*psiNight)-psiDay*psiNight 
+    prob[s,2] <-  psiDay*(1-psiNight)  
+    prob[s,3] <-  psiNight*(1-psiDay)
+    prob[s,4] <-  psiDay*psiNight
     }
     
     # Define observation matrix
@@ -40,7 +40,7 @@
     # State-space likelihood
     # State equation: model of true states (z)
     for (s in 1:R){
-    z[s] ~ dcat(phi[s,])
+    z[s] ~ dcat(prob[s,])
     }
     
     # Observation equation

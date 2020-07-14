@@ -69,11 +69,9 @@ ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000
 
 ### Fit Model1 - Full model - No Covariates ############################# 
 
-# number of alpha parameters
-K=3 
 
 #jags data input
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K)
+data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
 
 # Parameters monitored
 params <- c("alpha", "pNight", "pDay","pND","prob")
@@ -111,9 +109,8 @@ write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALS
 
 ### Model2 -Reduced model - No Covariates ############################# 
 
-K=2 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K)
-params <- c("alpha", "pNight", "pDay","prob")  
+data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
+params <- c("psiNight","psiDay","pNight", "pDay","prob")  
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
                          data = data.input,
