@@ -69,9 +69,11 @@ ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000
 
 ### Fit Model1 - Full model - No Covariates ############################# 
 
+# number of alpha parameters
+K=3 
 
 #jags data input
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
+data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K)
 
 # Parameters monitored
 params <- c("alpha", "pNight", "pDay","pND","prob")
@@ -109,8 +111,9 @@ write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALS
 
 ### Model2 -Reduced model - No Covariates ############################# 
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
-params <- c("psiNight","psiDay","pNight", "pDay","prob")  
+K=2 
+data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K)
+params <- c("alpha", "pNight", "pDay","prob")  
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
                          data = data.input,
@@ -159,7 +162,7 @@ M3.null.no.covs <- coda.samples(model.jags, variable.names=params,
                                 progress.bar="text")
 save(M3.null.no.covs,file="AJB Fosa/M3.null.no.covs.out")
 
-#load("AJB Fosa/M3.null.no.covs")
+#load("AJB Fosa/M3.null.no.covs.out")
 
 gelman.diag(M3.null.no.covs,multivariate = FALSE)
 
