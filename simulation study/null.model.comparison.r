@@ -62,7 +62,7 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   
   ################################################################
   #Fit the Null Model 
-  params <- c("psi","pdet","alpha","beta","psi.overall")
+  params <- c("psi","prob","pdet","alpha","beta","psi.overall")
   #Prepare the model and data
   model.null <- jags.model(
     file="JAGS/jags.multistate.occ.null.R", 
@@ -139,27 +139,9 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   #add the likelihood point estimate -which corresponds to the highest posterior value
   abline(v=unmarked.est.det@estimate,lwd=3,col=3,lty=3)
 
-
   ####################
   #plot the logit coeficient for detection
   hist(beta.samples) #posterior samples
   #add the likelihood point estimate-which corresponds to the highest posterior value
   abline(v=m1@estimates@estimates$det@estimates,lwd=3,col=2)
   
-  
-######################    
-#Compare to RMark (MARK.exe needs to be installed)
-  # library(RMark)
-  # mark_input=as.data.frame(apply(y1,1,paste,collapse=""))
-  # mark_input <- data.frame(lapply(mark_input, as.character), stringsAsFactors=FALSE)
-  # colnames(mark_input)= c("ch")
-  # 
-  # psi.dot=list(formula=~1,link="logit")
-  # p.dot=list(formula=~1,link="logit")
-  # #Run model through RMARK
-  # mrk= mark(mark_input,model="Occupancy",profile.int = TRUE,model.parameters=list(p=p.dot, Psi=psi.dot),adjust=FALSE,invisible=TRUE,silent=TRUE,delete=TRUE, 
-  #               retry=5,brief=FALSE, output=FALSE)
-  # 
-  # mrk$results$beta
-  # mrk$results$real
-  # 

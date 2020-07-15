@@ -437,7 +437,7 @@ zst=rep(4,dim(y)[1])
 inits <- function(){list(z = zst)}
 
 # Parameters monitored
-params <- c("alpha", "pNight", "pDay","pND","prob") 
+params <- c("alpha", "pNight","pDay","pND","prob") 
 
 # MCMC settings
 ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000

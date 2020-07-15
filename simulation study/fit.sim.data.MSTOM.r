@@ -99,11 +99,10 @@ for(q in 1:n.sim){
   pdet.samples=model.null.fit$pdet[,,1]
 
 #We need to derive state occupancy and detection probs
-
-psiDay=psi.samples
-psiNight=psi.samples
-psiND=psi.samples
-psi0=1-psiDay-psiNight-psiND
+  psiDay=psi.samples
+  psiNight=psi.samples
+  psiND=psi.samples
+  psi0=1-psiDay-psiNight-psiND
 
 #hist(psi.overall)
 

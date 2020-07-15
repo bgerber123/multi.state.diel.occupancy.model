@@ -8,6 +8,11 @@
       phi[s,2] <- exp(alpha)
       phi[s,3] <- exp(alpha)
       phi[s,4] <- exp(alpha)
+      #Save the site-level occupancy probabilties      
+      prob[s,1] <- phi[s,1]/sum(phi[s,])
+      prob[s,2] <- phi[s,2]/sum(phi[s,])
+      prob[s,3] <- phi[s,3]/sum(phi[s,])
+      prob[s,4] <- phi[s,4]/sum(phi[s,])
     }
     # Define observation matrix
     # Order of indices: true state, time, observed state
@@ -43,7 +48,7 @@
    #The prob of occupancy derived for site 1 in state 2.   
    psi<-phi[1,2]/sum(phi[1,])
    #Overall occurence is the sum of states 2,3, and 4. Here, fixed for site 1
-   psi.overall <- phi[1,2]/sum(phi[1,])+phi[1,3]/sum(phi[1,])+phi[1,4]/sum(phi[1,])
+   psi.overall <- prob[1,2]+prob[1,3]+prob[1,4]
    #The probability of detection is equal to the sum of detection in state 2,3, and 4.
    #These estimates come from the beta parameter. Here, I have fixed this to be occasion 1 (t=1).
    pdet <- p[4,1,2]/sum(p[4,1,])+p[4,1,3]/sum(p[4,1,])+p[4,1,4]/sum(p[4,1,])
