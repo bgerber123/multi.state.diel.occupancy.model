@@ -4,7 +4,7 @@
     beta ~ dlogis(0,1)
  #Define state vector for each s site
     for (s in 1:R){
-      phi[s,1] <- log(3)
+      phi[s,1] <- 3
       phi[s,2] <- exp(alpha)
       phi[s,3] <- exp(alpha)
       phi[s,4] <- exp(alpha)
@@ -24,7 +24,7 @@
     p[3,t,2] <- 0
     p[3,t,3] <- exp(beta)
     p[3,t,4] <- 0
-    p[4,t,1] <- log(3)
+    p[4,t,1] <- 3
     p[4,t,2] <- exp(beta)
     p[4,t,3] <- exp(beta)
     p[4,t,4] <- exp(beta)

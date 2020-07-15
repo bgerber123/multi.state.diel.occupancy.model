@@ -96,15 +96,6 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   psiND=psi.samples
   psi0=1-psiDay-psiNight-psiND
   #psi.overall=psiDay+psiNight+psiND
-  
-  #plot the overall occupancy 
-  hist(psi.overall)
-  #add lines for the posterior mean and true overall occupancy
-  abline(v=mean(psi.overall),lwd=3,col=1)
-  abline(v=overall.occu.true,lwd=3,col=2)
-  
-  hist(pdet.samples)
-  abline(v=pdet.truth, lwd=3, col=2)
 
 #Estimate likelihood based overall occurence without states  
 #We need to remove the state designations in the data
@@ -125,6 +116,11 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   unmarked.est.det=backTransform(m1, "det")
   
   #add the mle estimate
+  #plot the overall occupancy 
+  hist(psi.overall)
+  #add lines for the posterior mean and true overall occupancy
+  abline(v=mean(psi.overall),lwd=3,col=1)
+  abline(v=overall.occu.true,lwd=3,col=2)
   abline(v=unmarked.est.psi@estimate,lwd=3,col=3,lty=3)
   #Note that the MLE corresponds to the highest posterior value 
 
@@ -138,9 +134,11 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   #plot the detection probability
   hist(pdet.samples) #posterior samples
   #add the true probability of detection
-  abline(v=pdet.truth,lwd=3,col=1)
+  abline(v=mean(pdet.samples),lwd=3,col=1)
+  abline(v=pdet.truth,lwd=3,col=2)
   #add the likelihood point estimate -which corresponds to the highest posterior value
-  abline(v=unmarked.est.det@estimate,lwd=3,col=2)
+  abline(v=unmarked.est.det@estimate,lwd=3,col=3,lty=3)
+
 
   ####################
   #plot the logit coeficient for detection
