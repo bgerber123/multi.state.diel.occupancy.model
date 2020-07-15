@@ -50,7 +50,11 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   obs.matrix=sim.data$obs.matrix[[q]] #observed data
   
   #Bundle data for jags
-  data.list <- list(y = obs.matrix, R = dim(obs.matrix)[1], T = dim(obs.matrix)[2])
+  data.list <- list(
+    y = obs.matrix, 
+    R = dim(obs.matrix)[1],
+    T = dim(obs.matrix)[2]
+  )
   
   #Initial values
   zst=rep(4,dim(data.list$y)[1])
@@ -60,20 +64,24 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   #Fit the Null Model 
   params <- c("psi","pdet","alpha","beta","psi.overall")
   #Prepare the model and data
-  model.null <- jags.model(file="JAGS/jags.multistate.occ.null.R", 
-                           data = data.list,
-                           inits=inits,
-                           n.chains = nc,
-                           n.adapt=adapt)
+  model.null <- jags.model(
+    file="JAGS/jags.multistate.occ.null.R", 
+    data = data.list,
+    inits=inits,
+    n.chains = nc,
+    n.adapt=adapt
+  )
   
   #Do a burn in period
   update(model.null,n.iter=nb,progress.bar="none")
   
   #Fit the model  
-  model.null.fit <- jags.samples(model.null, variable.names=params, 
-                                 n.iter=ni, 
-                                 thin=nt,
-                                 progress.bar="none")
+  model.null.fit <- jags.samples(
+    model.null, variable.names=params, 
+    n.iter=ni, 
+    thin=nt,
+    progress.bar="none"
+  )
   
   #save the parameters
   alpha.samples=model.null.fit$alpha[,,1]
@@ -94,6 +102,9 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   #add lines for the posterior mean and true overall occupancy
   abline(v=mean(psi.overall),lwd=3,col=1)
   abline(v=overall.occu.true,lwd=3,col=2)
+  
+  hist(pdet.samples)
+  abline(v=pdet.truth, lwd=3, col=2)
 
 #Estimate likelihood based overall occurence without states  
 #We need to remove the state designations in the data
