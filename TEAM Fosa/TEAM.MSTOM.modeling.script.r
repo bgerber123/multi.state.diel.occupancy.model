@@ -1,8 +1,7 @@
 ### Setup ############################# 
-#This script makes use of fosa detection non-detection data from the site AJB
-#in northern Madagascar. These data come from Z.J. Farris.
+#This script makes use of fosa detection non-detection data from the Ranomafana
+#in Madagascar. Surveys were part of the TEAM initiative
 #
-#This script will fit the data prepared in the file - AJB.data.script.r
 
 # 4 States:
 # 1: No use
@@ -19,43 +18,20 @@ expit=function(x){exp(x)/(exp(x)+1)}
 library(rjags)
 library(runjags)
 library(coda)
-source("AJB Fosa/multi.state.likelihood.r")
-source("AJB Fosa/CPO.function.r")
+source("TEAM Fosa/multi.state.likelihood.r")
+source("TEAM Fosa/CPO.function.r")
 
 
 ### Data ############################# 
 #load the prepared data file
-load("AJB Fosa/AJB.data")
+load("TEAM Fosa/TEAM.data")
 
 #assign data to objects
-y=as.matrix(AJB.data$data) #detection history
+y=as.matrix(TEAM.data$data) #detection history
 
-#Drop sites with no detection data
-index.site.drop=which(apply(y,1,FUN=function(x){all(is.na(x))}))
-y=y[-index.site.drop,]
-
-#assign covariate data to object
-cov=AJB.data$cov
-cov=cov[-index.site.drop,]
-head(cov)
 
 #Effect Coding Matrix for Survey
-survey.cov=AJB.data$conmat
-
-#Look at correlation among human trap success covariates
-cor(cov,use="complete.obs")
-
-#TS vs mean.TS is irrelevant
-plot(cov$TS,cov$mean.TS)
-
-#compare day and night trap success
-plot(cov$day.TS,cov$night.TS)
-
-hist(cov$day.TS,breaks=20)
-hist(cov$night.TS,breaks=20)
-
-#There is very little variability in human night TS. Only 5 sites have TS >0
-#for all surveys. No reason to include this covariate.
+survey.cov=TEAM.data$conmat
 
 ### Set Modeling ############################# 
 
@@ -64,7 +40,7 @@ zst=rep(4,dim(y)[1])
 inits <- function(){list(z = zst)}
 
 # MCMC settings
-ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000
+ni <- 8000  ;       nt <- 2;    nb <- 1000;    nc <- 3;   adapt=1000
 
 
 ### Fit Model1 - Full model - No Covariates ############################# 
@@ -90,9 +66,9 @@ M1.full.no.covs <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M1.full.no.covs,file="AJB Fosa/M1.full.no.covs.out")
+save(M1.full.no.covs,file="TEAM Fosa/M1.full.no.covs.out")
 
-#load("AJB Fosa/M1.full.no.covs")
+#load("TEAM Fosa/M1.full.no.covs.out")
 
 #plot(M1.full.no.covs,ask=TRUE)
 
