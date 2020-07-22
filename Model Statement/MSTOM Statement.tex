@@ -26,6 +26,10 @@
 \setlength{\parskip}{0em}
 
 \begin{document}
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
 \maketitle
 
 
@@ -92,6 +96,11 @@ To model site-level occurrence according to a single continuous covariates ($\ma
 \psi^2_{i} &=\frac{\phi^2_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
 \psi^3_{i} &=\frac{\phi^3_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
 \psi^4_{i} &=\frac{\phi^4_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}.\\
+\end{align*}
+\end{center}
+
+\begin{center}
+\begin{align*}
 \phi^1_{i} &= 1\\
 \phi^2_{i} &= e^{\alpha_{1}+\alpha_{2}\times x_{i}}\\
 \phi^3_{i} &= e^{\alpha_{3}+\alpha_{4}\times x_{i}}\\
@@ -111,6 +120,11 @@ We could generalize the modeling of state-specific occupancy parameters using se
 \psi^2_{i} &=\frac{\phi^2_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
 \psi^3_{i} &=\frac{\phi^3_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
 \psi^4_{i} &=\frac{\phi^4_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}.\\
+\end{align*}
+\end{center}
+
+\begin{center}
+\begin{align*}
 \phi^1_{i} &= 1\\
 \phi^2_{i} &= e^{\textbf{x}_{i}^{\text{Day}}\boldsymbol{\alpha}^{\text{Day}}}\\
 \phi^3_{i} &= e^{\textbf{x}_{i}^{\text{Night}}\boldsymbol{\alpha}^{\text{Night}}}\\
@@ -120,6 +134,36 @@ We could generalize the modeling of state-specific occupancy parameters using se
 
 A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ This model allows state-specific modeling of occupancy probabilities by any combination of covaraites when specificed using a design matrix, which is common in linear regression modeling. This model is coded for JAGS in the file `jags.multistate.occ.full.site.covs.R'.
 
+\subsubsection{Multinomial-logit Model 2}
+
+We could also model detection parameters by site (\textbf{x}) or survey specific (\textbf{V}) covarariates, such that 
+\begin{center}
+\begin{align*}
+\boldsymbol{q}_{ij} &= \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
+									1 &  q^{2,2}_{ij} & 0 & 0 \\ 
+									1 & 0 & q^{3,3}_{ij} & 0\\
+  								       1 & q^{4,2}_{ij} & q^{4,3}_{ij} & q^{4,4}_{ij}
+  								      \end{bmatrix}\\
+q^{2,2}_{ij} &=e^{\beta^{\text{Day}}_{0} +\beta^{\text{Day}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{3,3}_{ij} &=e^{\beta^{\text{Night}}_{0} +\beta^{\text{Night}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,2}_{ij} &=e^{\beta^{\text{ND2}}_{0} +\beta^{\text{ND2}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,3}_{ij} &=e^{\beta^{\text{ND3}}_{0} +\beta^{\text{ND3}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,4}_{ij} &=e^{\beta^{\text{ND4}}_{0} +\beta^{\text{ND4}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}
+\end{align*}
+\end{center}
+and the probability of detection parameters can be derived as, 
+\begin{center}
+\begin{align*}
+p^{\text{Day}}_{ij} &=\frac{q^{2,2}_{ij}}{1+q^{2,2}_{ij}+0+0}\\
+p^{\text{Night}}_{ij} &=\frac{q^{3,3}_{ij}}{1+0+q^{3,3}_{ij}+0}\\
+p^{\text{ND1}}_{ij} &=\frac{1}{1+q^{4,2}_{ij}+q^{4,3}_{ij}+q^{4,4}_{ij}}\\
+p^{\text{ND2}}_{ij} &=\frac{q^{4,2}_{ij}}{1+q^{4,2}_{ij}+q^{4,3}_{ij}+q^{4,4}_{ij}}\\
+p^{\text{ND3}}_{ij} &=\frac{q^{4,3}_{ij}}{1+q^{4,2}_{ij}+q^{4,3}_{ij}+q^{4,4}_{ij}}\\
+p^{\text{ND4}}_{ij} &=\frac{q^{4,4}_{ij}}{1+q^{4,2}_{ij}+q^{4,3}_{ij}+q^{4,4}_{ij}}.
+\end{align*}
+\end{center}
+
+Diffuse priors for all $\beta$ parameters could be specifed as Logistic(0,1).
 
 \subsection{Reduced MSTOM}
 \subsubsection{Probability Model}
