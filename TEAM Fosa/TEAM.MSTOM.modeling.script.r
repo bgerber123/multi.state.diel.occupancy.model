@@ -84,8 +84,8 @@ write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FA
 
 ### Model2 -Reduced model - No Covariates ############################# 
 
-K=2 
-data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],K=K)
+Q=2 
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q=Q)
 params <- c("pNight", "pDay","PSI")  
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
@@ -117,7 +117,7 @@ write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FA
 
 ### Model3 -Null model - No Covariates ############################# 
 data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
-params <- c("alpha", "p.overall", "PSI","psi.overall") 
+params <- c("alpha","beta", "p.overall", "PSI","psi.overall") 
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.alt.R", 
                          data = data.input,
@@ -153,12 +153,12 @@ dim(survey.cov)
 
 #The X design matrix is the same for all states, but the effects are different
 Xday=Xnight=Xnd=survey.cov
-K.day=dim(Xday)[2] # number of alpha parameters for day state
-K.night=dim(Xnight)[2] # number of alpha parameters for night state
-K.nd=dim(Xnd)[2] # number of alpha parameters for night and day state
+Q.day=dim(Xday)[2] # number of alpha parameters for day state
+Q.night=dim(Xnight)[2] # number of alpha parameters for night state
+Q.nd=dim(Xnd)[2] # number of alpha parameters for night and day state
 
-data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],K.day=K.day,
-                   K.night=K.night,K.nd=K.nd,Xday=Xday,Xnight=Xnight,Xnd=Xnd)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q.day=Q.day,
+                   Q.night=Q.night,Q.nd=Q.nd,Xday=Xday,Xnight=Xnight,Xnd=Xnd)
 
 params <- c("alpha.day","alpha.night","alpha.nd", "pNight", "pDay","pND","PSI")
 
@@ -193,11 +193,11 @@ write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FA
 #The X design matrix is the same for both states
 Xday=Xnight=survey.cov
 
-K.day=ncol(Xday) # number of alpha parameters
-K.night=ncol(Xnight) # number of alpha parameters
+Q.day=ncol(Xday) # number of alpha parameters
+Q.night=ncol(Xnight) # number of alpha parameters
 
-data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],K.day=K.day,
-                   K.night=K.night,Xday=Xday,Xnight=Xnight)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q.day=Q.day,
+                   Q.night=Q.night,Xday=Xday,Xnight=Xnight)
 
 params <- c("alpha.day","alpha.night", "pNight", "pDay","PSI")
 
@@ -228,12 +228,12 @@ write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FA
 
 ### Model3 -Null model - Survey Covariate ############################# 
 X=survey.cov
-K=6 # number of alpha parameters
+Q=6 # number of alpha parameters
 
-data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],K=K,X=X)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q=Q,X=X)
 
 # Parameters monitored
-params <- c("alpha","pdet", "PSI")
+params <- c("alpha","p.overall","psi.overall","psi", "PSI")
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.by.state.R", 
                          data = data.input,
