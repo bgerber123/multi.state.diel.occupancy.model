@@ -4,7 +4,7 @@
     pDay ~ dbeta(1, 1)
     #Define priors for alpha parameters on logit-scale
     for (q in 1:Q.day) {
-    alpha.day[i] ~ dlogis(0,1)
+    alpha.day[q] ~ dlogis(0,1)
     }
     for (q in 1:Q.night) {
     alpha.night[q] ~ dlogis(0,1)
