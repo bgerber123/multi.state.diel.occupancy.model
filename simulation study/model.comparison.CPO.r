@@ -38,9 +38,9 @@ colnames(CPO.save)=c("Null","Reduced","Full")
 #data.reduced.3.models indicates that the data was simulated under the reduced model
 #data.full.3.models indicates that the data was simulated under the full model
 
-load(paste("simulation study/data.null.3.models",q,sep=""))
-#load(paste("simulation study/data.Red.3.models",q,sep=""))
-#load(paste("simulation study/data.full.3.models",q,sep=""))
+#load(paste("simulation study/fit.simdata.Null.",q,".out",sep=""))
+load(paste("simulation study/fit.simdata.Red.",q,".out",sep=""))
+#load(paste("simulation study/fit.simdata.Full.",q,".out",sep=""))
 
 #extract observed data
 obs.matrix=save.model$obs.matrix #observed data
@@ -73,7 +73,7 @@ obs.matrix=save.model$obs.matrix #observed data
     CPO.sites=n.mcmc/(apply(1/lik.save,1,sum))
     length(CPO.sites)
     CPO=(-1)*sum(log(CPO.sites))
-    CPO.save[q,m]=CPO
+    CPO.save[m]=CPO
 }    
     
 ##################################

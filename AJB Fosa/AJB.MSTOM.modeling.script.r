@@ -70,10 +70,10 @@ ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000
 ### Fit Model1 - Full model - No Covariates ############################# 
 
 #jags data input
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
 
 # Parameters monitored
-params <- c("alpha","psi", "pNight", "pDay","pND","prob")
+params <- c("PSI", "pNight", "pDay","pND")
 
 #Fit the model to do adapt phase
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.R", 
@@ -108,9 +108,9 @@ write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALS
 
 ### Model2 -Reduced model - No Covariates ############################# 
 
-K=2 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K)
-params <- c("alpha", "pNight", "pDay","prob")  
+Q=2 
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q = Q)
+params <- c("pNight", "pDay","PSI","psiNight","psiDay")  
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
                          data = data.input,
@@ -136,16 +136,15 @@ gelman.diag(M2.reduced.no.covs,multivariate = FALSE)
 fit <- combine.mcmc(M2.reduced.no.covs)
 
 M2.red.no.covs.CPO=CPO.function(fit,y,"reduced")
-CPO.out=t(matrix(c("M2.red.no.covs.CPO",M2.red.no.covs.CPO)))
+CPO.out=t(matrix(c("M2.red.no.covs",M2.red.no.covs.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model3 -Null model - No Covariates ############################# 
 
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
+params <- c("alpha","beta", "p.overall", "PSI") 
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
-params <- c("alpha", "pdet", "prob") 
-
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.R", 
+model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.alt.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -166,7 +165,7 @@ gelman.diag(M3.null.no.covs,multivariate = FALSE)
 fit <- combine.mcmc(M3.null.no.covs)
 
 M3.null.no.covs.CPO=CPO.function(fit,y,"null")
-CPO.out=t(matrix(c("M3.null.no.covs.CPO",M3.null.no.covs.CPO)))
+CPO.out=t(matrix(c("M3.null.no.covs",M3.null.no.covs.CPO)))
 write.table(CPO.out,file="CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model1 -Full model - Survey Covariate ############################# 
@@ -179,14 +178,14 @@ dim(survey.cov)
 
 #The X design matrix is the same for all states, but the effects are different
 Xday=Xnight=Xnd=survey.cov
-K.day=dim(Xday)[2] # number of alpha parameters for day state
-K.night=dim(Xnight)[2] # number of alpha parameters for night state
-K.nd=dim(Xnd)[2] # number of alpha parameters for night and day state
+Q.day=dim(Xday)[2] # number of alpha parameters for day state
+Q.night=dim(Xnight)[2] # number of alpha parameters for night state
+Q.nd=dim(Xnd)[2] # number of alpha parameters for night and day state
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=K.day,
-                   K.night=K.night,K.nd=K.nd,Xday=Xday,Xnight=Xnight,Xnd=Xnd)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q.day=Q.day,
+                   Q.night=Q.night,Q.nd=Q.nd,Xday=Xday,Xnight=Xnight,Xnd=Xnd)
 
-params <- c("alpha.day","alpha.night","alpha.nd", "pNight", "pDay","pND","prob")
+params <- c("alpha.day","alpha.night","alpha.nd", "pNight", "pDay","pND","PSI")
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.by.state.R", 
                          data = data.input,
@@ -209,7 +208,7 @@ gelman.diag(M1.full.covs.1,multivariate = FALSE)
 fit <- combine.mcmc(M1.full.covs.1)
 
 M1.full.covs.1.CPO=CPO.function(fit,y,"full")
-CPO.out=t(matrix(c("M1.full.covs.1.CPO",M1.full.covs.1.CPO)))
+CPO.out=t(matrix(c("M1.full.covs.1",M1.full.covs.1.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
@@ -219,13 +218,13 @@ write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALS
 #The X design matrix is the same for both states
 Xday=Xnight=survey.cov
 
-K.day=ncol(Xday) # number of alpha parameters
-K.night=ncol(Xnight) # number of alpha parameters
+Q.day=ncol(Xday) # number of alpha parameters
+Q.night=ncol(Xnight) # number of alpha parameters
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=K.day,
-                   K.night=K.night,Xday=Xday,Xnight=Xnight)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q.day=Q.day,
+                   Q.night=Q.night,Xday=Xday,Xnight=Xnight)
 
-params <- c("alpha.day","alpha.night", "pNight", "pDay","prob")
+params <- c("alpha.day","alpha.night", "pNight", "pDay","PSI","psiDay","psiNight")
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.by.state.R", 
                          data = data.input,
@@ -248,18 +247,18 @@ gelman.diag(M2.red.covs.1,multivariate = FALSE)
 fit <- combine.mcmc(M2.red.covs.1)
 
 M2.red.covs.1.CPO=CPO.function(fit,y,"reduced")
-CPO.out=t(matrix(c("M2.red.covs.1.CPO",M2.red.covs.1.CPO)))
+CPO.out=t(matrix(c("M2.red.covs.1",M2.red.covs.1.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
 ### Model3 -Null model - Survey Covariate ############################# 
 X=survey.cov
-K=6 # number of alpha parameters
+Q=6 # number of alpha parameters
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=K,X=X)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q = Q,X=X)
 
 # Parameters monitored
-params <- c("alpha","pdet", "prob")
+params <- c("alpha","beta","p.overall","psi.overall", "PSI")
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.by.state.R", 
                          data = data.input,
@@ -282,7 +281,7 @@ gelman.diag(M3.null.covs.1,multivariate = FALSE)
 fit <- combine.mcmc(M3.null.covs.1)
 
 M3.null.covs.1.CPO=CPO.function(fit,y,"null")
-CPO.out=t(matrix(c("M3.null.covs.1.CPO",M3.null.covs.1.CPO)))
+CPO.out=t(matrix(c("M3.null.covs.1",M3.null.covs.1.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model1 -Full model - Human TS Night/Day Covariate ############################# 
@@ -291,11 +290,11 @@ Xday=model.matrix(~day.TS,data=cov)
 Xnight=model.matrix(~1,data=cov)
 Xnd=model.matrix(~day.TS,data=cov)
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=ncol(Xday),
-                  K.night=ncol(Xnight),K.nd=ncol(Xnd),Xday=Xday,Xnight=Xnight,
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q.day=ncol(Xday),
+                  Q.night=ncol(Xnight),Q.nd=ncol(Xnd),Xday=Xday,Xnight=Xnight,
                   Xnd=Xnd)
 
-params <- c("alpha.day","alpha.night","alpha.nd", "pNight", "pDay","pND","prob")
+params <- c("alpha.day","alpha.night","alpha.nd", "pNight", "pDay","pND","PSI")
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.by.state.R", 
                          data = data.input,
                          inits=inits,
@@ -317,7 +316,7 @@ gelman.diag(M1.full.covs.2,multivariate = FALSE)
 fit <- combine.mcmc(M1.full.covs.2)
 
 M1.full.covs.2.CPO=CPO.function(fit,y,"full")
-CPO.out=t(matrix(c("M1.full.covs.2.CPO",M1.full.covs.2.CPO)))
+CPO.out=t(matrix(c("M1.full.covs.2",M1.full.covs.2.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
@@ -326,10 +325,10 @@ write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALS
 Xday=model.matrix(~day.TS,data=cov)
 Xnight=model.matrix(~1,data=cov)
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=ncol(Xday),
-                   K.night=ncol(Xnight),Xday=Xday,Xnight=Xnight)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q.day=ncol(Xday),
+                   Q.night=ncol(Xnight),Xday=Xday,Xnight=Xnight)
 
-params <- c("alpha.day","alpha.night", "pNight", "pDay","prob")
+params <- c("alpha.day","alpha.night", "pNight", "pDay","PSI")
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.by.state.R", 
                          data = data.input,
                          inits=inits,
@@ -351,7 +350,7 @@ gelman.diag(M2.red.covs.2,multivariate = FALSE)
 fit <- combine.mcmc(M2.red.covs.2)
 
 M2.red.covs.2.CPO=CPO.function(fit,y,"reduced")
-CPO.out=t(matrix(c("M2.red.covs.2.CPO",M2.red.covs.2.CPO)))
+CPO.out=t(matrix(c("M2.red.covs.2",M2.red.covs.2.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
@@ -362,9 +361,9 @@ write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALS
 X=model.matrix(~TS,data=cov)
 
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=ncol(X),X=X)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2], Q=ncol(X),X=X)
 
-params <- c("alpha","pdet","prob")
+params <- c("alpha","beta","p.overall","psi.overall","psi","PSI")
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.by.state.R", 
                          data = data.input,
                          inits=inits,
@@ -386,5 +385,5 @@ gelman.diag(M3.null.covs.2,multivariate = FALSE)
 fit <- combine.mcmc(M3.null.covs.2)
 
 M3.null.covs.2.CPO=CPO.function(fit,y,"null")
-CPO.out=t(matrix(c("M3.null.covs.2.CPO",M3.null.covs.2.CPO)))
+CPO.out=t(matrix(c("M3.null.covs.2",M3.null.covs.2.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)

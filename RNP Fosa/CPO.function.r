@@ -1,4 +1,5 @@
-#Script to calculate CPO from a model
+#Script to calculate CPO from a model. This model can handle site level variation in state
+#occupancy parameters, but assumes no site or survey occasion variaion in detection
 
 CPO.function=function(fit,y,model.type){
   
@@ -9,7 +10,7 @@ CPO.function=function(fit,y,model.type){
   pNight=fit[,which(grepl("pNight",colnames(fit)))]
   
   if(model.type=="null"){
-    pDay=fit[,which(grepl("pdet",colnames(fit)))]
+    pDay=fit[,which(grepl("p.overall",colnames(fit)))]
     pNight=pDay
     
     mat=cbind(log(3),qlogis(pDay),qlogis(pDay),qlogis(pDay))
@@ -54,7 +55,7 @@ CPO.function=function(fit,y,model.type){
   for(k in 1:dim(lik.save)[1]){
     
     site.num=k
-    index.occ=which(apply(as.matrix(colnames(fit)), 1, FUN=function(x){grepl(paste("prob[",site.num,",",sep=""), x, fixed = TRUE)}))
+    index.occ=which(apply(as.matrix(colnames(fit)), 1, FUN=function(x){grepl(paste("PSI[",site.num,",",sep=""), x, fixed = TRUE)}))
     
     #For site q in order of states by 1,2,3,4
     

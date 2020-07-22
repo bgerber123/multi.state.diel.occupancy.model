@@ -15,7 +15,7 @@
 #4: Night and Day
 
 
-#Below, we will fit three multi-state temporal occurence models, in the following order to the loaded 
+#Below, we will fit three multi-state temporal occurrence models, in the following order to the loaded 
 #simulated data: 
 #1) Null
 #2) Reduced
@@ -29,15 +29,13 @@
   library(jagsUI)
   library(rjags)
 
-#Set which data to load
-load.data="Null"
-
-if(load.data=="Full"){load("simulation study/sim.data.multistate.full") }
-if(load.data=="Red"){load("simulation study/sim.data.multistate.reduced") }
-if(load.data=="Null"){load("simulation study/sim.data.multistate.null") }
-
+  #Set which data to load "Full", "Red", or "Null
+  load.data="Red"
   
-  
+  if(load.data=="Full"){load("simulation study/sim.full.data") }
+  if(load.data=="Red"){load("simulation study/sim.reduced.data") }
+  if(load.data=="Null"){load("simulation study/sim.null.data") }
+
   # MCMC settings
   ni <- 10000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
 
@@ -48,7 +46,7 @@ if(load.data=="Null"){load("simulation study/sim.data.multistate.null") }
 ########################################
 ########################################
 #Start for loop
-for(q in 1:n.sim){
+for(q in 1:n.sim){ #
 
 #the first saved list object will be the data
   save.model=vector("list",2)
@@ -63,7 +61,7 @@ for(q in 1:n.sim){
 
 
 #Bundle data for jags
-  data.list <- list(y = obs.matrix, R = dim(obs.matrix)[1], T = dim(obs.matrix)[2])
+  data.list <- list(y = obs.matrix, N = dim(obs.matrix)[1], K = dim(obs.matrix)[2])
 
 #Initial values
   zst=rep(4,dim(data.list$y)[1])
@@ -71,9 +69,10 @@ for(q in 1:n.sim){
 
 ################################################################
 #Fit the Null Model 
-  params <- c("psi","pdet","alpha","beta","psi.overall")
+params <- c("psi","p.overall","alpha","beta","psi.overall")
+
 #Prepare the model and data
-  model.null <- jags.model(file="JAGS/jags.multistate.occ.null.R", 
+  model.null <- jags.model(file="JAGS/jags.multistate.occ.null.alt.R", 
                          data = data.list,
                          inits=inits,
                          n.chains = nc,
@@ -96,7 +95,7 @@ for(q in 1:n.sim){
   beta.samples=model.null.fit$beta[,,1]
   psi.overall=model.null.fit$psi.overall[,,1]
   psi.samples=model.null.fit$psi[,,1]
-  pdet.samples=model.null.fit$pdet[,,1]
+  pdet.samples=model.null.fit$p.overall[,,1]
 
 #We need to derive state occupancy and detection probs
   psiDay=psi.samples
@@ -149,7 +148,7 @@ save.model$models$Null$samples=data.frame(pDet=pdet.samples,
 # Parameters monitored
 # Note that psi and p parameters are marginal probabilities
 # We need to derive the state-occurence probabilities
-params <- c("psiDay","psiNight", "pNight", "pDay") 
+params <- c("psiDay","psiNight", "pNight", "pDay")
 
 model.reduced <- jags.model(file="JAGS/jags.multistate.occ.reduced.R",
                             data = data.list,
@@ -259,7 +258,7 @@ save.model$models$Full$samples=data.frame(psi=psi.samples,pDay=pDay.samples,pNig
 
 
 
-save(save.model,file=paste("simulation study/data.",load.data,".3.models",q,sep=""))
+save(save.model,file=paste("simulation study/fit.simdata.",load.data,".",q,".out",sep=""))
 
 
 

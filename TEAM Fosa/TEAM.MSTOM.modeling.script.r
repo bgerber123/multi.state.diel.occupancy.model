@@ -40,7 +40,7 @@ zst=rep(4,dim(y)[1])
 inits <- function(){list(z = zst)}
 
 # MCMC settings
-ni <- 8000  ;       nt <- 2;    nb <- 1000;    nc <- 3;   adapt=1000
+ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000
 
 
 ### Fit Model1 - Full model - No Covariates ############################# 
@@ -80,7 +80,7 @@ fit <- combine.mcmc(M1.full.no.covs)
 
 M1.full.no.covs.CPO=CPO.function(fit,y,"full")
 CPO.out=t(matrix(c("M1.full.no.covs",M1.full.no.covs.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model2 -Reduced model - No Covariates ############################# 
 
@@ -101,9 +101,9 @@ M2.reduced.no.covs <- coda.samples(model.jags, variable.names=params,
                                    n.iter=ni, 
                                    thin=nt,
                                    progress.bar="text")
-save(M2.reduced.no.covs,file="AJB Fosa/M2.reduced.no.covs.out")
+save(M2.reduced.no.covs,file="TEAM Fosa/M2.reduced.no.covs.out")
 
-#load("AJB Fosa/M2.reduced.no.covs")
+#load("TEAM Fosa/M2.reduced.no.covs")
 
 #plot(M2.reduced.no.covs,ask=TRUE)
 
@@ -113,11 +113,9 @@ fit <- combine.mcmc(M2.reduced.no.covs)
 
 M2.red.no.covs.CPO=CPO.function(fit,y,"reduced")
 CPO.out=t(matrix(c("M2.red.no.covs.CPO",M2.red.no.covs.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model3 -Null model - No Covariates ############################# 
-
-
 data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
 params <- c("alpha", "pdet", "prob") 
 
@@ -133,9 +131,9 @@ M3.null.no.covs <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M3.null.no.covs,file="AJB Fosa/M3.null.no.covs.out")
+save(M3.null.no.covs,file="TEAM Fosa/M3.null.no.covs.out")
 
-#load("AJB Fosa/M3.null.no.covs.out")
+#load("TEAM Fosa/M3.null.no.covs.out")
 
 gelman.diag(M3.null.no.covs,multivariate = FALSE)
 
@@ -143,7 +141,7 @@ fit <- combine.mcmc(M3.null.no.covs)
 
 M3.null.no.covs.CPO=CPO.function(fit,y,"null")
 CPO.out=t(matrix(c("M3.null.no.covs.CPO",M3.null.no.covs.CPO)))
-write.table(CPO.out,file="CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model1 -Full model - Survey Covariate ############################# 
 #Fit the full model with survey/year covariate (effect coding)
@@ -176,7 +174,7 @@ M1.full.covs.1 <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M1.full.covs.1,file="AJB Fosa/M1.full.covs.1.out")
+save(M1.full.covs.1,file="TEAM Fosa/M1.full.covs.1.out")
 
 #plot(M1.full.covs.1,ask=TRUE)
 
@@ -186,7 +184,7 @@ fit <- combine.mcmc(M1.full.covs.1)
 
 M1.full.covs.1.CPO=CPO.function(fit,y,"full")
 CPO.out=t(matrix(c("M1.full.covs.1.CPO",M1.full.covs.1.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
 ### Model2 -Reduced model - Survey Covariate ############################# 
@@ -215,7 +213,7 @@ M2.red.covs.1 <- coda.samples(model.jags, variable.names=params,
                                n.iter=ni, 
                                thin=nt,
                                progress.bar="text")
-save(M2.red.covs.1,file="AJB Fosa/M2.red.covs.1.out")
+save(M2.red.covs.1,file="TEAM Fosa/M2.red.covs.1.out")
 
 #plot(M2.red.covs.1,ask=TRUE)
 
@@ -225,7 +223,7 @@ fit <- combine.mcmc(M2.red.covs.1)
 
 M2.red.covs.1.CPO=CPO.function(fit,y,"reduced")
 CPO.out=t(matrix(c("M2.red.covs.1.CPO",M2.red.covs.1.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
 ### Model3 -Null model - Survey Covariate ############################# 
@@ -249,7 +247,7 @@ M3.null.covs.1 <- coda.samples(model.jags, variable.names=params,
                               n.iter=ni, 
                               thin=nt,
                               progress.bar="text")
-save(M3.null.covs.1,file="AJB Fosa/M3.null.covs.1.out")
+save(M3.null.covs.1,file="TEAM Fosa/M3.null.covs.1.out")
 
 #plot(M3.null.covs.1,ask=TRUE)
 
@@ -259,108 +257,108 @@ fit <- combine.mcmc(M3.null.covs.1)
 
 M3.null.covs.1.CPO=CPO.function(fit,y,"null")
 CPO.out=t(matrix(c("M3.null.covs.1.CPO",M3.null.covs.1.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
-### Model1 -Full model - Human TS Night/Day Covariate ############################# 
-#Since Night TS has no variabilty. Consider Day TS to effect probability of states 2 and 4 only.
-Xday=model.matrix(~day.TS,data=cov)
-Xnight=model.matrix(~1,data=cov)
-Xnd=model.matrix(~day.TS,data=cov)
-
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=ncol(Xday),
-                  K.night=ncol(Xnight),K.nd=ncol(Xnd),Xday=Xday,Xnight=Xnight,
-                  Xnd=Xnd)
-
-params <- c("alpha.day","alpha.night","alpha.nd", "pNight", "pDay","pND","prob")
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.by.state.R", 
-                         data = data.input,
-                         inits=inits,
-                         n.chains = nc,
-                         n.adapt=adapt)
-
-update(model.jags, n.iter=nb)
-
-M1.full.covs.2 <- coda.samples(model.jags, variable.names=params, 
-                               n.iter=ni, 
-                               thin=nt,
-                               progress.bar="text")
-save(M1.full.covs.2,file="AJB Fosa/M1.full.covs.2.out")
-
-#plot(M1.full.covs.2,ask=TRUE)
-
-gelman.diag(M1.full.covs.2,multivariate = FALSE)
-
-fit <- combine.mcmc(M1.full.covs.2)
-
-M1.full.covs.2.CPO=CPO.function(fit,y,"full")
-CPO.out=t(matrix(c("M1.full.covs.2.CPO",M1.full.covs.2.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
-
-
-### Model2 -Reduced model - Human TS Night/Day Covariate ############################# 
-#Since Night TS has no variabilty. Consider Day TS to effect probability of states 2 and 4 only.
-Xday=model.matrix(~day.TS,data=cov)
-Xnight=model.matrix(~1,data=cov)
-
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=ncol(Xday),
-                   K.night=ncol(Xnight),Xday=Xday,Xnight=Xnight)
-
-params <- c("alpha.day","alpha.night", "pNight", "pDay","prob")
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.by.state.R", 
-                         data = data.input,
-                         inits=inits,
-                         n.chains = nc,
-                         n.adapt=adapt)
-
-update(model.jags, n.iter=nb)
-
-M2.red.covs.2 <- coda.samples(model.jags, variable.names=params, 
-                               n.iter=ni, 
-                               thin=nt,
-                               progress.bar="text")
-save(M2.red.covs.2,file="AJB Fosa/M2.red.covs.2.out")
-
-#plot(M2.red.covs.2,ask=TRUE)
-
-gelman.diag(M2.red.covs.2,multivariate = FALSE)
-
-fit <- combine.mcmc(M2.red.covs.2)
-
-M2.red.covs.2.CPO=CPO.function(fit,y,"reduced")
-CPO.out=t(matrix(c("M2.red.covs.2.CPO",M2.red.covs.2.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
-
-
-
-### Model3 -Null model - Human TS Night/Day Covariate ############################# 
-#Since we treat each of the occupied states as the same, we should use mean trap success
-#covariate on each state
-X=model.matrix(~TS,data=cov)
-
-
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=ncol(X),X=X)
-
-params <- c("alpha","pdet","prob")
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.by.state.R", 
-                         data = data.input,
-                         inits=inits,
-                         n.chains = nc,
-                         n.adapt=adapt)
-
-update(model.jags, n.iter=nb)
-
-M3.null.covs.2 <- coda.samples(model.jags, variable.names=params, 
-                              n.iter=ni, 
-                              thin=nt,
-                              progress.bar="text")
-save(M3.null.covs.2,file="AJB Fosa/M3.null.covs.2.out")
-
-#plot(M3.null.covs.2,ask=TRUE)
-
-gelman.diag(M3.null.covs.2,multivariate = FALSE)
-
-fit <- combine.mcmc(M3.null.covs.2)
-
-M3.null.covs.2.CPO=CPO.function(fit,y,"null")
-CPO.out=t(matrix(c("M3.null.covs.2.CPO",M3.null.covs.2.CPO)))
-write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+# ### Model1 -Full model - Human TS Night/Day Covariate ############################# 
+# #Since Night TS has no variabilty. Consider Day TS to effect probability of states 2 and 4 only.
+# Xday=model.matrix(~day.TS,data=cov)
+# Xnight=model.matrix(~1,data=cov)
+# Xnd=model.matrix(~day.TS,data=cov)
+# 
+# data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=ncol(Xday),
+#                   K.night=ncol(Xnight),K.nd=ncol(Xnd),Xday=Xday,Xnight=Xnight,
+#                   Xnd=Xnd)
+# 
+# params <- c("alpha.day","alpha.night","alpha.nd", "pNight", "pDay","pND","prob")
+# model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.by.state.R", 
+#                          data = data.input,
+#                          inits=inits,
+#                          n.chains = nc,
+#                          n.adapt=adapt)
+# 
+# update(model.jags, n.iter=nb)
+# 
+# M1.full.covs.2 <- coda.samples(model.jags, variable.names=params, 
+#                                n.iter=ni, 
+#                                thin=nt,
+#                                progress.bar="text")
+# save(M1.full.covs.2,file="TEAM Fosa/M1.full.covs.2.out")
+# 
+# #plot(M1.full.covs.2,ask=TRUE)
+# 
+# gelman.diag(M1.full.covs.2,multivariate = FALSE)
+# 
+# fit <- combine.mcmc(M1.full.covs.2)
+# 
+# M1.full.covs.2.CPO=CPO.function(fit,y,"full")
+# CPO.out=t(matrix(c("M1.full.covs.2.CPO",M1.full.covs.2.CPO)))
+# write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+# 
+# 
+# ### Model2 -Reduced model - Human TS Night/Day Covariate ############################# 
+# #Since Night TS has no variabilty. Consider Day TS to effect probability of states 2 and 4 only.
+# Xday=model.matrix(~day.TS,data=cov)
+# Xnight=model.matrix(~1,data=cov)
+# 
+# data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K.day=ncol(Xday),
+#                    K.night=ncol(Xnight),Xday=Xday,Xnight=Xnight)
+# 
+# params <- c("alpha.day","alpha.night", "pNight", "pDay","prob")
+# model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.by.state.R", 
+#                          data = data.input,
+#                          inits=inits,
+#                          n.chains = nc,
+#                          n.adapt=adapt)
+# 
+# update(model.jags, n.iter=nb)
+# 
+# M2.red.covs.2 <- coda.samples(model.jags, variable.names=params, 
+#                                n.iter=ni, 
+#                                thin=nt,
+#                                progress.bar="text")
+# save(M2.red.covs.2,file="TEAM Fosa/M2.red.covs.2.out")
+# 
+# #plot(M2.red.covs.2,ask=TRUE)
+# 
+# gelman.diag(M2.red.covs.2,multivariate = FALSE)
+# 
+# fit <- combine.mcmc(M2.red.covs.2)
+# 
+# M2.red.covs.2.CPO=CPO.function(fit,y,"reduced")
+# CPO.out=t(matrix(c("M2.red.covs.2.CPO",M2.red.covs.2.CPO)))
+# write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+# 
+# 
+# 
+# ### Model3 -Null model - Human TS Night/Day Covariate ############################# 
+# #Since we treat each of the occupied states as the same, we should use mean trap success
+# #covariate on each state
+# X=model.matrix(~TS,data=cov)
+# 
+# 
+# data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],K=ncol(X),X=X)
+# 
+# params <- c("alpha","pdet","prob")
+# model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.by.state.R", 
+#                          data = data.input,
+#                          inits=inits,
+#                          n.chains = nc,
+#                          n.adapt=adapt)
+# 
+# update(model.jags, n.iter=nb)
+# 
+# M3.null.covs.2 <- coda.samples(model.jags, variable.names=params, 
+#                               n.iter=ni, 
+#                               thin=nt,
+#                               progress.bar="text")
+# save(M3.null.covs.2,file="TEAM Fosa/M3.null.covs.2.out")
+# 
+# #plot(M3.null.covs.2,ask=TRUE)
+# 
+# gelman.diag(M3.null.covs.2,multivariate = FALSE)
+# 
+# fit <- combine.mcmc(M3.null.covs.2)
+# 
+# M3.null.covs.2.CPO=CPO.function(fit,y,"null")
+# CPO.out=t(matrix(c("M3.null.covs.2.CPO",M3.null.covs.2.CPO)))
+# write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)

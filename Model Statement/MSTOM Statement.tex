@@ -1,0 +1,402 @@
+\title{Multi-State Temporal Occupancy Modeling}
+
+
+\date{\today}
+
+\author{
+  Brian Gerber \\
+  University of Rhode Island
+  \and
+  Kimberly Rivera \\
+  University of Rhode Island
+ \and
+  Mason Fidino \\
+  Urban Wildlife Institute
+}
+
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[round]{natbib}
+\usepackage{wasysym}
+
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{0em}
+
+\begin{document}
+\maketitle
+
+
+\section{Introduction}
+We are interested in understanding the spatial variability and drivers of temporal habitat-use of wild animal populations. Common approaches of studying habitat-use or species occurrence are exclusively focused on identifying the spatial drivers of where animals are and are not. Occupancy models are commonly used in these studies to leverage repeat independent surveys to account for sampling biases (e.g., the probability a species occurs or asymtotically uses a spatial unit of interest (site), but goes undetected; \citealt{occupancybook}). The when of where these animals use a site is commonly ignored; in other words, the diel activity of the animal is disregarded when investigating spatial variation in habitat-use. \\
+
+Our interest is to understand the temporal structuring of habitat use, such as what are the spatial locations (and associated probabilities) that an animal uses during the day (sunrise to sunset), during the night (sunset to sunrise), or during the day and night (sunrise to sunrise). The exact temporal structure ultimately depends on the diel pattern of the species; for species that are highly diurnal, temporal categories of interest could be dawn, morning, afternoon, and dusk and for species that are highly noctural, temporal categories may be dusk, early night, late night, and dusk. Further, the why an animal uses a location during one time period or another is species-specific and depends on the life history strategy and behavior of the animal. This model could be useful to understand temporal habitat loss due to anthropogenic activity; for example, a species may use a site when considering the entire 24-hour diel period despite human influence, but change the time period of day they use the site (day only $\rightarrow$ night only) or use the site less by dropping activity during one part of the day (day and night $\rightarrow$ night only). \\
+
+The utility of this modeling framework will be well suited for remote sampling of species of interest that is continuous throughout the 24-hour diel period, such as camera traps. However, this type of plotless sampling in a continuous environment presents some reinterpretation of parameters as animals move in and out a camera site. Specifically, occupancy probabilities do not reflect `instantaneous occurrence', but rather `asymptotic occurrence', or the probability a site is used at least once over the duration of sampling \citep{efford2012}. Further, the probability of detection at a camera site is a product of the probability a camera takes a picture of the species as it passes in front of the camera and the probability the species is available to be sampled. Most likely, the probability of availability is the main source of heterogeneity. As such, the parameter reflecting the probability of observing the species at a given site and survey occasion should likely \emph{a priori} considered to be different across temporal periods (e.g., day and night), unless the species is known to be active equivalently during these periods (\emph{}.g., cathemeral).\\
+
+Below, we outline a series of multi-state temporal occupancy models (MSTOM) that can be used to understand temporal habitat-use. This model is a special form of the general multi-state occupancy model with state uncertainty \citep{MacKenzie2009}. 
+
+
+
+\section{Single Season MSTOM}
+\subsection{Fully State Specific}
+\subsubsection{Probability Model}
+We assume each $i$ = 1...$N$ sites (spatial locations) are sampled with $j$ = 1....$K$ independent surveys. Each site is considered to be in one of $M$ mutually exclusive states during the survey period in which we can assume there are no changes in the state occurrence (i.e., closure). We will define four total states throughout ($M = 4$) where the states of site $i$ are 1) not occupied, 2) occupied during the day only, 3) occupied during night only, and 4) occupied during the night and day. State occurrence probabilities in the same order are, 
+
+%Perhaps not use the day, night, ND notation as it is confused with below. Do I need it?
+\begin{equation}
+\boldsymbol{\psi} = \begin{bmatrix} \psi^1 & \psi^2 & \psi^3 & \psi^4 \end{bmatrix}, %= \begin{bmatrix} \psi^0 & \psi^{\text{Day}} & \psi^{\text{Night}} & \psi^{\text{ND}} \end{bmatrix}
+\end{equation}
+
+where  $\psi^{1} = 1 - \psi^{2} - \psi^{3} - \psi^{4}$ and $\boldmath{1} \cdot \boldsymbol{\psi} = \text{1}$. The overall marginal (regardless of the state) occurrence of the species is $\psi^{\bullet} = \psi^{2} + \psi^{3} + \psi^{4}$ The true occupancy state for site $i$ is defined by the latent variable,
+
+\begin{equation}
+\textbf{z}_{i} \sim \text{Categorical}(\boldsymbol{\psi})
+\end{equation}
+and is a 1 x $M$ matrix. For each true state, there is an order to which states may be observed, but this is not strictly hierarchical, as commonly applied in multi-state occupancy models \citep{nichols2007}. Specifically, if a site is in state 3 (night only), it can not be observed in state 2 (day only). Let,  $p^{m,l}_{j}$ be the probability of observing the occupancy state $l$, given the true state is $m$ in survey $j$. To maintain the nomenclature of our intended inference and assuming no site- or survey-level variation in detection probabilities, we can define the $p^{2,2}$ as the probability of detection during the day ($p^{\text{Day}}$), $p^{3,3}$ as the probability of detection during the night ($p^{\text{Night}}$), and the detection probability in state 4 (in order) as $pND^{1}$, $pND^{2}$, $pND^{3}$, and $pND^{4}$. The detection matrix for survey $j$ is $M$ x $M$ with the observed (columns) and true state (row) as,
+
+\begin{equation}
+\boldsymbol{p}_{j} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
+									1-p^{\text{Day}} & p^{\text{Day}} & 0 & 0 \\ 
+									1-p^{\text{Night}} & 0 & p^{\text{Night}} & 0\\
+  								      p^{\text{ND1}} & p^{\text{ND2}} & p^{\text{ND3}} & p^{\text{ND4}}
+  								      \end{bmatrix}
+\end{equation}
+where $p^{1,4} = p^{\text{ND1}} = 1-pND^{2} - pND^{3} -pND^{4}$ and $\boldsymbol{p}_{j} \cdot \boldsymbol{1} = 1$. The observed state at site $i$ in survey $j$ is a 1 x $M$ categorical random variable as,
+
+\begin{equation}
+\textbf{y}_{ij} \sim \text{Categorical}(\textbf{z}_{i} \cdot \boldsymbol{p}_{j}).
+\end{equation}
+
+Diffuse prior distributions could be defined as,
+\begin{center}
+\begin{align*}
+\boldsymbol{\psi} &\sim \text{Dirichlet}(1,1,1,1)\\
+p^{2,2}= p^{\text{Day}} &\sim \text{Beta}(1,1)\\
+p^{3,3} = p_{j}^{\text{Night}}  &\sim \text{Beta}(1,1)\\
+\boldsymbol{p}^{4 \bullet} = \boldsymbol{p^{\text{ND}\bullet}} &\sim \text{Dirichlet}(1,1,1,1).\\
+\end{align*}
+\end{center}
+
+Under this model, there is no shared relationship between the state occupancy probability 4 (night and day) and states 2 (day only) and 3 (night only). There is also no relationship shared between the detection probabilities of the same states. This model would suggest that the detection or availability of the species at state 4 is possibly different then the detection in other states. This might be because of the species' behavior at sites used throughout the diel period is different than at the other sites. This model is coded for JAGS in the file `jags.multistate.occ.full.R'.
+
+\subsubsection{Multinomial-logit Model 1}
+To model site-level occurrence according to a single continuous covariates ($\mathbf{x}$) that effects state-level probabilities differently, we could specify this as,
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi_{i}})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}.\\
+\psi^1_{i} &=\frac{\phi^1_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^2_{i} &=\frac{\phi^2_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^3_{i} &=\frac{\phi^3_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^4_{i} &=\frac{\phi^4_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}.\\
+\phi^1_{i} &= 1\\
+\phi^2_{i} &= e^{\alpha_{1}+\alpha_{2}\times x_{i}}\\
+\phi^3_{i} &= e^{\alpha_{3}+\alpha_{4}\times x_{i}}\\
+\phi^4_{i} &= e^{\alpha_{5}+\alpha_{6}\times x_{i}}\\
+\end{align*}
+\end{center}
+
+A diffuse prior could be $\alpha_{\bullet} \sim \text{Logistic}(0,1).$ This model is coded for JAGS in the file `jags.multistate.occ.full.site.covs.R'.
+
+\subsubsection{Multinomial-logit Model 2}
+We could generalize the modeling of state-specific occupancy parameters using separate design matrices ($\textbf{x}_{i}^{\text{Day}}, \textbf{x}_{i}^{\text{Night}}, \textbf{x}_{i}^{\text{ND}}$) that for each site $i$ are  1 x Q$_{m}$ (being the number of columns) and associated vectors of coefficients ($\boldsymbol{\alpha}^{\text{Day}}, \boldsymbol{\alpha}^{\text{Night}}, \boldsymbol{\alpha}^{\text{ND}}$) that are $Q_{m}$ x 1, and specified as,
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi_{i}})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}.\\
+\psi^1_{i} &=\frac{\phi^1_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^2_{i} &=\frac{\phi^2_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^3_{i} &=\frac{\phi^3_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^4_{i} &=\frac{\phi^4_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}.\\
+\phi^1_{i} &= 1\\
+\phi^2_{i} &= e^{\textbf{x}_{i}^{\text{Day}}\boldsymbol{\alpha}^{\text{Day}}}\\
+\phi^3_{i} &= e^{\textbf{x}_{i}^{\text{Night}}\boldsymbol{\alpha}^{\text{Night}}}\\
+\phi^4_{i} &= e^{\textbf{x}_{i}^{\text{ND}}\boldsymbol{\alpha}^{\text{ND}}}\\
+\end{align*}
+\end{center}
+
+A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ This model allows state-specific modeling of occupancy probabilities by any combination of covaraites when specificed using a design matrix, which is common in linear regression modeling. This model is coded for JAGS in the file `jags.multistate.occ.full.site.covs.R'.
+
+
+\subsection{Reduced MSTOM}
+\subsubsection{Probability Model}
+We might consider a simpler structure for $\boldsymbol{\psi}$ or $\boldsymbol{p}_{j}$ because of ecological or data sparsity reasons. It might be that sites used during the day and night (state 4) are not unique, but simply random and independently determined by the probability any site is used during the day ($\psi^{\text{Day.M}}$) and night ($\psi^{\text{Night.M}}$). Rather than exclusive state probabilities, $\psi^{\text{Day.M}}$ is the probability of using any site during the day, regardless of use or not use at night (marginal probability); further, $\psi^{\text{Night}}$ is the probability of using any site at night, regardless of use during the day.  We can redefine our occupancy parameters as,
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi})\\
+\boldsymbol{\psi} &= \begin{bmatrix} \psi^1 & \psi^2 & \psi^3 & \psi^4 \end{bmatrix}\\
+\psi^1 &=(1-\psi^{\text{Day.M}})(1-\psi^{\text{Night.M}})\\
+\psi^2 &=\psi^{\text{Day.M}}(1-\psi^{\text{Night.M}})\\
+\psi^3 &=(1-\psi^{\text{Day.M}})\psi^{\text{Night.M}}\\
+\psi^4 &=\psi^{\text{Day.M}}\psi^{\text{Night.M}}.\\
+\end{align*}
+\end{center}
+
+Similarly, we can simplify the detection matrix using the probability of detection during the day  ($p^{\text{Day.M}}$) and night ($p^{\text{Night.M}}$) as,
+\begin{equation}
+\boldsymbol{p}_{j} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
+									1-p^{\text{Day.M}} & p^{\text{Day.M}} & 0 & 0 \\ 
+									1-p^{\text{Night.M}} & 0 & p^{\text{Night.M}} & 0\\
+  								      (1-p^{\text{Day.M}})(1-p^{\text{Night.M}}) & p^{\text{Day.M}}(1-p^{\text{Night.M}}) & (1-p^{\text{Day.M}})p^{\text{Night.M}} & p^{\text{Day.M}}p^{\text{Night.M}}
+  								      \end{bmatrix}
+\end{equation}
+, where $p^{1,4}$ can also be specified as equal to $1- p^{\text{Day.M}}(1-p^{\text{Night.M}}) - (1-p^{\text{Day.M}})p^{\text{Night.M}} - p^{\text{Day.M}}p^{\text{Night.M}}$. Unless the species of interest is completely cathemeral and uses the day and night times in equal proportion, it is unlikely that $p^{\text{Day.M}}$ and $p^{\text{Night.M}}$ should be equivalent. We could use the diffuse prior distributions of 
+\begin{center}
+\begin{align*}
+\psi^{\text{Day.M}} &\sim \text{Beta}(1,1)\\
+\psi^{\text{Night.M}} &\sim \text{Beta}(1,1)\\
+p^{\text{Day.M}} &\sim \text{Beta}(1,1)\\
+p^{\text{Night.M}} &\sim \text{Beta}(1,1).\\
+\end{align*}
+\end{center}
+This model is coded for JAGS in the file `jags.multistate.occ.reduced.R'.
+
+\subsection{Logit Model 1}
+We could consider the effects of a site-level covariate (\textbf{x}) on the marginal occurrence probabilities $(\psi^{\text{Day.M}}, \psi^{\text{Night.M}})$ by specifying,
+
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi}_{i})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}\\
+\psi^1_{i} &=(1-\psi^{\text{Day.M}}_{i})(1-\psi^{\text{Night.M}}_{i})\\%1-\psi^2-\psi^3-\psi^4\\
+\psi^2_{i} &=\psi^{\text{Day.M}}_{i}(1-\psi^{\text{Night.M}}_{i})\\
+\psi^3_{i} &=(1-\psi^{\text{Day.M}}_{i})\psi^{\text{Night.M}}_{i}\\
+\psi^4_{i} &=\psi^{\text{Day.M}}_{i}\psi^{\text{Night.M}}_{i}\\
+\text{logit}(\psi^{\text{Day.M}}_{i}) &= \alpha_{1}^{\text{Day}}+\alpha_{2}^{\text{Day}}\times x_{i}\\
+\text{logit}(\psi^{\text{Night.M}}_{i}) &= \alpha_{1}^{\text{Night}}+\alpha_{2}^{\text{Night}}\times x_{i}\\
+\end{align*}
+\end{center}
+
+Diffuse prior distributions for all $\alpha$ parameters could be $\text{Logistic}(0,1)$. This model is coded for JAGS in the file `jags.multistate.occ.reduced.site.covs.R'
+
+\subsubsection{Logit Model 2}
+We could generalize the modeling of marginal occupancy parameters using separate design matrices ($\textbf{x}_{i}^{\text{Day}}, \textbf{x}_{i}^{\text{Night}}$) that for each site $i$ are  1 x Q$_{m}$ (being the number of columns) and associated vectors of coefficients ($\boldsymbol{\alpha}^{\text{Day}}, \boldsymbol{\alpha}^{\text{Night}}$) that are $Q_{m}$ x 1, and specified as,
+
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi_{i}})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}.\\
+\psi^1_{i} &=(1-\psi^{\text{Day.M}}_{i})(1-\psi^{\text{Night.M}}_{i})\\%1-\psi^2-\psi^3-\psi^4\\
+\psi^2_{i} &=\psi^{\text{Day.M}}_{i}(1-\psi^{\text{Night.M}}_{i})\\
+\psi^3_{i} &=(1-\psi^{\text{Day.M}}_{i})\psi^{\text{Night.M}}_{i}\\
+\psi^4_{i} &=\psi^{\text{Day.M}}_{i}\psi^{\text{Night.M}}_{i}\\
+\text{logit}(\psi^{\text{Day.M}}_{i}) &= \textbf{x}_{i}^{\text{Day}}\boldsymbol{\alpha}^{\text{Day}}\\
+\text{logit}(\psi^{\text{Night.M}}_{i}) &= \textbf{x}_{i}^{\text{Night}}\boldsymbol{\alpha}^{\text{Night}}\\
+\end{align*}
+\end{center}
+Diffuse prior distributions for all $\alpha$ parameters could be $\text{Logistic}(0,1)$. This model is coded for JAGS in the file `jags.multistate.occ.reduced.site.covs.by.state.R'.
+
+\subsubsection{Multinomial-logit Mode 1}
+An alternative reduced model specification is to use the multinomial-logit parameterization, which can constrain relationships among state probabilties and include covariates. This model could parameterized as, 
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi_{i}})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}.\\
+\psi^1_{i} &=\frac{\phi^1_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^2_{i} &=\frac{\phi^2_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^3_{i} &=\frac{\phi^3_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^4_{i} &=\frac{\phi^4_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}.\\
+\phi^1_{i} &= 1\\
+\phi^2_{i} &= e^{\alpha_{1}}\\
+\phi^3_{i} &= e^{\alpha_{2}}\\
+\phi^4_{i} &= e^{\alpha_{1}+\alpha_{2}}\\
+\end{align*}
+\end{center}
+
+The detection matrix could also be specified similarly on the logit scale as,
+
+\begin{equation}
+\boldsymbol{q}_{j} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
+									1 & e^{\beta_{1}} & 0 & 0 \\ 
+									1 & 0 & e^{\beta_{2}} & 0\\
+  								      1 & e^{\beta_{1}} & e^{\beta_{2}} & e^{\beta_{1}+\beta_{2}}  
+  								      \end{bmatrix}
+\end{equation}
+and where the detection parameters are derived as,
+\begin{center}
+\begin{align*}
+p^{\text{Day}} &= \frac{e^{\beta_{1}}}{1+e^{\beta_{1}}+0+0}\\
+p^{\text{Night}} &= \frac{e^{\beta_{2}}}{1+0+e^{\beta_{2}}+0}\\
+ p^{\text{ND4}} &= \frac{e^{\beta_{1}+\beta{2}}}{1+e^{\beta_{1}}+e^{\beta_{2}}+e^{\beta_{1}+\beta{2}}}
+\end{align*}
+\end{center}
+
+This model could be easily extended to include a difference of occupancy and detection in state 4 by a small modification of $\phi^4_{i} = e^{\alpha_{1}+\alpha_{2}+\alpha_{3}}$ and the matrix cell $q^{4,4}$ to $e^{\beta_{1}+\beta_{2}+\beta_{3}} $. A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ This model is coded for JAGS in the file `jags.multistate.occ.reduced.alt.R'.\\
+
+\subsection{Null MSTOM}
+\subsubsection{Probability Model}
+Furthermore, we could consider a multi-state model in which there is no spatial variability in temporal occurrence. This could be used as a null model in a model comparison framework to assess the importance of this type of heterogeneity. The state-specific occurrence probabilities can be described by the overall or marginal (regardless of state) occurrence probability ($\psi^{\bullet}$); since we assume the states do not matter, we then assume the probability of occurrence in each state is the same. The same is true for the overall or marginal probability of detection ($p^{\bullet}$). This model would be essentially a single state (occurrence or not occurrence) model. We can do so by defining, 
+
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi})\\
+\boldsymbol{\psi} &= \begin{bmatrix} \psi^1 & \psi^2 & \psi^3 & \psi^4 \end{bmatrix}.\\
+\psi^1 &= 1-\psi^{\bullet}\\
+\psi^2 &=\frac{\psi^{\bullet}}{3}\\
+\psi^3 &=\frac{\psi^{\bullet}}{3}\\
+\psi^4 &=\frac{\psi^{\bullet}}{3}\\
+\boldsymbol{\psi} &= \begin{bmatrix} \psi^1 & \psi^2 & \psi^3 & \psi^4 \end{bmatrix}.
+\end{align*}
+\end{center}
+
+Similarly, we can define the detection matrix using $p^{\bullet}$ as,
+\begin{equation}
+\boldsymbol{p}_{j} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
+									1-p^{\bullet}_{j} & p^{\bullet}_{j} & 0 & 0 \\ 
+									1-p^{\bullet}_{j} & 0 & p^{\bullet}_{j} & 0\\
+  								      1-p^{\bullet}_{j} & \frac{p^{\bullet}_{j}}{3} & \frac{p^{\bullet}_{j}}{3} & \frac{p^{\bullet}_{j}}{3}
+  								      \end{bmatrix}
+\end{equation}
+We could use the diffuse prior distributions of 
+\begin{center}
+\begin{align*}
+\psi^{\bullet} &\sim \text{Beta}(1,1)\\
+p^{\bullet}_{j} &\sim \text{Beta}(1,1).\\
+\end{align*}
+\end{center}
+
+This model is coded for JAGS in the file `jags.multistate.occ.null.R'.
+
+\subsubsection{Multinomial-logit Model 1}
+An alternative specification uses the multinomial logit to transform occurrence and detection probabilities to the logit-scale while ensuring appropriate constrains on parameters (i.e., probabilities stay between 0 and 1). This model specification is more conducive to including covariates to model their effects on different parameters. To do so we can define occupancy parameters with a shared log-valued parameter ($\alpha$), such that 
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi})\\
+\boldsymbol{\psi} &= \begin{bmatrix} \psi^1 & \psi^2 & \psi^3 & \psi^4 \end{bmatrix}\\
+\psi^1 &=\frac{\phi^1}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^2 &=\frac{\phi^2}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^3 &=\frac{\phi^3}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^4 &=\frac{\phi^4}{\phi^1+ \phi^2+\phi^3+\phi^4}.\\
+\phi^1 &= 3\\
+\phi^2 &= e^{\alpha}\\
+\phi^3 &= e^{\alpha}\\
+\phi^4 &= e^{\alpha}\\
+\end{align*}
+\end{center}
+
+Similarly, we can define the detection matrix on the logit scale using a shared log-valued parameter ($\beta$), such that 
+\begin{equation}
+\boldsymbol{q}_{j} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
+									1 &  e^{\beta} & 0 & 0 \\ 
+									1 & 0 & e^{\beta} & 0\\
+  								       3 & e^{\beta} & e^{\beta} & e^{\beta}
+  								      \end{bmatrix}.
+\end{equation}
+The probability of detection can be derived as, 
+\begin{equation}
+p^{\bullet} =\frac{e^{\beta}}{1+e^{\beta}+0+0}
+\end{equation}
+We could use the diffuse prior distributions of 
+\begin{center}
+\begin{align*}
+\alpha &\sim \text{Logistic}(0,1)\\
+\beta &\sim \text{Logistic}(0,1).\\
+\end{align*}
+\end{center}
+
+
+\subsubsection{Multinomial-logit Model 2}
+We could consider the effects of a site-level covariate (\textbf{x}) on the occupancy probability by specifying,
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi}_{i})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}\\
+\psi^1_{i} &=\frac{\phi^1}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^2_{i} &=\frac{\phi^2}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^3_{i} &=\frac{\phi^3}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^4_{i} &=\frac{\phi^4}{\phi^1+ \phi^2+\phi^3+\phi^4}.\\
+\phi^1_{i} &= 3\\
+\phi^2_{i} &= e^{\alpha_{1}+\alpha_{2}\times x_{i}}\\
+\phi^3_{i} &= e^{\alpha_{1}+\alpha_{2}\times x_{i}}\\
+\phi^4_{i} &= e^{\alpha_{1}+\alpha_{2}\times x_{i}}\\
+\end{align*}
+\end{center}
+Since we are ignoring the state designations, there is no reason to use different design matrices of each state-occupancy parameter nor a reason to estimate different parameters. This model is coded for JAGS in the file `jags.multistate.occ.null.site.covs.R'.
+
+\subsubsection{Multinomial-logit Model 3}
+We could generalize the modeling of the occupancy parameter using the same design matrix ($\textbf{x}_{i}$) that for each site $i$ that is 1 x Q (being the number of columns) and associated vectors of coefficients ($\boldsymbol{\alpha})$ that are $Q_{m}$ x 1, we specify
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi}_{i})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}\\
+\psi^1_{i} &=\frac{\phi^1}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^2_{i} &=\frac{\phi^2}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^3_{i} &=\frac{\phi^3}{\phi^1+ \phi^2+\phi^3+\phi^4}\\
+\psi^4_{i} &=\frac{\phi^4}{\phi^1+ \phi^2+\phi^3+\phi^4}.\\
+\phi^1_{i} &= 3\\
+\phi^2_{i} &= e^{\textbf{x}_{i}\boldsymbol{\alpha}}\\
+\phi^3_{i} &= e^{\textbf{x}_{i}\boldsymbol{\alpha}}\\
+\phi4_{i} &= e^{\textbf{x}_{i}\boldsymbol{\alpha}}.\\
+\end{align*}
+\end{center}
+
+Since we are ignoring the state designations, there is no reason to use different design matrices of each state-occupancy parameter nor a reason to estimate different parameters. This model is coded for JAGS in the file `jags.multistate.occ.null.site.covs.by.state.R'.
+
+
+
+\section{Model Selection}
+To compare models (e.g., Full, Reduced, and Null MSTOM) we could use the conditional predictive ordinate (CPO; \citealt{hooten2015}). To do so, we need to define the integrated likelihood. First, lets define $I_{i}$ as an indicator for site $i$ that is a 1 when the logical argument is true and otherwise 0 (see below) and $\boldsymbol{f}_{i} =  \begin{bmatrix}f_{i}^1 f_{i}^2 f_{i}^3 f_{i}^4  \end{bmatrix}$ is matrix of the frequency of observations in each state across all $K$ surveys. Therefore,  assuming detection parameters are constant over each $j$ survey, the integrated likelihood is specified as,
+
+\begin{center}
+\begin{align*}
+[\textbf{y}_{i}|\boldsymbol{\psi}_{i}, \boldsymbol{p}]  &= \left(\psi^1+\psi^2(1-p^{2,2})^{f_{i}^1}+ \psi^3(1-p^{3,3})^{f_{i}^1}+\psi^4(1-p^{1,4})^{f_{i}^1}\right)^{I_{\text{max}(\boldsymbol{y}_{i\cdot})\equiv 1}}\\
+&\times  \left(\psi^2(p^{2,2})^{f_{i}^2}(1-p^{2,2})^{f_{i}^1}+\psi^4(p^{1,4})^{f_{i}^1}(p^{2,4})^{f_{i}^2}(p^{3,4})^{f_{i}^3}(p^{4,4})^{f_{i}^4}\right)^{I_{\text{max}(\boldsymbol{y}_{i\cdot})\equiv 2}} \\
+&\times  \left(\psi^3(p^{3,3})^{f_{i}^3}(1-p^{3,3})^{f_{i}^1}+\psi^4(p^{1,4})^{f_{i}^1}(p^{2,4})^{f_{i}^2}(p^{3,4})^{f_{i}^3}(p^{4,4})^{f_{i}^4}\right)^{I_{\text{max}(\boldsymbol{y}_{i\cdot})\equiv 3 \wedge \forall \boldsymbol{y}_{i\cdot}\not\equiv 2}}\\
+&\times  \left(\psi^4(p^{1,4})^{f_{i}^1}(p^{2,4})^{f_{i}^2}(p^{3,4})^{f_{i}^3}(p^{4,4})^{f_{i}^4}\right)^{I_{\text{max}(\boldsymbol{y}_{i\cdot})\equiv 4 \vee 2\in \boldsymbol{y}_{i\cdot}\wedge 3 \in \boldsymbol{y}_{i\cdot}}}
+\end{align*}
+\end{center}
+
+
+Following \citealt{broms2016}, for each MCMC iteration $s$ = 1,..., $S$,
+\begin{center}
+\begin{align*}
+\text{CPO}  &=-\sum_{i=1}^{N} \text{log}(CPO_{ij})\\
+\text{CPO}_{ij}  &=\frac{S}{\sum_{s=1}^S [\textbf{y}_{i}|\boldsymbol{\psi}_{i}^{(s)}, \boldsymbol{p}^{(s)} ]^{-1}}\\
+\end{align*}
+\end{center}
+
+
+\section{Goodness of fit}
+We can evaluate the overall fit of the model using a Bayesian p-value comparing the observed ($D$) and predicted model deviance ($\tilde{D}$) as,
+\begin{center}
+\begin{align*}
+%D^{(s)} &= -2\cdot\text{log}[\textbf{y}|\boldsymbol{\theta}^{(s)}]\\
+D^{(s)} &= -2\cdot \sum_{i=1}^N \text{log}[\textbf{y}_{i}|\boldsymbol{\psi}_{i}^{(s)},\boldsymbol{p}^{(s)}]\\
+\tilde{D}^{(s)} &= -2\cdot \sum_{i=1}^N \text{log}[\tilde{\textbf{y}}_{i}|\boldsymbol{\psi}_{i}^{(s)},\boldsymbol{p}^{(s)}]
+\end{align*}
+\end{center}
+where the predicted occurrences and detections are sampled for each $s$ MCMC iteration as,
+\begin{center}
+\begin{align*}
+\tilde{\boldsymbol{z}}^{(s)}_{i} &\sim \text{Categorical}(\boldsymbol{\psi}^{(s)}_{i})\\
+\tilde{\boldsymbol{y}}^{(s)}_{ij} &\sim  \text{Categorical}(\tilde{\textbf{z}}_{i} \cdot \boldsymbol{p}_{j})\\
+\end{align*}
+\end{center}
+
+The Bayesian P-value can be calculated as the proportion of times $D$ is greater than $\tilde{D}$. For a model that fits well, the p-value should be near 0.5; if the p-value is greater than 0.95 or less than 0.05 than the model foes not fit the data well.
+
+
+\pagebreak
+
+
+\begin{thebibliography}{100}
+\bibitem[Broms et al., 2016]{broms2016}Broms, K. M., Hooten, M. B., \& Fitzpatrick, R. M. (2016). Model selection and assessment for multi‐species occupancy models. Ecology, 97(7), 1759-1770.
+
+\bibitem[Efford and Dawson, 2012]{efford2012}Efford, M. G., \& Dawson, D. K. (2012). Occupancy in continuous habitat. Ecosphere, 3(4), 1-15.
+
+
+\bibitem[Hooten and Hobbs, 2015]{hooten2015}Hooten, M. B., \& Hobbs, N. T. (2015). A guide to bayesian model selection for ecologists. Ecological Monographs, 85, 3–28.
+
+\bibitem[Mackenzie et al., 2009]{MacKenzie2009}MacKenzie, D. I., Nichols, J. D., Seamans, M. E., \& Gutiérrez, R. J. (2009). Modeling species occurrence dynamics with multiple states and imperfect detection. Ecology, 90(3), 823-835.
+
+\bibitem[Mackenzie et al., 2017]{occupancybook}MacKenzie, D. I., Nichols, J. D., Royle, J. A., Pollock, K. H., Bailey, L., \& Hines, J. E. (2018). Occupancy estimation and modeling: inferring patterns and dynamics of species occurrence. 2nd Edition. Elsevier.
+
+\bibitem[Nichols et al., 2007]{nichols2007}Nichols, J. D., Hines, J. E., Mackenzie, D. I., Seamans, M. E., \& Gutierrez, R. J. (2007). Occupancy estimation and modeling with multiple states and state uncertainty. Ecology, 88(6), 1395-1400.
+\end{thebibliography}
+
+\end{document}
+
+  
