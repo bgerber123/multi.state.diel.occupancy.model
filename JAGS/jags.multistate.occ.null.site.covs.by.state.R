@@ -4,7 +4,7 @@
       alpha[q]~dlogis(0,1)
     }
     beta ~ dlogis(0,1)
- #Define state vector for each s site
+ #Define state vector for each i site
     for (i in 1:N){
       phi[i,1] <- 3
       phi[i,2] <- exp(inprod(X[i,],alpha))
