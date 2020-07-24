@@ -55,10 +55,16 @@ colnames(fit)
 #The first 6 columns are the alpha parameters
 fit.matrix=as.matrix(fit)
 
+    index.occ1=which(apply(as.matrix(colnames(fit)), 1, FUN=function(x){grepl(paste("PSI[1,1]"), x, fixed = TRUE)}))
+    index.occ2=which(apply(as.matrix(colnames(fit)), 1, FUN=function(x){grepl(paste("PSI[1,2]"), x, fixed = TRUE)}))
+    index.occ3=which(apply(as.matrix(colnames(fit)), 1, FUN=function(x){grepl(paste("PSI[1,3]"), x, fixed = TRUE)}))
+    index.occ4=which(apply(as.matrix(colnames(fit)), 1, FUN=function(x){grepl(paste("PSI[1,4]"), x, fixed = TRUE)}))
+
+fit.psi=fit.matrix[,c(index.occ1,index.occ2,index.occ3,index.occ4)]
+    
 png(file="TEAM Fosa/RNP.fosa.parms.png",res=200,units = "in",height=8,width=8)
 color_scheme_set("red")
-mcmc_areas(fit.matrix,
-           pars = c("prob[1,1]", "prob[1,2]", "prob[1,3]", "prob[1,4]"),
+mcmc_areas(fit.psi,
            prob = 0.5,
            prob_outer=0.99) + geom_vline(xintercept=0, linetype="solid", 
                                          color = "black", size=1)+

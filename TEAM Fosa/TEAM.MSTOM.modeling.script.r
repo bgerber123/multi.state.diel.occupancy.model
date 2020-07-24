@@ -84,8 +84,7 @@ write.table(CPO.out,file="TEAM Fosa/CPO.out.TEAM.csv",append=TRUE,col.names = FA
 
 ### Model2 -Reduced model - No Covariates ############################# 
 
-Q=2 
-data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q=Q)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
 params <- c("pNight", "pDay","PSI")  
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
@@ -233,7 +232,7 @@ Q=6 # number of alpha parameters
 data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q=Q,X=X)
 
 # Parameters monitored
-params <- c("alpha","p.overall","psi.overall","psi", "PSI")
+params <- c("alpha","beta","p.overall","psi.overall","psi", "PSI")
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.by.state.R", 
                          data = data.input,

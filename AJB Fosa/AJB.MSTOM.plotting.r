@@ -3,8 +3,9 @@ library(runjags)
 library(bayesplot)
 library(ggplot2)
 rm(list=ls())
-load("AJB Fosa/M1.full.fit.plotting")
-
+#load("AJB Fosa/M1.full.fit.plotting")
+load("AJB Fosa/M1.full.no.covs.out")
+fit <- combine.mcmc(M1.full.no.covs)
 #Plot detection parameters
 pDay=fit[,which(grepl("pDay",colnames(fit)))]
 pNight=fit[,which(grepl("pNight",colnames(fit)))]
@@ -38,10 +39,10 @@ dev.off()
 
 head(fit)
 
-prob.state1=fit[,match("prob[1,1]",colnames(fit))]
-prob.state2=fit[,match("prob[1,2]",colnames(fit))]
-prob.state3=fit[,match("prob[1,3]",colnames(fit))]
-prob.state4=fit[,match("prob[1,4]",colnames(fit))]
+prob.state1=fit[,match("PSI[1,1]",colnames(fit))]
+prob.state2=fit[,match("PSI[1,2]",colnames(fit))]
+prob.state3=fit[,match("PSI[1,3]",colnames(fit))]
+prob.state4=fit[,match("PSI[1,4]",colnames(fit))]
 
 prob.matrix=cbind(prob.state1,prob.state2,prob.state3,prob.state4)
 hist(prob.state4)

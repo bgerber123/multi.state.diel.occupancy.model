@@ -144,11 +144,11 @@ We could also model detection parameters by site (\textbf{x}) or survey specific
 									1 & 0 & q^{3,3}_{ij} & 0\\
   								       1 & q^{4,2}_{ij} & q^{4,3}_{ij} & q^{4,4}_{ij}
   								      \end{bmatrix}\\
-q^{2,2}_{ij} &=e^{\beta^{\text{Day}}_{0} +\beta^{\text{Day}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
-q^{3,3}_{ij} &=e^{\beta^{\text{Night}}_{0} +\beta^{\text{Night}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
-q^{4,2}_{ij} &=e^{\beta^{\text{ND2}}_{0} +\beta^{\text{ND2}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
-q^{4,3}_{ij} &=e^{\beta^{\text{ND3}}_{0} +\beta^{\text{ND3}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
-q^{4,4}_{ij} &=e^{\beta^{\text{ND4}}_{0} +\beta^{\text{ND4}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}
+q^{2,2}_{ij} &=e^{\alpha^{\text{Day}}_{0} +\alpha^{\text{Day}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
+q^{3,3}_{ij} &=e^{\alpha^{\text{Night}}_{0} +\alpha^{\text{Night}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,2}_{ij} &=e^{\alpha^{\text{ND2}}_{0} +\alpha^{\text{ND2}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,3}_{ij} &=e^{\alpha^{\text{ND3}}_{0} +\alpha^{\text{ND3}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,4}_{ij} &=e^{\alpha^{\text{ND4}}_{0} +\alpha^{\text{ND4}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}
 \end{align*}
 \end{center}
 and the probability of detection parameters can be derived as, 
@@ -163,7 +163,7 @@ p^{\text{ND4}}_{ij} &=\frac{q^{4,4}_{ij}}{1+q^{4,2}_{ij}+q^{4,3}_{ij}+q^{4,4}_{i
 \end{align*}
 \end{center}
 
-Diffuse priors for all $\beta$ parameters could be specifed as Logistic(0,1).
+Diffuse priors for all $\alpha$ parameters could be specifed as Logistic(0,1).
 
 \subsection{Reduced MSTOM}
 \subsubsection{Probability Model}

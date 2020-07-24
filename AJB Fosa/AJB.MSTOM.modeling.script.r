@@ -108,8 +108,7 @@ write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALS
 
 ### Model2 -Reduced model - No Covariates ############################# 
 
-Q=2 
-data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Q = Q)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
 params <- c("pNight", "pDay","PSI","psiNight","psiDay")  
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
@@ -166,7 +165,7 @@ fit <- combine.mcmc(M3.null.no.covs)
 
 M3.null.no.covs.CPO=CPO.function(fit,y,"null")
 CPO.out=t(matrix(c("M3.null.no.covs",M3.null.no.covs.CPO)))
-write.table(CPO.out,file="CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model1 -Full model - Survey Covariate ############################# 
 #Fit the full model with survey/year covariate (effect coding)
@@ -387,3 +386,61 @@ fit <- combine.mcmc(M3.null.covs.2)
 M3.null.covs.2.CPO=CPO.function(fit,y,"null")
 CPO.out=t(matrix(c("M3.null.covs.2",M3.null.covs.2.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+
+
+### Model1 -hybrid - no covariates - occupancy is null and detection is full############################# 
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
+
+params <- c("alpha","pND","psi.overall","pNight","pDay","PSI")
+model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.det.null.R", 
+                         data = data.input,
+                         inits=inits,
+                         n.chains = nc,
+                         n.adapt=adapt)
+
+update(model.jags, n.iter=nb)
+
+M1.hybrid.no.covs <- coda.samples(model.jags, variable.names=params, 
+                              n.iter=ni, 
+                              thin=nt,
+                              progress.bar="text")
+save(M1.hybrid.no.covs,file="AJB Fosa/M1.hybrid.no.covs.out")
+
+#plot(M1.hybrid.no.covs,ask=TRUE)
+
+gelman.diag(M1.hybrid.no.covs,multivariate = FALSE)
+
+fit <- combine.mcmc(M1.hybrid.no.covs)
+
+M1.hybrid.no.covs.CPO=CPO.function(fit,y,"full") #CPO function will only need "full" for the detection parameters
+CPO.out=t(matrix(c("M1.hybrid.no.covs",M1.hybrid.no.covs.CPO)))
+write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+
+### Model2-hybrid - reduced occupancy and detection is full############################# 
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
+
+params <- c("psiDay","pND","psiNight","pNight","pDay","PSI")
+model.jags <- jags.model(file="JAGS/jags.multistate.occ.red.det.null.R", 
+                         data = data.input,
+                         inits=inits,
+                         n.chains = nc,
+                         n.adapt=adapt)
+
+update(model.jags, n.iter=nb)
+
+M2.hybrid.no.covs <- coda.samples(model.jags, variable.names=params, 
+                              n.iter=ni, 
+                              thin=nt,
+                              progress.bar="text")
+save(M2.hybrid.no.covs,file="AJB Fosa/M2.hybrid.no.covs.out")
+
+#plot(M2.hybrid.no.covs,ask=TRUE)
+
+gelman.diag(M2.hybrid.no.covs,multivariate = FALSE)
+
+fit <- combine.mcmc(M2.hybrid.no.covs)
+
+M2.hybrid.no.covs.CPO=CPO.function(fit,y,"full") #CPO function will only need "full" for the detection parameters
+CPO.out=t(matrix(c("M2.hybrid.no.covs",M2.hybrid.no.covs.CPO)))
+write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+

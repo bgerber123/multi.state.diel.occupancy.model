@@ -42,8 +42,8 @@
     z[i] ~ dcat(PSI[i,])
     }
     # Observation equation
-    for (s in 1:R){
-    for (t in 1:T){ 
+    for (i in 1:N){
+    for (j in 1:K){ 
     y[i,j] ~ dcat(q[z[i],j,])
     } #j
     } #i
