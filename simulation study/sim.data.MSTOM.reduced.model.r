@@ -2,7 +2,7 @@
 # Brian D. Gerber 
 # 06/29/2020
 #
-# This script is intended to simulate multi-state occuancy data where the states are defined
+# This script is intended to simulate multi-state occupancy data where the states are defined
 # based on temporal use of a site.
 #
 # 4 States
@@ -13,7 +13,7 @@
 
 #  ****This script simulates data from the Reduced model without covariates****
 
-# The Reduced model - assume that the probabiltiy of detection and occurence in state 4 is a combination
+# The Reduced model - assume that the probability of detection and occurrence in state 4 is a combination
 #                  of probabilities associated with states 2 and 3.
 ########################################
 ########################################
@@ -22,7 +22,7 @@ rm(list=ls())
 
 #Which file name should we save the simulated data
 #The saved simulations will be saved within the working directory
-filename="simulation study/sim.data.multistate.reduced"
+filename="simulation study/sim.reduced.data"
 
 #How many datasets to simualte
 n.sim=100
@@ -67,7 +67,7 @@ sum(omega)
 #################################################
 #Define the detection matrix
 
-#If pDay and pNight are the same then there is no heterogenity in site level of detection
+#If pDay and pNight are the same then there is no heterogeneity in site level of detection
 #due to temporal use. They do not have to be the same though.
 pDay=0.6
 pNight=0.4
@@ -77,7 +77,7 @@ pND.D.marginal=pDay
 pND.N.marginal=pNight
 
 
-#Define State 4 Detection Probabilitities 
+#Define State 4 Detection Probabilities 
 pND.0=(1-pND.D.marginal)*(1-pND.N.marginal)   #Detection of state 1 in state 4
 pND.D=pND.D.marginal*(1-pND.N.marginal)       #Detection of state 2 in state 4
 pND.N=pND.N.marginal*(1-pND.D.marginal)       #Detection of state 3 in state 4

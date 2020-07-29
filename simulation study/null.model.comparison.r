@@ -26,13 +26,13 @@ library(jagsUI)
 library(rjags)
 
 #Load the simulated data - choose one
-load("simulation study/sim.data.multistate.null") 
+load("simulation study/sim.null.data") 
 
 #This is the simulated true logit coeficient
 alpha=1.2
 
 #This is the true probability of detection for the simulated data
-pdet.truth=0.7
+p.overall.truth=0.7
 
 sim.data$omega
 
@@ -52,8 +52,8 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   #Bundle data for jags
   data.list <- list(
     y = obs.matrix, 
-    R = dim(obs.matrix)[1],
-    T = dim(obs.matrix)[2]
+    N = dim(obs.matrix)[1],
+    K = dim(obs.matrix)[2]
   )
   
   #Initial values
@@ -62,10 +62,10 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   
   ################################################################
   #Fit the Null Model 
-  params <- c("psi","pdet","alpha","beta","psi.overall")
+  params <- c("psi","PSI","p.overall","alpha","beta","psi.overall")
   #Prepare the model and data
   model.null <- jags.model(
-    file="JAGS/jags.multistate.occ.null.R", 
+    file="JAGS/jags.multistate.occ.null.alt.R", 
     data = data.list,
     inits=inits,
     n.chains = nc,
@@ -87,8 +87,8 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   alpha.samples=model.null.fit$alpha[,,1]
   beta.samples=model.null.fit$beta[,,1]
   psi.samples=model.null.fit$psi[,,1]
-  psi.overall=model.null.fit$psi.overall[,,1]
-  pdet.samples=model.null.fit$pdet[,,1]
+  psi.overall.samples=model.null.fit$psi.overall[,,1]
+  p.overall.samples=model.null.fit$p.overall[,,1]
   
   #We need to derive state occupancy and detection probs
   psiDay=psi.samples
@@ -117,9 +117,9 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   
   #add the mle estimate
   #plot the overall occupancy 
-  hist(psi.overall)
+  hist(psi.overall.samples)
   #add lines for the posterior mean and true overall occupancy
-  abline(v=mean(psi.overall),lwd=3,col=1)
+  abline(v=mean(psi.overall.samples),lwd=3,col=1)
   abline(v=overall.occu.true,lwd=3,col=2)
   abline(v=unmarked.est.psi@estimate,lwd=3,col=3,lty=3)
   #Note that the MLE corresponds to the highest posterior value 
@@ -132,13 +132,12 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   
   ####################
   #plot the detection probability
-  hist(pdet.samples) #posterior samples
+  hist(p.overall.samples) #posterior samples
   #add the true probability of detection
-  abline(v=mean(pdet.samples),lwd=3,col=1)
-  abline(v=pdet.truth,lwd=3,col=2)
+  abline(v=mean(p.overall.samples),lwd=3,col=1)
+  abline(v=p.overall.truth,lwd=3,col=2)
   #add the likelihood point estimate -which corresponds to the highest posterior value
   abline(v=unmarked.est.det@estimate,lwd=3,col=3,lty=3)
-
 
   ####################
   #plot the logit coeficient for detection
@@ -147,19 +146,3 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   abline(v=m1@estimates@estimates$det@estimates,lwd=3,col=2)
   
   
-######################    
-#Compare to RMark (MARK.exe needs to be installed)
-  # library(RMark)
-  # mark_input=as.data.frame(apply(y1,1,paste,collapse=""))
-  # mark_input <- data.frame(lapply(mark_input, as.character), stringsAsFactors=FALSE)
-  # colnames(mark_input)= c("ch")
-  # 
-  # psi.dot=list(formula=~1,link="logit")
-  # p.dot=list(formula=~1,link="logit")
-  # #Run model through RMARK
-  # mrk= mark(mark_input,model="Occupancy",profile.int = TRUE,model.parameters=list(p=p.dot, Psi=psi.dot),adjust=FALSE,invisible=TRUE,silent=TRUE,delete=TRUE, 
-  #               retry=5,brief=FALSE, output=FALSE)
-  # 
-  # mrk$results$beta
-  # mrk$results$real
-  # 

@@ -22,7 +22,7 @@ rm(list=ls())
 
 #Which file name should we save the simulated data
 #The saved simulations will be saved within the working directory.
-filename="simulation study/sim.data.multistate.null"
+filename="simulation study/sim.null.data"
 
 #How many datasets to simualte
 n.sim=100
@@ -37,16 +37,23 @@ model.type="Null"
 
 #The null model assumed the probability of occupancy in state 2,3, and 4 are all the same
 
-#Define the logit-value for the probabilty of occurence in each state (2,3,4)
+#Define the logit-value for the probability of occurrence in each state (2,3,4)
 alpha=1.2
 mat=c(log(3),alpha,alpha,alpha)
 mat=exp(mat)
 
 
 #Omega are the probability of site i for each state - in order  - states 1,2,3,4
-#These are mututally exclsive probabilitities and must sum to 1
+#These are mutually exclusive probabilities and must sum to 1
 omega=mat/sum(mat)
 sum(omega)
+
+#Alternative specification for the same model
+# psi.overall=sum(omega[2:4])
+# omega[2]=psi.overall/3
+# omega[3]=psi.overall/3
+# omega[4]=psi.overall/3
+# omega[1]=1-omega[2]-omega[3]-omega[4]
 
 psi0=omega[1]
 psiDay=omega[2]
@@ -56,12 +63,12 @@ psiND=omega[4]
 #################################################
 #Define the state-dependent detection matrix
 
-#probability of detection of the species, regardles of the state
+#probability of detection of the species, regardless of the state
 pdet=0.7
 
 #These need to be equivalent
-pDay=pdet          #probabilty of detecting state 2 when in state 2
-pNight=pdet         #probabilty of detecting state 3 when in state 3
+pDay=pdet          #probability of detecting state 2 when in state 2
+pNight=pdet         #probability of detecting state 3 when in state 3
 
 #Probability of detection in state 4
 #State 2,3,4 detection should be equivalent and the sum should add to pdet
@@ -119,14 +126,14 @@ sim.data$obs.matrix=vector("list",n.sim)
 #start data simulation loop
 for(z in 1:n.sim){
   
-  #Simualte true occurence states using the omega probs
+  #Simulate true occurrence states using the omega probs
   state.occurence.matrix=rmultinom(n.sites,1,prob=omega)
   rownames(state.occurence.matrix)=rownames(det.matrix)
   
-  #reducd matrix to simple vector format
+  #reduced matrix to simple vector format
   state.occurence=apply(state.occurence.matrix,2,FUN=function(x){which(x==1)})
   
-  #save true occurences
+  #save true occurrences
   sim.data$state.occ.matrix[[z]]=state.occurence.matrix
   sim.data$state.occurence[[z]]=state.occurence
   

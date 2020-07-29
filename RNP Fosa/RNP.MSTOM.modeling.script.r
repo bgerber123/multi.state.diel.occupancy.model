@@ -75,13 +75,13 @@ hist(cov)
 cov1.unscaled=as.numeric(cov)
 cov1.scaled=as.numeric(scale(cov,center = TRUE,scale = TRUE))
 
-K=6 # number of alpha parameters
+Q=6 # number of alpha parameters
 
 #Package data
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],cov1=cov1.scaled,K=K)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],x=cov1.scaled,Q=Q)
 
 # Parameters monitored
-params <- c("alpha", "pNight", "pDay","pND","prob")
+params <- c("alpha", "pNight", "pDay","pND","PSI")
 
 #Fit the model to do adapt phase
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.R", 
@@ -131,13 +131,13 @@ hist(cov)
 cov1.unscaled=as.numeric(cov)
 cov1.scaled=as.numeric(scale(cov,center = TRUE,scale = TRUE))
 
-K=6 # number of alpha parameters
+Q=6 # number of alpha parameters
 
 #package Data
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2], cov1=cov1.scaled,K=K)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2], x=cov1.scaled,Q=Q)
 
 # Parameters monitored
-params <- c("alpha", "pNight", "pDay","pND","prob")  
+params <- c("alpha", "pNight", "pDay","pND","PSI")  
 
 
 #Fit the model to do adapt phase
@@ -182,12 +182,12 @@ hist(cov)
 cov1.unscaled=as.numeric(cov)
 cov1.scaled=as.numeric(scale(cov,center = TRUE,scale = TRUE))
 
-K=4 # number of alpha parameters
+Q=4 # number of alpha parameters
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],cov1=cov1.scaled,K=K)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],x=cov1.scaled,Q=Q)
 
 # Parameters monitored
-params <- c("alpha", "pNight", "pDay","prob") 
+params <- c("alpha", "pNight", "pDay","PSI") 
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.R", 
                          data = data.input,
@@ -231,10 +231,10 @@ cov1.scaled=as.numeric(scale(cov,center = TRUE,scale = TRUE))
 K=4 # number of alpha parameters
 
 #package data
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2],cov1=cov1.scaled,K=K)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],x=cov1.scaled,Q=Q)
 
 # Parameters monitored
-params <- c("alpha", "pNight", "pDay","prob") 
+params <- c("alpha", "pNight", "pDay","PSI") 
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.R", 
                          data = data.input,
@@ -278,14 +278,14 @@ cov1.scaled=as.numeric(scale(cov,center = TRUE,scale = TRUE))
 
 K=2 # number of alpha parameters
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2], cov1=cov1.scaled,K=K)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2], x=cov1.scaled,Q=Q)
 
 # Initial values- max state in hierachy as starting value
 zst=rep(4,dim(y)[1])
 inits <- function(){list(z = zst)}
 
 # Parameters monitored
-params <- c("alpha", "pdet", "prob") 
+params <- c("alpha","beta" ,"p.overall", "PSI","psi.overall","psi") 
 
 # MCMC settings
 ni <- 10000  ;       nt <- 2;    nb <- 2000;    nc <- 3;   adapt=1000
@@ -335,13 +335,13 @@ hist(cov)
 cov1.unscaled=as.numeric(cov)
 cov1.scaled=as.numeric(scale(cov,center = TRUE,scale = TRUE))
 
-K=2 # number of alpha parameters
+Q=2 # number of alpha parameters
 
 #package data
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2], cov1=cov1.scaled,K=K)
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2], x=cov1.scaled,Q=Q)
 
 # Parameters monitored
-params <- c("alpha", "pdet", "prob") 
+params <- c("alpha","beta" ,"p.overall", "PSI","psi.overall","psi") 
 
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.R", 
@@ -382,17 +382,17 @@ write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALS
 #Fit the null model with no covariates
 
 #package data
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
 
 # Parameters monitored
-params <- c("alpha", "pdet", "prob") 
+params <- c("alpha", "beta", "PSI","p.overall","psi") 
 
 # MCMC settings
 ni <- 10000  ;       nt <- 2;    nb <- 2000;    nc <- 3;   adapt=1000
 
 #Fit the model to do adapt phase
 #this is the full model
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.R", 
+model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.alt.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -430,14 +430,14 @@ write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALS
 #MODEL 8- FULL model - no covs
 K=3 # number of alpha parameters
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
 
 # Initial values- max state in hierachy as starting value
 zst=rep(4,dim(y)[1])
 inits <- function(){list(z = zst)}
 
 # Parameters monitored
-params <- c("alpha", "pNight", "pDay","pND","prob") 
+params <- c("pNight","pDay","pND","PSI") 
 
 # MCMC settings
 ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000
@@ -471,17 +471,17 @@ gelman.diag(M8.full.nocovs,multivariate = FALSE)
 fit <- combine.mcmc(M8.full.nocovs)
 
 M8.full.no.covs.CPO=CPO.function(fit,y,"full")
-CPO.out=t(matrix(c("M8.full.no.covs.CPO",M8.full.no.covs.CPO)))
+CPO.out=t(matrix(c("M8.full.no.covs",M8.full.no.covs.CPO)))
 write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ########################################
 ########################################
 #MODEL 9- Reduced model - no covs
 
-data.input <- list(y = y, R = dim(y)[1], T = dim(y)[2])
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
 
 # Parameters monitored
-params <- c("psiNight","psiDay", "pNight", "pDay","prob")
+params <- c("psiNight","psiDay", "pNight", "pDay","PSI")
 
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
                          data = data.input,
@@ -510,7 +510,7 @@ gelman.diag(M9.red.nocovs,multivariate = FALSE)
 fit <- combine.mcmc(M9.red.nocovs)
 
 M9.red.no.covs.CPO=CPO.function(fit,y,"reduced")
-CPO.out=t(matrix(c("M9.red.no.covs.CPO",M9.red.no.covs.CPO)))
+CPO.out=t(matrix(c("M9.red.no.covs",M9.red.no.covs.CPO)))
 write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 

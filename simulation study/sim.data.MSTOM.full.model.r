@@ -13,7 +13,7 @@
 
 #  ****This script simulates data from the Full model without covariates****
 #
-# The Full model - state detection and occurence can be uniquly different without shared relationships.
+# The Full model - state detection and occurrence can be uniquely different without shared relationships.
 
 ########################################
 #######################################
@@ -22,7 +22,7 @@ rm(list=ls())
 
 #Which file name should we save the simulated data
 #The saved simulations will be saved within the working directory
-filename="simulation study/sim.data.multistate.full"
+filename="simulation study/sim.full.data"
 
 #How many datasets to simualte
 n.sim=100
@@ -35,8 +35,8 @@ n.occs=5    #number of surveys per site
 #Define the model type
 model.type="Full"
 
-#If TIF == 1 then the probability of night (state 3) and day (state 2) occurence is the product 
-#of the maringal occurences of day and night states.If TIF does not equal one, it changes how 
+#If TIF == 1 then the probability of night (state 3) and day (state 2) occurrence is the product 
+#of the marginal occurrences of day and night states.If TIF does not equal one, it changes how 
 #state 4 probability is different from the product
 
 TIF.occ=1.1
@@ -75,7 +75,7 @@ pND.D.marginal=pDay
 pND.N.marginal=pNight
 TIF.det=1.3
 
-#Define State 4 Detection Probabilitities 
+#Define State 4 Detection Probabilities 
 pND.ND=pND.D.marginal*pND.N.marginal*TIF.det  #Detection of state 4 in state 4
 pND.D=pND.D.marginal-pND.ND                   #Detection of state 2 in state 4
 pND.N=pND.N.marginal-pND.ND                   #Detection of state 3 in state 4

@@ -4,3 +4,4 @@
 .Ruserdata
 *.out
 .Rproj.user
+*.data
