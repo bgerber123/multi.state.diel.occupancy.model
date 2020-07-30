@@ -83,7 +83,7 @@ pND.0=1-pND.ND- pND.D-pND.N                   #Detection of state 1 in state 4
 
 #This function creates the detection matrix
 source("simulation study/det.matrix.func.r")
-det.matrix=det.matrix.func(pNight,pDay,pND.N,pND.D,pND.0)
+det.matrix=det.matrix.func(pNight,pDay,pND.N,pND.D,pND.ND,pND.0)
 det.matrix
 
 #Check to make sure the sums of the rows (true states) equal one and no negative values
