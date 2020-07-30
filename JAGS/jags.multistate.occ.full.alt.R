@@ -33,9 +33,9 @@
     q[3,j,3] <- exp(beta2)
     q[3,j,4] <- 0
     q[4,j,1] <- 1
-    q[4,j,2] <- exp(beta1)
-    q[4,j,3] <- exp(beta2)
-    q[4,j,4] <- exp(beta1 + beta2 + beta3)
+    q[4,j,2] <- exp(beta3)
+    q[4,j,3] <- exp(beta4)
+    q[4,j,4] <- exp(beta3 + beta4 + beta5)
     }
     # State-space likelihood
     # State equation: model of true states (z)

@@ -36,18 +36,18 @@
 \section{Introduction}
 We are interested in understanding the spatial variability and drivers of temporal habitat-use of wild animal populations. Common approaches of studying habitat-use or species occurrence are exclusively focused on identifying the spatial drivers of where animals are and are not. Occupancy models are commonly used in these studies to leverage repeat independent surveys to account for sampling biases (e.g., the probability a species occurs or asymtotically uses a spatial unit of interest (site), but goes undetected; \citealt{occupancybook}). The when of where these animals use a site is commonly ignored; in other words, the diel activity of the animal is disregarded when investigating spatial variation in habitat-use. \\
 
-Our interest is to understand the temporal structuring of habitat use, such as what are the spatial locations (and associated probabilities) that an animal uses during the day (sunrise to sunset), during the night (sunset to sunrise), or during the day and night (sunrise to sunrise). The exact temporal structure ultimately depends on the diel pattern of the species; for species that are highly diurnal, temporal categories of interest could be dawn, morning, afternoon, and dusk and for species that are highly noctural, temporal categories may be dusk, early night, late night, and dusk. Further, the why an animal uses a location during one time period or another is species-specific and depends on the life history strategy and behavior of the animal. This model could be useful to understand temporal habitat loss due to anthropogenic activity; for example, a species may use a site when considering the entire 24-hour diel period despite human influence, but change the time period of day they use the site (day only $\rightarrow$ night only) or use the site less by dropping activity during one part of the day (day and night $\rightarrow$ night only). \\
+Our interest is to understand the temporal structuring of habitat use, such as what are the spatial locations (and associated probabilities) that an animal uses during the day (sunrise to sunset), during the night (sunset to sunrise), or during the day and night (sunrise to sunrise). The exact temporal structure ultimately depends on the diel pattern of the species; for species that are highly diurnal, temporal categories of interest could be dawn, morning, afternoon, and dusk. For species that are highly nocturnal, temporal categories may be dusk, early night, late night, and dusk. Further, the why an animal uses a location during one time period or another is species-specific and depends on the life history strategy and behavior of the animal. This model could be useful to understand temporal habitat loss due to anthropogenic activity; for example, a species may use a site when considering the entire 24-hour diel period, but in effect change their time period of day they use the site (day only $\rightarrow$ night only) because of diurnal human activity or use the site less by dropping activity during one part of the day (day and night $\rightarrow$ night only). \\
 
-The utility of this modeling framework will be well suited for remote sampling of species of interest that is continuous throughout the 24-hour diel period, such as camera traps. However, this type of plotless sampling in a continuous environment presents some reinterpretation of parameters as animals move in and out a camera site. Specifically, occupancy probabilities do not reflect `instantaneous occurrence', but rather `asymptotic occurrence', or the probability a site is used at least once over the duration of sampling \citep{efford2012}. Further, the probability of detection at a camera site is a product of the probability a camera takes a picture of the species as it passes in front of the camera and the probability the species is available to be sampled. Most likely, the probability of availability is the main source of heterogeneity. As such, the parameter reflecting the probability of observing the species at a given site and survey occasion should likely \emph{a priori} considered to be different across temporal periods (e.g., day and night), unless the species is known to be active equivalently during these periods (\emph{}.g., cathemeral).\\
+The utility of this modeling framework will be well suited for remote sampling of species of interest that is continuous throughout the 24-hour diel period, such as camera traps. However, this type of plotless (point-based) sampling in a continuous environment presents some reinterpretation of parameters as animals move in and out a camera site. Specifically, occupancy probabilities do not reflect `instantaneous occurrence', but rather `asymptotic occurrence', or the probability a site is used at least once over the duration of sampling \citep{efford2012}. Further, the probability of detection at a camera site is a product of the probability a camera takes a picture of the species as it passes in front of the camera and the probability the species is available to be sampled. Most likely, the probability of availability is the main source of heterogeneity. As such, the parameter reflecting the probability of observing the species at a given site and survey occasion should likely \emph{a priori} considered to be different across temporal periods (e.g., day and night), unless the species is known to be active equivalently during these periods (\emph{}.g., cathemeral).\\
 
-Below, we outline a series of multi-state temporal occupancy models (MSTOM) that can be used to understand temporal habitat-use. This model is a special form of the general multi-state occupancy model with state uncertainty \citep{MacKenzie2009}. Furthermore, the MSTOM Full model is equivalent to the original co-occurence occupancy model \citep{MacKenzie2004} with two-species and the equivalent four states. A demonstration of their equivalent estimation of the most probable parameters values (i.e., maximum likelihood estimates or mode of the posterior distribution) can be found in the R script, `MSTOM Full comparison with 2.species.occ.model.r'. Note, that while MacKenzie et al. 2004 is known to have numerical optimization issues, especially when modeling covariates \citep{MacKenzie2004}, this issue does not persist when using a hierarchical Bayesian approach with markov chain monte carlo optimization.
+Below, we outline a series of multi-state temporal occupancy model (MSTOM) parameterizations that can be used to understand temporal habitat-use. The MSTOM is a special form of the general multi-state occupancy model with state uncertainty \citep{MacKenzie2009} and is equivalent to the original co-occurence occupancy model \citep{MacKenzie2004} with two-species and the equivalent four states. A demonstration of their equivalent estimation of the most probable parameters values (i.e., maximum likelihood estimates and mode of the posterior distributions) can be found in the R script, `MSTOM Full comparison with 2.species.occ.model.r'. Note, that while the likelihood models of MacKenzie et al. 2004 are often discussed as being prone to numerical optimization issues, especially when modeling covariates \citep{MacKenzie2004}, this issue does not persist when using a hierarchical Bayesian approach with markov chain monte carlo optimization.
 
 
 
 \section{Single Season MSTOM}
 \subsection{Fully State Specific}
 \subsubsection{Probability Model}
-We assume each $i$ = 1...$N$ sites (spatial locations) are sampled with $j$ = 1....$K$ independent surveys. Each site is considered to be in one of $M$ mutually exclusive states during the survey period in which we can assume there are no changes in the state occurrence (i.e., closure). We will define four total states throughout ($M = 4$) where the states of site $i$ are 1) not occupied, 2) occupied during the day only, 3) occupied during night only, and 4) occupied during the night and day. State occurrence probabilities in the same order are, 
+We assume each $i$ = 1...$N$ sites (spatial locations) are sampled with $j$ = 1....$K$ independent surveys. Each site is considered to be in one of $M$ mutually exclusive states during the survey period in which we can assume there are no changes in the state occurrence (i.e., closure). We will define four total states throughout ($M = 4$) where the states of site $i$ are 1) not occupied, 2) occupied during the day only, 3) occupied during the night only, and 4) occupied during the night and day. State occurrence probabilities in the same order are, 
 
 %Perhaps not use the day, night, ND notation as it is confused with below. Do I need it?
 \begin{equation}
@@ -59,7 +59,7 @@ where  $\psi^{1} = 1 - \psi^{2} - \psi^{3} - \psi^{4}$ and $\boldmath{1} \cdot \
 \begin{equation}
 \textbf{z}_{i} \sim \text{Categorical}(\boldsymbol{\psi})
 \end{equation}
-and is a 1 x $M$ matrix. For each true state, there is an order to which states may be observed, but this is not strictly hierarchical, as commonly applied in multi-state occupancy models \citep{nichols2007}. Specifically, if a site is in state 3 (night only), it can not be observed in state 2 (day only). Let,  $p^{m,l}_{j}$ be the probability of observing the occupancy state $l$, given the true state is $m$ in survey $j$. To maintain the nomenclature of our intended inference and assuming no site- or survey-level variation in detection probabilities, we can define the $p^{2,2}$ as the probability of detection during the day ($p^{\text{Day}}$), $p^{3,3}$ as the probability of detection during the night ($p^{\text{Night}}$), and the detection probability in state 4 (in order) as $pND^{1}$, $pND^{2}$, $pND^{3}$, and $pND^{4}$. The detection matrix for survey $j$ is $M$ x $M$ with the observed (columns) and true state (row) as,
+and is a 1 x $M$ matrix. For each true state, there is an order to which states may be observed, but this is not strictly hierarchical, as commonly applied in multi-state occupancy models \citep{nichols2007}. Specifically, if a site is in state 3 (night only), it can not be observed in state 2 (day only). Let,  $p^{m,l}_{j}$ be the probability of observing the occupancy state $l$, given the true state is $m$ in survey $j$. To maintain the nomenclature of our intended inference and assuming no site- or survey-level variation in detection probabilities, we can define $p^{2,2}$ as the probability of detection during the day state ($p^{\text{Day}}$), $p^{3,3}$ as the probability of detection during the night state ($p^{\text{Night}}$), and the detection probability in state 4 (in order) as $pND^{1}$, $pND^{2}$, $pND^{3}$, and $pND^{4}$. The detection matrix for survey $j$ is $M$ x $M$ with the observed (columns) and true state (row) as,
 
 \begin{equation}
 \boldsymbol{p}_{j} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
@@ -84,23 +84,18 @@ p^{3,3} = p_{j}^{\text{Night}}  &\sim \text{Beta}(1,1)\\
 \end{align*}
 \end{center}
 
-Under this model, there is no shared relationship between the state occupancy probability 4 (night and day) and states 2 (day only) and 3 (night only). There is also no relationship shared between the detection probabilities of the same states. This model would suggest that the detection or availability of the species at state 4 is possibly different then the detection in other states. This might be because of the species' behavior at sites used throughout the diel period is different than at the other sites. This model is coded for JAGS in the file `jags.multistate.occ.full.R'.
+Under this model, there is no shared relationship between the state occupancy probability of state 4 (night and day) and states 2 (day only) and 3 (night only). There is also no relationship shared between the detection probabilities of the same states. This model would suggest that the detection or availability of the species at state 4 is possibly different then the detection in other states. This might be because of the species' behavior at sites used throughout the diel period is different than at the other sites. This model is coded for JAGS in the file `jags.multistate.occ.full.R'.
 
 \subsubsection{Multinomial-logit Model 1}
-Instead of focusing on estimating site-level occupancy probabilities, we could recast this model using a multinomial logit link as, 
+It is common for model optimization reasons, the desire to use certain prior distributions, or when using covarites to model probabilities to recast occupancy and detection probabilities using a multinomial logit link as, 
 \begin{center}
 \begin{align*}
 \textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi})\\
-\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}.\\
+\boldsymbol{\psi} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}.\\
 \psi^1 &=\frac{\phi^1_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
 \psi^2 &=\frac{\phi^2_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
 \psi^3 &=\frac{\phi^3_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
 \psi^4 &=\frac{\phi^4_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}.\\
-\end{align*}
-\end{center}
-
-\begin{center}
-\begin{align*}
 \phi^1 &= 1\\
 \phi^2 &= e^{\alpha_{1}}\\
 \phi^3 &= e^{\alpha_{2}}\\
@@ -108,6 +103,33 @@ Instead of focusing on estimating site-level occupancy probabilities, we could r
 \end{align*}
 \end{center}
 
+Further, we could do the same for the detection parameters as, 
+\begin{center}
+\begin{align*}
+\boldsymbol{q} &= \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
+									1 &  q^{2,2} & 0 & 0 \\ 
+									1 & 0 & q^{3,3} & 0\\
+  								       1 & q^{4,2} & q^{4,3} & q^{4,4}
+  								      \end{bmatrix}\\
+q^{2,2} &=e^{\beta^{\text{Day}}}\\
+q^{3,3} &=e^{\beta^{\text{Night}}}\\
+q^{4,2} &=e^{\beta^{\text{ND2}}}\\
+q^{4,3} &=e^{\beta^{\text{ND3}}}\\
+q^{4,4} &=e^{\beta^{\text{ND2}}+\beta^{\text{ND3}}+\beta^{\text{ND4}}}
+\end{align*}
+\end{center}
+and the probability of detection parameters can be derived as, 
+
+\begin{center}
+\begin{align*}
+p^{\text{Day}} &=\frac{q^{2,2}}{1+q^{2,2}+0+0}\\
+p^{\text{Night}} &=\frac{q^{3,3}}{1+0+q^{3,3}+0}\\
+p^{\text{ND1}} &=\frac{1}{1+q^{4,2}+q^{4,3}+q^{4,4}}\\
+p^{\text{ND2}} &=\frac{q^{4,2}}{1+q^{4,2}+q^{4,3}+q^{4,4}}\\
+p^{\text{ND3}} &=\frac{q^{4,3}}{1+q^{4,2}+q^{4,3}+q^{4,4}}\\
+p^{\text{ND4}} &=\frac{q^{4,4}}{1+q^{4,2}+q^{4,3}+q^{4,4}}.
+\end{align*}
+\end{center}
 A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ This model is coded for JAGS in the file `jags.multistate.occ.full.alt.R'.
 
 \subsubsection{Multinomial-logit Model 2}
@@ -168,11 +190,11 @@ We could also model detection parameters by site (\textbf{x}) or survey specific
 									1 & 0 & q^{3,3}_{ij} & 0\\
   								       1 & q^{4,2}_{ij} & q^{4,3}_{ij} & q^{4,4}_{ij}
   								      \end{bmatrix}\\
-q^{2,2}_{ij} &=e^{\alpha^{\text{Day}}_{0} +\alpha^{\text{Day}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
-q^{3,3}_{ij} &=e^{\alpha^{\text{Night}}_{0} +\alpha^{\text{Night}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
-q^{4,2}_{ij} &=e^{\alpha^{\text{ND2}}_{0} +\alpha^{\text{ND2}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
-q^{4,3}_{ij} &=e^{\alpha^{\text{ND3}}_{0} +\alpha^{\text{ND3}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}\\
-q^{4,4}_{ij} &=e^{\alpha^{\text{ND4}}_{0} +\alpha^{\text{ND4}}_{1}\times x_{i}+\alpha^{\text{Day}}_{2}\times v_{ij}}
+q^{2,2}_{ij} &=e^{\beta^{\text{Day}}_{0} +\beta^{\text{Day}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{3,3}_{ij} &=e^{\beta^{\text{Night}}_{0} +\beta^{\text{Night}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,2}_{ij} &=e^{\beta^{\text{ND2}}_{0} +\beta^{\text{ND2}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,3}_{ij} &=e^{\beta^{\text{ND3}}_{0} +\beta^{\text{ND3}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}\\
+q^{4,4}_{ij} &=e^{\beta^{\text{ND4}}_{0} +\beta^{\text{ND4}}_{1}\times x_{i}+\beta^{\text{Day}}_{2}\times v_{ij}}
 \end{align*}
 \end{center}
 and the probability of detection parameters can be derived as, 
@@ -187,11 +209,11 @@ p^{\text{ND4}}_{ij} &=\frac{q^{4,4}_{ij}}{1+q^{4,2}_{ij}+q^{4,3}_{ij}+q^{4,4}_{i
 \end{align*}
 \end{center}
 
-Diffuse priors for all $\alpha$ parameters could be specifed as Logistic(0,1).
+Diffuse priors for all $\beta$ parameters could be specified as Logistic(0,1).
 
 \subsection{Reduced MSTOM}
 \subsubsection{Probability Model}
-We might consider a simpler structure for $\boldsymbol{\psi}$ or $\boldsymbol{p}_{j}$ because of ecological or data sparsity reasons. It might be that sites used during the day and night (state 4) are not unique, but simply random and independently determined by the probability any site is used during the day ($\psi^{\text{Day.M}}$) and night ($\psi^{\text{Night.M}}$). Rather than exclusive state probabilities, $\psi^{\text{Day.M}}$ is the probability of using any site during the day, regardless of use or not use at night (marginal probability); further, $\psi^{\text{Night}}$ is the probability of using any site at night, regardless of use during the day.  We can redefine our occupancy parameters as,
+We might consider a simpler structure for $\boldsymbol{\psi}$ or $\boldsymbol{p}_{j}$ because of ecological or data sparsity reasons. It might be that sites used during the day and night (state 4) are not unique, but simply random and independently determined by the probability any site is used during the day ($\psi^{\text{Day.M}}$) and night ($\psi^{\text{Night.M}}$). Rather than exclusive state probabilities, $\psi^{\text{Day.M}}$ is the probability of using any site during the day, regardless of use or not use at night (marginal probability); further, $\psi^{\text{Night.M}}$ is the probability of using any site at night, regardless of use during the day.  We can redefine our occupancy parameters as,
 \begin{center}
 \begin{align*}
 \textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi})\\
@@ -259,7 +281,7 @@ We could generalize the modeling of marginal occupancy parameters using separate
 Diffuse prior distributions for all $\alpha$ parameters could be $\text{Logistic}(0,1)$. This model is coded for JAGS in the file `jags.multistate.occ.reduced.site.covs.by.state.R'.
 
 \subsubsection{Multinomial-logit Mode 1}
-An alternative reduced model specification is to use the multinomial-logit parameterization, which can constrain relationships among state probabilties and include covariates. This model could parameterized as, 
+An alternative reduced model specification is to use the multinomial-logit parameterization, which can constrain relationships among state probabilities and include covariates. This model could be parameterized as, 
 \begin{center}
 \begin{align*}
 \textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi_{i}})\\
@@ -275,7 +297,7 @@ An alternative reduced model specification is to use the multinomial-logit param
 \end{align*}
 \end{center}
 
-The detection matrix could also be specified similarly on the logit scale as,
+The detection matrix could also be specified similarly using the multinomial-logit as,
 
 \begin{equation}
 \boldsymbol{q}_{j} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 
@@ -293,7 +315,7 @@ p^{\text{Night}} &= \frac{e^{\beta_{2}}}{1+0+e^{\beta_{2}}+0}\\
 \end{align*}
 \end{center}
 
-This model could be easily extended to include a difference of occupancy and detection in state 4 by a small modification of $\phi^4_{i} = e^{\alpha_{1}+\alpha_{2}+\alpha_{3}}$ and the matrix cell $q^{4,4}$ to $e^{\beta_{1}+\beta_{2}+\beta_{3}} $. A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ \\
+This model could be easily extended to include a difference of occupancy and detection in state 4 by a small modification of $\phi^4_{i} = e^{\alpha_{1}+\alpha_{2}+\alpha_{3}}$ and the matrix cell $q^{4,4}$ to $e^{\beta_{1}+\beta_{2}+\beta_{3}} $. This would constrain the probability of detection during the day to be the same in state 2 and state 4 and the probabilty of detection during the night to be the same in state 3 and state 4. But, detection of state 4 in state 4 would be allowed to be more or less than the combination of the probability of detection during the day and night alone.  A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ \\
 
 \subsection{Null MSTOM}
 \subsubsection{Probability Model}
