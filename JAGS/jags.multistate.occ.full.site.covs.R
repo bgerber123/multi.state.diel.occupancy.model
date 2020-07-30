@@ -17,7 +17,9 @@
       phi[i,1] <- 1
       phi[i,2] <- exp(alpha[1]+alpha[2]*x[i])
       phi[i,3] <- exp(alpha[3]+alpha[4]*x[i])
-      phi[i,4] <- exp(alpha[5]+alpha[6]*x[i])
+      phi[i,4] <- exp(alpha[1]+alpha[2]*x[i]+
+                      alpha[3]+alpha[4]*x[i]+
+                      alpha[5]+alpha[6]*x[i])
       PSI[i,1]     <- phi[i,1]/sum(phi[i,])
       PSI[i,2]     <- phi[i,2]/sum(phi[i,])
       PSI[i,3]     <- phi[i,3]/sum(phi[i,])

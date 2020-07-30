@@ -40,7 +40,7 @@ Our interest is to understand the temporal structuring of habitat use, such as w
 
 The utility of this modeling framework will be well suited for remote sampling of species of interest that is continuous throughout the 24-hour diel period, such as camera traps. However, this type of plotless sampling in a continuous environment presents some reinterpretation of parameters as animals move in and out a camera site. Specifically, occupancy probabilities do not reflect `instantaneous occurrence', but rather `asymptotic occurrence', or the probability a site is used at least once over the duration of sampling \citep{efford2012}. Further, the probability of detection at a camera site is a product of the probability a camera takes a picture of the species as it passes in front of the camera and the probability the species is available to be sampled. Most likely, the probability of availability is the main source of heterogeneity. As such, the parameter reflecting the probability of observing the species at a given site and survey occasion should likely \emph{a priori} considered to be different across temporal periods (e.g., day and night), unless the species is known to be active equivalently during these periods (\emph{}.g., cathemeral).\\
 
-Below, we outline a series of multi-state temporal occupancy models (MSTOM) that can be used to understand temporal habitat-use. This model is a special form of the general multi-state occupancy model with state uncertainty \citep{MacKenzie2009}. 
+Below, we outline a series of multi-state temporal occupancy models (MSTOM) that can be used to understand temporal habitat-use. This model is a special form of the general multi-state occupancy model with state uncertainty \citep{MacKenzie2009}. Furthermore, the MSTOM Full model is equivalent to the original co-occurence occupancy model \citep{MacKenzie2004} with two-species and the equivalent four states. A demonstration of their equivalent estimation of the most probable parameters values (i.e., maximum likelihood estimates or mode of the posterior distribution) can be found in the R script, `MSTOM Full comparison with 2.species.occ.model.r'. Note, that while MacKenzie et al. 2004 is known to have numerical optimization issues, especially when modeling covariates \citep{MacKenzie2004}, this issue does not persist when using a hierarchical Bayesian approach with markov chain monte carlo optimization.
 
 
 
@@ -87,6 +87,30 @@ p^{3,3} = p_{j}^{\text{Night}}  &\sim \text{Beta}(1,1)\\
 Under this model, there is no shared relationship between the state occupancy probability 4 (night and day) and states 2 (day only) and 3 (night only). There is also no relationship shared between the detection probabilities of the same states. This model would suggest that the detection or availability of the species at state 4 is possibly different then the detection in other states. This might be because of the species' behavior at sites used throughout the diel period is different than at the other sites. This model is coded for JAGS in the file `jags.multistate.occ.full.R'.
 
 \subsubsection{Multinomial-logit Model 1}
+Instead of focusing on estimating site-level occupancy probabilities, we could recast this model using a multinomial logit link as, 
+\begin{center}
+\begin{align*}
+\textbf{z}_{i} &\sim \text{Categorical}(\boldsymbol{\psi})\\
+\boldsymbol{\psi}_{i} &= \begin{bmatrix} \psi^1_{i} & \psi^2_{i} & \psi^3_{i} & \psi^4_{i} \end{bmatrix}.\\
+\psi^1 &=\frac{\phi^1_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^2 &=\frac{\phi^2_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^3 &=\frac{\phi^3_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}\\
+\psi^4 &=\frac{\phi^4_{i}}{\phi^1_{i}+ \phi^2_{i}+\phi^3_{i}+\phi^4_{i}}.\\
+\end{align*}
+\end{center}
+
+\begin{center}
+\begin{align*}
+\phi^1 &= 1\\
+\phi^2 &= e^{\alpha_{1}}\\
+\phi^3 &= e^{\alpha_{2}}\\
+\phi^4 &= e^{\alpha_{1}+\alpha_{2}+\alpha_{3}}\\
+\end{align*}
+\end{center}
+
+A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ This model is coded for JAGS in the file `jags.multistate.occ.full.alt.R'.
+
+\subsubsection{Multinomial-logit Model 2}
 To model site-level occurrence according to a single continuous covariates ($\mathbf{x}$) that effects state-level probabilities differently, we could specify this as,
 \begin{center}
 \begin{align*}
@@ -104,13 +128,13 @@ To model site-level occurrence according to a single continuous covariates ($\ma
 \phi^1_{i} &= 1\\
 \phi^2_{i} &= e^{\alpha_{1}+\alpha_{2}\times x_{i}}\\
 \phi^3_{i} &= e^{\alpha_{3}+\alpha_{4}\times x_{i}}\\
-\phi^4_{i} &= e^{\alpha_{5}+\alpha_{6}\times x_{i}}\\
+\phi^4_{i} &= e^{\alpha_{1}+\alpha_{2}\times x_{i}+\alpha_{3}+\alpha_{4}\times x_{i}+\alpha_{5}+\alpha_{6}\times x_{i}}\\
 \end{align*}
 \end{center}
 
 A diffuse prior could be $\alpha_{\bullet} \sim \text{Logistic}(0,1).$ This model is coded for JAGS in the file `jags.multistate.occ.full.site.covs.R'.
 
-\subsubsection{Multinomial-logit Model 2}
+\subsubsection{Multinomial-logit Model 3}
 We could generalize the modeling of state-specific occupancy parameters using separate design matrices ($\textbf{x}_{i}^{\text{Day}}, \textbf{x}_{i}^{\text{Night}}, \textbf{x}_{i}^{\text{ND}}$) that for each site $i$ are  1 x Q$_{m}$ (being the number of columns) and associated vectors of coefficients ($\boldsymbol{\alpha}^{\text{Day}}, \boldsymbol{\alpha}^{\text{Night}}, \boldsymbol{\alpha}^{\text{ND}}$) that are $Q_{m}$ x 1, and specified as,
 \begin{center}
 \begin{align*}
@@ -128,7 +152,7 @@ We could generalize the modeling of state-specific occupancy parameters using se
 \phi^1_{i} &= 1\\
 \phi^2_{i} &= e^{\textbf{x}_{i}^{\text{Day}}\boldsymbol{\alpha}^{\text{Day}}}\\
 \phi^3_{i} &= e^{\textbf{x}_{i}^{\text{Night}}\boldsymbol{\alpha}^{\text{Night}}}\\
-\phi^4_{i} &= e^{\textbf{x}_{i}^{\text{ND}}\boldsymbol{\alpha}^{\text{ND}}}\\
+\phi^4_{i} &= e^{\textbf{x}_{i}^{\text{Day}}\boldsymbol{\alpha}^{\text{Day}}+\textbf{x}_{i}^{\text{Night}}\boldsymbol{\alpha}^{\text{Night}}+\textbf{x}_{i}^{\text{ND}}\boldsymbol{\alpha}^{\text{ND}}}\\
 \end{align*}
 \end{center}
 
@@ -269,7 +293,7 @@ p^{\text{Night}} &= \frac{e^{\beta_{2}}}{1+0+e^{\beta_{2}}+0}\\
 \end{align*}
 \end{center}
 
-This model could be easily extended to include a difference of occupancy and detection in state 4 by a small modification of $\phi^4_{i} = e^{\alpha_{1}+\alpha_{2}+\alpha_{3}}$ and the matrix cell $q^{4,4}$ to $e^{\beta_{1}+\beta_{2}+\beta_{3}} $. A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ This model is coded for JAGS in the file `jags.multistate.occ.reduced.alt.R'.\\
+This model could be easily extended to include a difference of occupancy and detection in state 4 by a small modification of $\phi^4_{i} = e^{\alpha_{1}+\alpha_{2}+\alpha_{3}}$ and the matrix cell $q^{4,4}$ to $e^{\beta_{1}+\beta_{2}+\beta_{3}} $. A diffuse prior for all coefficients could be done using $\text{Logistic}(0,1).$ \\
 
 \subsection{Null MSTOM}
 \subsubsection{Probability Model}
@@ -434,6 +458,8 @@ The Bayesian P-value can be calculated as the proportion of times $D$ is greater
 
 
 \bibitem[Hooten and Hobbs, 2015]{hooten2015}Hooten, M. B., \& Hobbs, N. T. (2015). A guide to bayesian model selection for ecologists. Ecological Monographs, 85, 3–28.
+
+\bibitem[Mackenzie et al., 2004]{MacKenzie2004}MacKenzie, D. I., Bailey, L. L., \& Nichols, J. D. (2004). Investigating species co‐occurrence patterns when species are detected imperfectly. Journal of Animal Ecology, 73(3), 546-555.
 
 \bibitem[Mackenzie et al., 2009]{MacKenzie2009}MacKenzie, D. I., Nichols, J. D., Seamans, M. E., \& Gutiérrez, R. J. (2009). Modeling species occurrence dynamics with multiple states and imperfect detection. Ecology, 90(3), 823-835.
 

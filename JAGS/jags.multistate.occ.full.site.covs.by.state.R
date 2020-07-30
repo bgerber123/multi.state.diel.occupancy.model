@@ -23,7 +23,7 @@
       phi[i,1] <- 1
       phi[i,2] <- exp(inprod(Xday[i,],alpha.day))
       phi[i,3] <- exp(inprod(Xnight[i,],alpha.night))
-      phi[i,4] <- exp(inprod(Xnd[i,],alpha.nd))
+      phi[i,4] <- exp(inprod(Xday[i,],alpha.day)+inprod(Xnight[i,],alpha.night)+inprod(Xnd[i,],alpha.nd))
       PSI[i,1] <- phi[i,1]/sum(phi[i,])
       PSI[i,2] <- phi[i,2]/sum(phi[i,])
       PSI[i,3] <- phi[i,3]/sum(phi[i,])
