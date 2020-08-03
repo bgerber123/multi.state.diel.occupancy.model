@@ -6,25 +6,29 @@ library(runjags)
 #library(foreach)
 
 source("simulation study/det.matrix.func.r")
-source("RNP Fosa/multi.state.likelihood.r")
-source("RNP Fosa/GOF.r")
+source("AJB Fosa/multi.state.likelihood.r")
+source("AJB Fosa/GOF.r")
 
 #load most supported model and data
-load("RNP Fosa/RNP.data")
+#assign data to objects
+load("AJB Fosa/AJB.data")
 
 #assign data to objects
-y=RNP.data[[1]] #detection history
+y=as.matrix(AJB.data$data) #detection history
 
-load("RNP Fosa/M1.full.out")
-fit=combine.mcmc(M1.full)
+#Drop sites with no detection data
+index.site.drop=which(apply(y,1,FUN=function(x){all(is.na(x))}))
+y=y[-index.site.drop,]
 
+load("AJB Fosa/M1.full.no.covs.out")
+fit <- combine.mcmc(M1.full.no.covs)
 
 model.type="full"
 
-#The GOF function takes some time. It loops over each site and does foreach for all mcmc samples
-#This could be sped up.
+#The GOF function is not very efficient due to a for loop across sites and across mcmc samples.
+#This could be sped up significantly.
 dev=GOF(fit,y,model.type)
-save(dev,file="RNP Fosa/dev.RNP.out")
+save(dev,file="AJB Fosa/dev.RNP.out")
 
 #plot the Predicted and observed deviances
 hist(dev$Deviance.Predicted,breaks=50,col=2)

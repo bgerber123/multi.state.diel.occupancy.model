@@ -1,8 +1,7 @@
 #Calculate a Bayesian p-value as a measure of goodness-of-fit
 
 GOF=function(fit,y,model.type){
-
-  cl <- parallel::makeCluster(detectCores())
+  
   #To do model selection with CPO, we need to get site-level occurence and detection
   #probabilities.
   
@@ -85,30 +84,15 @@ GOF=function(fit,y,model.type){
     for(s in 1:n.mcmc){
       linear.pred[[s]]=t(z.pred[,s])%*%det.out[[s]]
     }
-
-  # cl <- parallel::makeCluster(10)
-  # linear.pred= foreach(s = 1:n.mcmc) %dopar% {
-    #     t(z.pred[,s])%*%det.out[[s]]
-  #   }
-    
-    
-      
+  
     #Predict samples for each s by each k site
     y.pred=lapply(linear.pred,FUN=function(x){rmultinom(length(y[k,][!is.na(y[k,])]),1,prob=x)})
     state.occurence=lapply(y.pred,FUN=function(x){apply(x,2,FUN=function(y){which(y==1)})})
 
 #Calculate the likelihood of the predicted observations based on the estimates
-#for each parallel
-   #   pred.temp= foreach(s = 1:n.mcmc) %dopar% {
-   #     multi.state.likelihood(t(matrix(psi.matrix[s,])),t(matrix(det.matrix[s,])),state.occurence[[s]])
-   # }
-
-   # predicted.lik.save[k,]=unlist(pred.temp)
-   
- #old for loop 
-   for(s in 1:n.mcmc){
-     predicted.lik.save[k,s]=multi.state.likelihood(t(matrix(psi.matrix[s,])),t(matrix(det.matrix[s,])),state.occurence[[s]])
-   }
+    for(s in 1:n.mcmc){
+      predicted.lik.save[k,s]=multi.state.likelihood(t(matrix(psi.matrix[s,])),t(matrix(det.matrix[s,])),state.occurence[[s]])
+    }
 
 
 # #to calculate the predicted deviance, loop over s mcmc samples for site k
