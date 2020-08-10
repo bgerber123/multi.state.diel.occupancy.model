@@ -1,4 +1,4 @@
-det.matrix.func=function(pNight,pDay,pND.N,pND.D,pND.notseen){
+det.matrix.func=function(pNight,pDay,pND.ND,pND.N,pND.D,pND.notseen){
   det.matrix=matrix(0, ncol=4,nrow=4)
   colnames(det.matrix)=c("not seen","seen day","seen night","seen ND")
   rownames(det.matrix)=c("not used","day use","night use","ND use")
