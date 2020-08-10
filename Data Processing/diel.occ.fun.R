@@ -32,9 +32,18 @@ diel.occ.fun = function(photo.data,
   start.survey = ymd(start.survey)
   end.survey = ymd(end.survey)
   
+  start.survey = ymd(start.survey)
+  end.survey = ymd(end.survey)
   full_date <- seq(start.survey, end.survey, by="day") 
-  occ_length <- ceiling(length(full_date)/occasion.length) 
-  occ <- sort(rep(1:occ_length,length.out=length(full_date))) # index of occasions
+  
+  true_occ_length <- (length(full_date)/occasion.length) # true # of occasions
+  occ_length <- ceiling(length(full_date)/occasion.length) # rounded occasions
+  date.out=sort(rep(1:occ_length,times=occasion.length)) #index of all occasions 
+  cut.this=length(date.out)-length(full_date) #this is used if true_occ_length is not an integer (see below)
+  
+  if (true_occ_length%%1 == 0) {
+    occ <- sort(rep(1:occ_length,length.out=length(full_date)))} else
+    {occ <- date.out[-c((length(date.out)-cut.this+1):length(date.out))]}
   
   full_date <- tibble(Date = full_date, occ) # combine days and occasion numbers
   photo.data <- left_join(photo.data, full_date) # add the occasion to the metadata
@@ -81,7 +90,7 @@ diel.occ.fun = function(photo.data,
       }
     }) %>% 
     ungroup() %>% 
-    pivot_longer(3:5, values_to="occ_type") %>% 
+    pivot_longer(3:ncol(.), values_to="occ_type") %>% 
     select(-name) %>% 
     drop_na()
   
@@ -91,7 +100,10 @@ diel.occ.fun = function(photo.data,
     mutate(occ_type = replace(occ_type,is.na(occ_type) & !(is.na(old_occ_type)),1)) %>%
     select(-old_occ_type) %>% 
     pivot_wider(values_from=occ_type, names_from=occ)
- 
+  
+  # Give your column names
+  colnames(diel.detection.matrix) <- c("Station", paste("Occ_", 1:ncol(diel.detection.matrix), sep=""))
+  
   #Output new diel detection matrix--------------------------------------------------
   out = list(diel.detection.matrix)
   return(out)

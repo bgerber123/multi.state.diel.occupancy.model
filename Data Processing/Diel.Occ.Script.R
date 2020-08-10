@@ -26,6 +26,10 @@ longitude = 49.603431 # Longitude of study site
 start.survey = "2008-09-02" # Starting date of survey (YYYY-MM-DD)
 end.survey = "2008-11-13" #Ending date of survey (YYYY-MM-DD)
 occasion.length = 6 # Number of days per occasion 
+
+#Note: In this exmaple, stations are identified by Station.ID + station.num (no space)
+# Station.ID is an input variable but the function will generate the station.num (e.g. Station1, Station2, Station3)
+# which should match the Station name in the CSV
 station.ID = "AJB" # Name of Study Area
 
 #Note- The detection matrix can be 1 (detected), 0 (not detected), and "." (not surveyed).
