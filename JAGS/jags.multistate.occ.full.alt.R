@@ -12,10 +12,10 @@
       phi[i,2] <- exp(alpha1)
       phi[i,3] <- exp(alpha2)
       phi[i,4] <- exp(alpha1+alpha2+alpha3)
-      PSI[i,1] <- phi[i,1]/phi[i,]
-      PSI[i,2] <- phi[i,2]/phi[i,]
-      PSI[i,3] <- phi[i,3]/phi[i,]
-      PSI[i,4] <- phi[i,4]/phi[i,]
+      PSI[i,1] <- phi[i,1]/sum(phi[i,])
+      PSI[i,2] <- phi[i,2]/sum(phi[i,])
+      PSI[i,3] <- phi[i,3]/sum(phi[i,])
+      PSI[i,4] <- phi[i,4]/sum(phi[i,])
     }
     # Define observation matrix
     # Order of indices: true state, time, observed state

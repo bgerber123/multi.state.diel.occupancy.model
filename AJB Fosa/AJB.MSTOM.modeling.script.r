@@ -21,6 +21,8 @@ library(runjags)
 library(coda)
 source("AJB Fosa/multi.state.likelihood.r")
 source("AJB Fosa/CPO.function.r")
+#Random effects across multiple surveys can be evaluated by CPO with this function:
+source("AJB Fosa/CPO.function.RE.r") 
 
 
 ### Data ############################# 
@@ -44,9 +46,6 @@ survey.cov=AJB.data$conmat
 
 #Look at correlation among human trap success covariates
 cor(cov,use="complete.obs")
-
-#TS vs mean.TS is irrelevant
-plot(cov$TS,cov$mean.TS)
 
 #compare day and night trap success
 plot(cov$day.TS,cov$night.TS)
@@ -443,4 +442,61 @@ fit <- combine.mcmc(M2.hybrid.no.covs)
 M2.hybrid.no.covs.CPO=CPO.function(fit,y,"full") #CPO function will only need "full" for the detection parameters
 CPO.out=t(matrix(c("M2.hybrid.no.covs",M2.hybrid.no.covs.CPO)))
 write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+
+
+##########################################
+### Fit Model1-Site-Level-Random Effect - Full model - No Covariates ############################# 
+
+#Bring in the array data
+y=AJB.data$fosa.array
+
+# Initial values- max state in hierarchy as starting value
+zst=matrix(rep(rep(4,dim(y)[1]),dim(y)[3]),ncol=dim(y)[3])
+inits <- function(){list(z = zst)}
+
+# MCMC settings
+ni <- 40000  ;       nt <- 2;    nb <- 3000;    nc <- 3;   adapt=2000
+
+
+
+dim(y)
+#jags data input
+data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Ns=dim(y)[3])
+
+# Parameters monitored
+params <- c("alpha1", "alpha2", "alpha3",
+            "mu.alpha1","mu.alpha2","mu.alpha3",
+            "tau.alpha1","tau.alpha2","tau.alpha3",
+            "beta1","beta2","beta3","beta4","beta5",
+            "mu.beta1","mu.beta2","mu.beta3","mu.beta4","mu.beta5",
+            "tau.beta1","tau.beta2","tau.beta3","tau.beta4","tau.beta5",
+            "psiDay","psiNight","psiND","pDay","pNight","pND.ND",
+            "pND.N","pND.D","pND.0","PSIM","PSI")
+
+#Fit the model to do adapt phase
+model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.alt.RE.R", 
+                         data = data.input,
+                         inits=inits,
+                         n.chains = nc,
+                         n.adapt=adapt)
+
+#burn in period
+update(model.jags, n.iter=nb)
+
+#Fit the model and get posterior samples
+M1.full.no.covs.RE <- coda.samples(model.jags, variable.names=params, 
+                                n.iter=ni, 
+                                thin=nt,
+                                progress.bar="text")
+save(M1.full.no.covs.RE,file="AJB Fosa/M1.full.no.covs.RE.out")
+#load("AJB Fosa/M1.full.no.covs.RE.out")
+
+gelman.diag(M1.full.no.covs.RE,multivariate = FALSE)
+
+fit <- combine.mcmc(M1.full.no.covs.RE)
+
+M1.full.no.covs.RE.CPO=CPO.function.RE(fit,y)
+CPO.out=t(matrix(c("M1.full.no.covs.RE",M1.full.no.covs.RE.CPO)))
+write.table(CPO.out,file="AJB Fosa/CPO.out.AJB.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+
 

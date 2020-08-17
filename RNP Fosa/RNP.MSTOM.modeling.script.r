@@ -26,7 +26,8 @@ source("RNP Fosa/multi.state.likelihood.r")
 source("RNP Fosa/CPO.function.r")
 
 #load the prepared data file
-load("RNP Fosa/RNP.data")
+#load("RNP Fosa/RNP.data")
+load("RNP Fosa/RNP2.data")
 
 #assign data to objects
 y=RNP.data[[1]] #detection history
@@ -48,6 +49,8 @@ cor(covs$DistTown,covs$Locals)
 hist(covs$DistMatrix)
 hist(covs$Locals)
 hist(covs$DistTown)
+
+plot(covs$DistMatrix,log(covs$DistMatrix))
 
 #Hypothesis:
 #Each covariate, representing an effect of edge/people will influence fosa occurence where
