@@ -8,12 +8,15 @@ library(bayesplot)
 library(ggplot2)
 
 
-load("RNP Fosa/M1.fit")
+#for first fit
+#load("RNP Fosa/M1.fit")
 
-
+rm(list=ls())
+load("RNP Fosa/M1.full.out")
+fit <- combine.mcmc(M1.full)
 #load the prepared data file
-load("RNP Fosa/RNP.data")
-covs=RNP.data[[2]]
+load("RNP Fosa/RNP2.data")
+covs=RNP2.data[[2]]
 cov=covs$DistTown
 hist(cov)
 cov1.unscaled=as.numeric(cov)
@@ -73,16 +76,17 @@ length(which(fit.matrix[,6]>0))/dim(fit.matrix)[1]
 #Need to predict site occupancy using newcov
 
 n.mcmc=dim(fit.matrix)[1]
-n.sites=53
+n.sites=dim(y)[1]
 
 
 
-alpha1=fit[,1]
-alpha2=fit[,2]
-alpha3=fit[,3]
-alpha4=fit[,4]
-alpha5=fit[,5]
-alpha6=fit[,6]
+alpha1=fit[,which(grepl("alpha[1]",colnames(fit), fixed = TRUE))]
+alpha2=fit[,which(grepl("alpha[2]",colnames(fit), fixed = TRUE))]
+alpha3=fit[,which(grepl("alpha[3]",colnames(fit), fixed = TRUE))]
+alpha4=fit[,which(grepl("alpha[4]",colnames(fit), fixed = TRUE))]
+alpha5=fit[,which(grepl("alpha[5]",colnames(fit), fixed = TRUE))]
+alpha6=fit[,which(grepl("alpha[6]",colnames(fit), fixed = TRUE))]
+
 
 #cov1.scaled2=cov1.scaled[order(cov1.scaled)]
 #cov1.unscaled2=cov1.unscaled[order(cov1.unscaled)]
@@ -96,7 +100,9 @@ for (s in 1:length(x.pred)){
   phi1 <- 1
   phi2 <- exp(alpha1+alpha2*x.pred.scaled[s])
   phi3 <- exp(alpha3+alpha4*x.pred.scaled[s])
-  phi4 <- exp(alpha5+alpha6*x.pred.scaled[s])
+  phi4 <- exp(alpha1+alpha2*x.pred.scaled[s]+
+                alpha3+alpha4*x.pred.scaled[s]+
+                alpha5+alpha6*x.pred.scaled[s])
   constant=phi1+phi2+phi3+phi4
   psi.state.mcmc[s,,1]     <- phi1/constant
   psi.state.mcmc[s,,2]     <- phi2/constant
@@ -142,7 +148,6 @@ par(mfrow=c(2,2))
 plot(0, type="n", ylim=c(0, 1),xlim=c(xlim1[1],xlim1[2]),ylab="Probability of Occurence",xlab="Distance to Nearest Village (m)",main="State 1 (No Use)")
 densregion(x.pred,y,z1,nlevels = nlevel,colmax = "black",pointwise = TRUE)
 lines(x.pred,z1.center,col="white",lwd=2)
-
 
 plot(0, type="n", ylim=c(0, 1),xlim=c(xlim1[1],xlim1[2]),ylab="Probability of Occurence",xlab="Distance to Nearest Village (m)",main="State 2 (Day Use)")
 densregion(x.pred,y,z2,nlevels = nlevel,colmax = "darkgreen",pointwise = TRUE)

@@ -103,7 +103,7 @@ M1.full <- coda.samples(model.jags, variable.names=params,
                         progress.bar="text")
 save(M1.full,file="RNP Fosa/M1.full.out")
 
-#load("RNP Fosa/M1.full")
+#load("RNP Fosa/M1.full.out")
 
 #plot(M1.full,ask=TRUE)
 

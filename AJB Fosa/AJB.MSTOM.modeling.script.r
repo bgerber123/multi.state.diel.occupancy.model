@@ -457,11 +457,12 @@ inits <- function(){list(z = zst)}
 # MCMC settings
 ni <- 40000  ;       nt <- 2;    nb <- 3000;    nc <- 3;   adapt=2000
 
-
-
 dim(y)
+
+#Make the number of sites a vector corresponding to the length of the number of survey areas
+N=rep(dim(y)[1],dim(y)[3])
 #jags data input
-data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],Ns=dim(y)[3])
+data.input <- list(y = y, N = N, K = dim(y)[2],T=dim(y)[3])
 
 # Parameters monitored
 params <- c("alpha1", "alpha2", "alpha3",
