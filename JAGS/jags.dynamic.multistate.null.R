@@ -5,7 +5,7 @@ model{
 for(i in 1:nsite) {
   for(ti in 1:nyear) {
     for(survey in 1:nsurvey) {
-      y[i, ti, survey] ~ dcat( rdm[i, ( 1:nout ) , z[i, ti], ti ] )
+      y[i, ti, survey] ~ dcat( rdm[i, , z[i, ti], ti ] )
     }
   }
 }
@@ -14,9 +14,9 @@ for(i in 1:nsite) {
 #######
 for(i in 1:nsite) {
   # for first season
-  z[i, 1] ~ dcat( PSI[i, ( 1:nout )] )
+  z[i, 1] ~ dcat( PSI[i, ] )
   for(t in 2:nyear) {
-    z[i, t] ~ dcat( tpm[i, ( 1:nout ) , z[ i, t-1], t-1] )
+    z[i, t] ~ dcat( tpm[i, , z[ i, t-1], t-1] )
   }
 }
 for( i in 1:nsite ) {
@@ -58,7 +58,7 @@ tpm[i, 4, 3, t-1] <- exp( gam[1, i, t-1] ) #--------------------------------|DN
 # DN to ..
 tpm[i, 1, 4, t-1] <- exp( eps[1, i, t-1] + eps[2, i, t-1] ) #---------------|U
 tpm[i, 2, 4, t-1] <- exp( eps[2, i, t-1] ) #--------------------------------|D
-tpm[i, 3, 4, t-1] <- exp(                  eps[2, i, t-1] ) #---------------|N
+tpm[i, 3, 4, t-1] <- exp(                  eps[1, i, t-1] ) #---------------|N
 tpm[i, 4, 4, t-1] <- 1 #----------------------------------------------------|DN
 } # close t year loop
 ######
