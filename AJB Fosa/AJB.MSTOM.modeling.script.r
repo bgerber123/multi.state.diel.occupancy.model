@@ -472,7 +472,7 @@ params <- c("alpha1", "alpha2", "alpha3",
             "mu.beta1","mu.beta2","mu.beta3","mu.beta4","mu.beta5",
             "tau.beta1","tau.beta2","tau.beta3","tau.beta4","tau.beta5",
             "psiDay","psiNight","psiND","pDay","pNight","pND.ND",
-            "pND.N","pND.D","pND.0","PSIM","PSI")
+            "pND.N","pND.D","pND.0","PSIM","PSI","PSIM")
 
 #Fit the model to do adapt phase
 model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.alt.RE.R", 

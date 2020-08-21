@@ -46,6 +46,15 @@
       PSI[i,2,t] <- phi[i,2,t]/sum(phi[i,,t])
       PSI[i,3,t] <- phi[i,3,t]/sum(phi[i,,t])
       PSI[i,4,t] <- phi[i,4,t]/sum(phi[i,,t])
+      #Mean occurence probabilities
+      phiM[i,1,t] <- 1
+      phiM[i,2,t] <- exp(mu.alpha.day+alpha1.1*cov1[i,t])
+      phiM[i,3,t] <- exp(mu.alpha.night+alpha2.1*cov2[i,t])
+      phiM[i,4,t] <- exp(mu.alpha.day+alpha1.1*cov1[i,t]+mu.alpha.night+alpha2.1*cov2[i,t]+mu.alpha.ND+alpha3.1*cov3[i,t])
+      PSIM[i,1,t] <- phiM[i,1,t]/sum(phiM[i,,t])
+      PSIM[i,2,t] <- phiM[i,2,t]/sum(phiM[i,,t])
+      PSIM[i,3,t] <- phiM[i,3,t]/sum(phiM[i,,t])
+      PSIM[i,4,t] <- phiM[i,4,t]/sum(phiM[i,,t])
       }
     }
     # Define observation matrix

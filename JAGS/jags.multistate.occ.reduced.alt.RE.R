@@ -29,6 +29,15 @@
     PSI[i,2,t] <- phi[i,2,t]/sum(phi[i,,t])
     PSI[i,3,t] <- phi[i,3,t]/sum(phi[i,,t])
     PSI[i,4,t] <- phi[i,4,t]/sum(phi[i,,t])
+    #Mean population-level occurence
+    phiM[i,1,t] <- 1
+    phiM[i,2,t] <- exp(mu.alpha1)
+    phiM[i,3,t] <- exp(mu.alpha2)
+    phiM[i,4,t] <- exp(mu.alpha1+mu.alpha2)
+    PSIM[i,1,t] <- phiM[i,1,t]/sum(phiM[i,,t])
+    PSIM[i,2,t] <- phiM[i,2,t]/sum(phiM[i,,t])
+    PSIM[i,3,t] <- phiM[i,3,t]/sum(phiM[i,,t])
+    PSIM[i,4,t] <- phiM[i,4,t]/sum(phiM[i,,t])
     }
 }
   # Define observation matrix
@@ -82,17 +91,5 @@
         pND.N[t] <- q[4,1,3,t]/sum(q[4,1,,t])
         pND.D[t] <- q[4,1,2,t]/sum(q[4,1,,t])
         pND.0[t] <- q[4,1,1,t]/sum(q[4,1,,t])      
-      
-      #Mean population-level occurence
-      # for(i in 1:N[t]){
-      #   phiM[i,1] <- 1
-      #   phiM[i,2] <- exp(mu.alpha1)
-      #   phiM[i,3] <- exp(mu.alpha2)
-      #   phiM[i,4] <- exp(mu.alpha1+mu.alpha2)
-      #   PSIM[i,1] <- phiM[i,1]/sum(phiM[i,])
-      #   PSIM[i,2] <- phiM[i,2]/sum(phiM[i,])
-      #   PSIM[i,3] <- phiM[i,3]/sum(phiM[i,])
-      #   PSIM[i,4] <- phiM[i,4]/sum(phiM[i,])
-      # }
     }
 }
