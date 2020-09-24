@@ -6,8 +6,8 @@
 #
 ################################################
 
-cat("Simulation for a dynamic multi-state null model\n")
-cat("-----------------------------------------------\n")
+cat("Simulation for a dynamic multi-state conditional model\n")
+cat("------------------------------------------------------\n")
 
 cat("Loading run.jags...\n")
 library(runjags)
@@ -29,7 +29,8 @@ my_covars <- sim_covariates()
 #  to detect and varying states (and transitions) are relatively common.
 cat("Simulating parameters and data...\n")
 my_data <- sim_data(
-  my_covars
+  my_covars,
+  conditional_params = TRUE
 )
 
 
@@ -39,12 +40,13 @@ cat("Generating initial values for JAGS...\n")
 # make the data_list we are going to supply to JAGS
 jags_list <- jags_prep(
   my_covars,
-  my_data
+  my_data,
+  has_conditionals = TRUE
 )
 
 # here is the function for initial values
 
-inits_no_inxs <- function(chain){
+inits_inxs <- function(chain){
   gen_list <- function(chain = chain){
     list( 
       z = matrix(
@@ -54,12 +56,17 @@ inits_no_inxs <- function(chain){
       ),
       a = matrix(rnorm(jags_list$ncat * jags_list$ncov_psi),
                  ncol = jags_list$ncov_psi, nrow = jags_list$ncat),
+      a_inxs = rnorm(jags_list$ncov_psi_inxs),
       b = matrix(rnorm(jags_list$ncat * jags_list$ncov_gam),
                  ncol = jags_list$ncov_gam, nrow = jags_list$ncat),
       d = matrix(rnorm(jags_list$ncat * jags_list$ncov_eps),
                  ncol = jags_list$ncov_eps, nrow = jags_list$ncat),
       f = matrix(rnorm(jags_list$ncat * jags_list$ncov_rho),
                  ncol = jags_list$ncov_rho, nrow = jags_list$ncat),
+      g = matrix(rnorm(jags_list$n_inxs * jags_list$ncov_gam),
+                 ncol = jags_list$ncov_gam, nrow = jags_list$n_inxs),
+      h = matrix(rnorm(jags_list$n_inxs * jags_list$ncov_eps),
+                 ncol = jags_list$ncov_eps, nrow = jags_list$n_inxs),
       .RNG.name = switch(chain,
                          "1" = "base::Wichmann-Hill",
                          "2" = "base::Marsaglia-Multicarry",
@@ -89,15 +96,15 @@ inits_no_inxs <- function(chain){
 cat("Fitting model..\n")
 
 mout <- run.jags(
-  model = "./JAGS/jags.dynamic.multistate.null.R",
-  monitor = c("a", "b", "d", "f"), 
+  model = "./JAGS/jags.dynamic.multistate.covars.R",
+  monitor = c("a", "a_inxs", "b", "d", "f", "g", "h"), 
   data = jags_list,
   n.chains = 4,
-  inits = inits_no_inxs,
+  inits = inits_inxs,
   adapt = 400,
   burnin = 50000,
   sample = ceiling(50000/4),
-  thin = 10,
+  thin = 5,
   summarise = FALSE,
   plots = FALSE,
   method = "parallel"
@@ -107,6 +114,7 @@ msum <- summary(mout)
 
 compare_ests(
   msum = msum,
-  pars = my_data$parameters
+  pars = my_data$parameters,
+  conditional_params = TRUE
 )
 

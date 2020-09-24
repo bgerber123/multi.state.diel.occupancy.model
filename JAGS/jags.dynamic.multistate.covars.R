@@ -5,7 +5,7 @@ model{
 for(i in 1:nsite) {
   for(ti in 1:nyear) {
     for(survey in 1:nsurvey) {
-      y[i, ti, survey] ~ dcat( rdm[i, ( 1:nout ) , z[i, ti], ti ] )
+      y[i, ti, survey] ~ dcat( rdm[i,  , z[i, ti], ti ] )
     }
   }
 }
@@ -14,9 +14,9 @@ for(i in 1:nsite) {
 #######
 for(i in 1:nsite) {
   # for first season
-  z[i, 1] ~ dcat( PSI[i, ( 1:nout )] )
+  z[i, 1] ~ dcat( PSI[i, ] )
   for(t in 2:nyear) {
-    z[i, t] ~ dcat( tpm[i, ( 1:nout ) , z[ i, t-1], t-1] )
+    z[i, t] ~ dcat( tpm[i,  , z[ i, t-1], t-1] )
   }
 }
 for( i in 1:nsite ) {
@@ -42,23 +42,23 @@ for(t in 2:nyear) {
 ######
 # U to ...
 tpm[i, 1, 1, t-1] <- 1 #----------------------------------------------------|U
-tpm[i, 2, 1, t-1] <- exp( gam[1, j, t-1] ) #--------------------------------|D
-tpm[i, 3, 1, t-1] <- exp(                  gam[2, j, t-1] ) #---------------|N
-tpm[i, 4, 1, t-1] <- exp( gam[1, j, t-1] + gam[2, j, t-1] ) #---------------|DN
+tpm[i, 2, 1, t-1] <- exp( gam[1, i, t-1] ) #--------------------------------|D
+tpm[i, 3, 1, t-1] <- exp(                  gam[2, i, t-1] ) #---------------|N
+tpm[i, 4, 1, t-1] <- exp( gam[1, i, t-1] + gam[2, i, t-1] ) #---------------|DN
 # A to ...
-tpm[i, 1, 2, t-1] <- exp( eps[1, j, t-1] ) #--------------------------------|U
+tpm[i, 1, 2, t-1] <- exp( eps[1, i, t-1] ) #--------------------------------|U
 tpm[i, 2, 2, t-1] <- 1 #----------------------------------------------------|D
-tpm[i, 3, 2, t-1] <- exp( eps[1, j, t-1] + gam_one[2, 1, j, t-1] ) #--------|N
-tpm[i, 4, 2, t-1] <- exp(                  gam_one[2, 1, j, t-1] ) #--------|DN
+tpm[i, 3, 2, t-1] <- exp( eps[1, i, t-1] + gam_one[2, 1, i, t-1] ) #--------|N
+tpm[i, 4, 2, t-1] <- exp(                  gam_one[2, 1, i, t-1] ) #--------|DN
 # B to ...
-tpm[i, 1, 3, t-1] <- exp(                         eps[2, j, t-1] ) #--------|U
-tpm[i, 2, 3, t-1] <- exp( gam_one[1, 2, j, t-1] + eps[2, j, t-1] ) #--------|D
+tpm[i, 1, 3, t-1] <- exp(                         eps[2, i, t-1] ) #--------|U
+tpm[i, 2, 3, t-1] <- exp( gam_one[1, 2, i, t-1] + eps[2, i, t-1] ) #--------|D
 tpm[i, 3, 3, t-1] <- 1 #----------------------------------------------------|N
-tpm[i, 4, 3, t-1] <- exp( gam_one[1, 2, j, t-1] ) #-------------------------|DN
+tpm[i, 4, 3, t-1] <- exp( gam_one[1, 2, i, t-1] ) #-------------------------|DN
 # AB to ..
-tpm[i, 1, 4, t-1] <- exp( eps_one[1, 2, j, t-1] + eps_one[2, 1, j, t-1] ) #-|U
-tpm[i, 2, 4, t-1] <- exp( eps_one[1, 2, j, t-1] ) #-------------------------|D
-tpm[i, 3, 4, t-1] <- exp(                         eps_one[2, 1, j, t-1] ) #-|N
+tpm[i, 1, 4, t-1] <- exp( eps_one[1, 2, i, t-1] + eps_one[2, 1, i, t-1] ) #-|U
+tpm[i, 2, 4, t-1] <- exp( eps_one[1, 2, i, t-1] ) #-------------------------|D
+tpm[i, 3, 4, t-1] <- exp(                         eps_one[2, 1, i, t-1] ) #-|N
 tpm[i, 4, 4, t-1] <- 1 #----------------------------------------------------|DN
 } # close t year loop
 ######
@@ -71,22 +71,22 @@ for(ti in 1:nyear) {
 rdm[i, 1, 1, ti] <- 1 #--------------------------------------------------|OS = U
 rdm[i, 2, 1, ti] <- 0 #--------------------------------------------------|OS = A
 rdm[i, 3, 1, ti] <- 0 #--------------------------------------------------|OS = B
-rdm[i, 5, 1, ti] <- 0 #--------------------------------------------------|OS = AB
+rdm[i, 4, 1, ti] <- 0 #--------------------------------------------------|OS = AB
 # TS = A
 rdm[i, 1, 2, ti] <- 1 #--------------------------------------------------|OS = U
-rdm[i, 2, 2, ti] <- exp( rho[1, j, ti] ) #-------------------------------|OS = A
+rdm[i, 2, 2, ti] <- exp( rho[1, i, ti] ) #-------------------------------|OS = A
 rdm[i, 3, 2, ti] <- 0 #--------------------------------------------------|OS = B
 rdm[i, 4, 2, ti] <- 0 #--------------------------------------------------|OS = AB
 # TS = B
 rdm[i, 1, 3, ti] <- 1 #--------------------------------------------------|OS = U
 rdm[i, 2, 3, ti] <- 0 #--------------------------------------------------|OS = A
-rdm[i, 3, 3, ti] <- exp( rho[2, j, ti] ) #-------------------------------|OS = B
+rdm[i, 3, 3, ti] <- exp( rho[2, i, ti] ) #-------------------------------|OS = B
 rdm[i, 4, 3, ti] <- 0 #--------------------------------------------------|OS = AB
 # TS = AB
 rdm[i, 1, 4, ti] <- 1 #--------------------------------------------------|OS = U
-rdm[i, 2, 4, ti] <- exp( rho[1, j, ti] ) #-------------------------------|OS = A
-rdm[i, 3, 4, ti] <- exp(                  rho[2, j, ti] ) #--------------|OS = B
-rdm[i, 4, 4, ti] <- exp( rho[1, j, ti] +  rho[2, j, ti] ) #--------------|OS = AB
+rdm[i, 2, 4, ti] <- exp( rho[1, i, ti] ) #-------------------------------|OS = A
+rdm[i, 3, 4, ti] <- exp(                  rho[2, i, ti] ) #--------------|OS = B
+rdm[i, 4, 4, ti] <- exp( rho[1, i, ti] +  rho[2, i, ti] ) #--------------|OS = AB
 } # close ti year
 ######
 # Fill in the linear predictors for the transition matrices
@@ -94,18 +94,21 @@ rdm[i, 4, 4, ti] <- exp( rho[1, j, ti] +  rho[2, j, ti] ) #--------------|OS = A
 for( s in 1:ncat ) {
 # base occupancy
 psi[s ,i] <- inprod( a[s, ], psi_cov[i, ] )
+}
 for(t in 2:nyear) {
+ for(s in 1:ncat){
 # base colonization
 gam[s, i, t-1] <- inprod( b[s, ], gam_cov[i, ,t-1] ) 
 # base extinction
 eps[s, i, t-1] <- inprod( d[s, ], eps_cov[i, , t-1] )
 # species interactions
- pi[s, s, i] <- 0 # fill inxs diagonal with 0's
-tau[s, s, i] <- 0 # fill inxs diagonal with 0's
+ pi[s, s, i, t-1] <- 0 # fill inxs diagonal with 0's
+tau[s, s, i, t-1] <- 0 # fill inxs diagonal with 0's
 # These are the matrices to hold conditional linear predictors for gamma and eps
 #  when one other species is present at t-1 (hence the _one after the name)
 gam_one[s, s, i, t-1] <- 0 # fill inxs diagonal with 0's
 eps_one[s, s, i, t-1] <- 0 # fill inxs diagonal with 0's
+}
 # 
 # In the model we put the inxs in a matrix
 #  these matrices get filled in this order:
@@ -134,7 +137,8 @@ eps_one[s, s, i, t-1] <- 0 # fill inxs diagonal with 0's
       inprod( d[rows_vec[k], ], eps_cov[i, ,t-1] ) + tau[rows_vec[k], cols_vec[k], i, t-1]
       } # close inxs
     } # close t
-for(ti in 1:nyear){
+for(s in 1:ncat){
+ for(ti in 1:nyear){
   # base detection probability
   rho[s, i, ti] <- inprod( f[s, ], rho_cov[i, , ti] ) 
 }
@@ -148,25 +152,25 @@ psi_one[i] <- psi[1,i] + psi[2,i] + inprod(a_inxs, psi_inxs_cov[i,] )
   for(psi_inxsp in 1:ncov_psi_inxs){
     a_inxs ~ dlogis(0, 1)
   }
-  for(species in 1:nspec){
+  for(s in 1:ncat){
     # Initial Occupancy
     for( psip in 1:ncov_psi ){
-      a[species, psip] ~ dlogis(0, 1)
+      a[s, psip] ~ dlogis(0, 1)
     }
    
     # Colonization
     for( gamp in 1:ncov_gam ){
-      b[species, gamp] ~ dlogis(0, 1)
+      b[s, gamp] ~ dlogis(0, 1)
       #b0[i, gamp] ~ dlogis(0, 1)
     }  
     # Extinction
     for( epsp in 1:ncov_eps ){
-      d[species, epsp] ~ dlogis(0, 1)
+      d[s, epsp] ~ dlogis(0, 1)
       #d0[i, epsp] ~ dlogis(0, 1)
     }
     # Detection
     for( rhop in 1:ncov_rho ){
-      f[species, rhop] ~ dlogis(0, 1)
+      f[s, rhop] ~ dlogis(0, 1)
     }
   }
   for( k in 1:n_inxs ){

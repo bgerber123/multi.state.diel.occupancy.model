@@ -6,8 +6,6 @@
 #
 #############################################
 
-library(cli)
-
 # Logit link
 logit <- function(x){
   log(x / (1 - x))
@@ -151,7 +149,7 @@ sim_covariates <- function(
     covar_seed = my_seed
   )
   # provide some info to command line
-  .success("Simulating covariates:")
+  .success("Covariates simulated:")
   # gimme back the data
   return(
     to_return
@@ -161,17 +159,11 @@ sim_covariates <- function(
 # function to make the parmaters for each process
 sim_params <- function(
   cov_mat,
-  has_conditionals,
   indep_detections = FALSE
 ){
   # this will determine if we estimate each state seperately
   #  for detection. If so, we need an extra linear predictor.
   nstate <- ifelse(indep_detections, 4, 2)
-  if(has_conditionals){
-    stop("FILL IN SIMULATION CODE FOR INTERACTIONS")
-    
-    # need an ifelse for indep detections as well
-  } else {
     
     generic_mat <- matrix(
       runif(
@@ -182,7 +174,7 @@ sim_params <- function(
       nrow = nstate,
       ncol = ncol(cov_mat)
     )
-  }
+  
   return(generic_mat)
 }
 
@@ -339,6 +331,177 @@ sim_null <- function(
   )
   return(to_return)
 }
+
+# simulate conditional model
+sim_conditional <- function(
+  params,
+  covars,
+  indep_detections = FALSE
+){
+  #probability of each state initial occupancy
+  # First season probabilities for each state
+  PSI <- matrix(1, ncol = 4, nrow = covars$nsite)
+  # Fill in remaining columns
+  PSI[, 2] <- exp( covars$psi_cov %*% params$psi[1,] ) 
+  PSI[, 3] <- exp( covars$psi_cov %*% params$psi[2,] ) 
+  PSI[, 4] <- exp( 
+    covars$psi_cov %*% params$psi[1,] +
+      covars$psi_cov %*% params$psi[2,] +
+      covars$psi_cov %*% params$psi_cond
+  )
+  # convert to probability
+  PSI <- sweep(
+    PSI,
+    1,
+    rowSums(PSI),
+    FUN = "/"
+  )
+  # Latent state for dynamic part of model
+  # TPM = transition probability matrix. All columns sum to 1.
+  # dim(TPM)[1] = site i 
+  # dim(TPM)[2] = state at time t
+  # dim(TPM)[3] = state at time t-1
+  TPM <- array(
+    1,
+    dim = c(
+      covars$nsite,
+      4,
+      4
+    )
+  )
+  # U to ... D(2), N(3), DN(4)
+  TPM[, 2, 1] <- exp( covars$gam_cov %*% params$gam[1,] ) 
+  TPM[, 3, 1] <- exp( covars$gam_cov %*% params$gam[2,] ) 
+  TPM[, 4, 1] <- exp( 
+    covars$gam_cov %*% params$gam[1,] + 
+    covars$gam_cov %*% params$gam[2,] 
+  ) 
+  # D to ...U(1), N(3), DN(4)
+  TPM[, 1, 2] <- exp( covars$eps_cov %*% params$eps[1,] ) 
+  TPM[, 3, 2] <- exp( 
+    covars$eps_cov %*% params$eps[1,] +
+    covars$gam_cov %*% params$gam[2,] + 
+    covars$gam_cov %*% params$gam_cond[1,]
+  ) 
+  TPM[, 4, 2] <- exp( 
+    covars$gam_cov %*% params$gam[2,] + 
+    covars$gam_cov %*% params$gam_cond[1,]
+  ) 
+  # N to ... U(1), D(2), DN(4)
+  TPM[, 1, 3] <- exp( covars$eps_cov %*% params$eps[2,] ) 
+  TPM[, 2, 3] <- exp(
+    covars$gam_cov %*% params$gam[1,] +
+    covars$eps_cov %*% params$eps[2,] + 
+    covars$gam_cov %*% params$gam_cond[2,]
+  ) 
+  TPM[, 4, 3] <- exp( 
+    covars$gam_cov %*% params$gam[1,] + 
+    covars$gam_cov %*% params$gam_cond[2,]
+  ) 
+  # DN to .. U(1), D(2), DN(3)
+  TPM[, 1, 4] <- exp( 
+    covars$eps_cov %*% params$eps[1,] + 
+    covars$eps_cov %*% params$eps[2,] +
+    covars$eps_cov %*% params$eps_cond[1,] + 
+    covars$eps_cov %*% params$eps_cond[2,]  
+  ) 
+  TPM[, 2, 4] <- exp( 
+    covars$eps_cov %*% params$eps[2,] +
+    covars$eps_cov %*% params$eps_cond[2,]
+  ) 
+  TPM[, 3, 4] <- exp( 
+    covars$eps_cov %*% params$eps[1,] + 
+    covars$eps_cov %*% params$eps_cond[1,]
+  ) 
+  
+  # make into a probability
+  for(site in 1:covars$nsite){
+    TPM[site,,] <- sweep(
+      TPM[site,,],
+      2,
+      colSums(TPM[site,,]),
+      FUN = "/"
+    )
+  }
+  # Create detection matrix
+  
+  RDM <- array(
+    0,
+    dim = dim(TPM)
+  )
+  to_add <- ifelse(indep_detections, 2, 0)
+  
+  # Detection for state U 
+  RDM[, 1, 1] <- 1
+  # Detection for state D
+  RDM[, 1, 2] <- 1
+  RDM[, 2, 2] <- exp( covars$rho_cov %*% params$rho[1,] )
+  # Detection for state N
+  RDM[, 1, 3] <- 1 
+  RDM[, 3, 3] <- exp( covars$rho_cov %*% params$rho[2,] ) 
+  # Detection for State DN
+  RDM[, 1, 4] <- 1
+  RDM[, 2, 4] <- exp( covars$rho_cov %*% params$rho[1+to_add,] ) 
+  RDM[, 3, 4] <- exp( covars$rho_cov %*% params$rho[2+to_add,] ) 
+  RDM[, 4, 4] <- exp( 
+    covars$rho_cov %*% params$rho[1+to_add,] +
+    covars$rho_cov %*% params$rho[2+to_add,]
+  )
+  # make into a probability
+  for(site in 1:covars$nsite){
+    RDM[site,,] <- sweep(
+      RDM[site,,],
+      2,
+      colSums(RDM[site,,]),
+      FUN = "/"
+    )
+  }
+  # simulate the data!
+  z <- matrix(
+    NA,
+    ncol = covars$nseason,
+    nrow = covars$nsite
+  )
+  # simulate first season
+  for(site in 1:covars$nsite){
+    z[site,1] <- sample(
+      1:4,
+      1,
+      FALSE,
+      PSI[site,]
+    )
+    # now the rest of the seasons
+    for(year in 2:covars$nseason){
+      z[site, year] <- sample(
+        1:4,
+        1,
+        FALSE,
+        TPM[site,,z[site,year-1]]
+      )
+    }
+  }
+  # simulate the detection data
+  y <- array(
+    NA,
+    dim = c(covars$nsite, covars$nseason, covars$nrep)
+  )
+  for(site in 1:covars$nsite){
+    for(year in 1:covars$nseason){
+      y[site,year,] <- 
+        sample(
+          1:4,
+          covars$nrep,
+          TRUE,
+          RDM[site, , z[site,year]]
+        )
+    }
+  }
+  to_return <- list(
+    z = z,
+    y = y
+  )
+  return(to_return)
+}
 # A function to simulate all of the data for the varying models.
 #  Assumptions:
 #  1. Processes vary spatial not temporal (i.e., covariate matrices
@@ -361,49 +524,233 @@ sim_data <- function(
   }
   # generate parameters for initial occupancy
   psi <- sim_params(
-    covar_list$psi_cov,
-    conditional_params
+    covar_list$psi_cov
   )
   # generate parameters for colonization
   gam <- sim_params(
-    covar_list$gam_cov,
-    conditional_params
+    covar_list$gam_cov
   )
   # generate parameters for extinction
   eps <- sim_params(
-    covar_list$eps_cov,
-    conditional_params
+    covar_list$eps_cov
   )
   # generate parmeters for detections
   rho <- sim_params(
     covar_list$rho,
-    conditional_params,
     indep_detections = independent_detections
   )
-  .success("Randomly generating parameters:")
-  pars_list <- list(
-    psi = psi,
-    gam = gam,
-    eps = eps,
-    rho = rho
-  )
-  
+  if(conditional_params){
+    # we only need the first row here
+    psi_cond <- sim_params(
+      covar_list$psi
+    )[1,]
+    gam_cond <- sim_params(
+      covar_list$gam_cov
+    )
+    eps_cond <- sim_params(
+      covar_list$eps_cov
+    )
+  }
+  .success("Parameters simulated:")
   # simulate states for null model
   if(!conditional_params){
+    pars_list <- list(
+      psi = psi,
+      gam = gam,
+      eps = eps,
+      rho = rho
+    )
     data_list <- sim_null(
       pars_list,
       covar_list,
       indep_detections = independent_detections
     )
+  } else {
+    pars_list <- list(
+      psi = psi,
+      gam = gam,
+      eps = eps,
+      rho = rho,
+      psi_cond = psi_cond,
+      gam_cond = gam_cond,
+      eps_cond = eps_cond
+    )
+    data_list <- sim_conditional(
+      pars_list,
+      covar_list,
+      indep_detections = independent_detections
+    )
   }
-  
-  if(conditional_params){
-    stop("Need to write sim_conditional()")
-  }
-  .success("Simulating data:")
+  .success("Data simulated:")
   to_return <- list(
     parameters = pars_list,
     data = data_list
   )
   return(to_return)
+}
+
+# this function just combines the other lists we created.
+jags_prep <- function(
+  covar_list,
+  data_list,
+  has_conditionals = FALSE,
+  independent_detections = FALSE
+){
+  if(independent_detections){
+    stop("fix this to allow for independetent detections")
+  }
+  # make arrays if needed
+  if(length(dim(covar_list$gam_cov)) == 2){
+    covar_list$gam_cov <- array(
+      as.numeric(covar_list$gam_cov),
+      dim = c(
+        covar_list$nsite,
+        dim(covar_list$gam_cov)[2],
+        (covar_list$nseason-1)
+      )
+    )
+  }
+  if(length(dim(covar_list$eps_cov)) == 2){
+    covar_list$eps_cov <- array(
+      as.numeric(covar_list$eps_cov),
+      dim = c(
+        covar_list$nsite,
+        dim(covar_list$eps_cov)[2],
+        (covar_list$nseason-1)
+      )
+    )
+  }
+  if(length(dim(covar_list$rho_cov)) == 2){
+    covar_list$rho_cov <- array(
+      as.numeric(covar_list$rho_cov),
+      dim = c(
+        covar_list$nsite,
+        dim(covar_list$rho_cov)[2],
+        covar_list$nseason
+      )
+    )
+  }
+  
+  to_return<- list(
+    # count of number of paramters
+    ncov_psi = ncol(covar_list$psi_cov),
+    ncov_gam = dim(covar_list$gam_cov)[2],
+    ncov_eps = ncol(covar_list$eps_cov),
+    ncov_rho = ncol(covar_list$rho_cov),
+    # number of categories, going to be 2 regardless (Day and Night)
+    ncat = 2,
+    # max possible state in model, which is always going to be 4
+    max_state = 4,
+    # design matrices
+    psi_cov = covar_list$psi_cov,
+    gam_cov = covar_list$gam_cov,
+    eps_cov = covar_list$eps_cov,
+    rho_cov = covar_list$rho_cov,
+    # count of sites, seasons, surveys
+    nsite = covar_list$nsite,
+    nyear = covar_list$nseason,
+    nsurvey = covar_list$nrep,
+    # observed data
+    y = data_list$data$y
+  )
+  if(has_conditionals){
+    to_return$n_inxs <- 2
+    to_return$ncov_psi_inxs <- to_return$ncov_psi
+    to_return$ncov_pi <- to_return$ncov_gam
+    to_return$ncov_tau <- to_return$ncov_eps
+    tmp <- make_inxs(2)
+    to_return$rows_vec <- tmp$rows_vec
+    to_return$cols_vec <- tmp$cols_vec
+    to_return$psi_inxs_cov <- to_return$psi_cov
+    to_return$pi_cov <- to_return$gam_cov
+    to_return$tau_cov <- to_return$eps_cov
+  }
+  
+  return(to_return)
+}
+
+compare_ests <- function(
+  msum,
+  pars,
+  conditional_params = FALSE,
+  independent_detections = FALSE
+){
+  if(independent_detections){
+    stop("fix this to allow for independetent detections")
+  }
+  if(conditional_params){
+    pnames <- list(
+      psi = "a",
+      gam = "b",
+      eps = "d",
+      rho = "f",
+      #psi_cond = "a_inxs",
+      gam_cond = "g",
+      eps_cond = "h"
+    )
+  } else {
+    pnames <- list(
+      psi = "a",
+      gam = "b",
+      eps = "d",
+      rho = "f"
+    )
+  }
+  par_split <- vector("list", length= length(pnames))
+  for(i in 1:length(pnames)){
+    par_split[[i]] <- msum[grep(pnames[i], row.names(msum)),1:3]
+  }
+  names(par_split) <- names(pnames)
+  
+  # generate plot of estimates compares to true values
+  windows(10,10)
+  par(mfrow = c(3,3))
+  
+  for(i in 1:length(pnames)){
+    plot(
+      x = par_split[[i]][,2],
+      y = seq_len(nrow(par_split[[i]])),
+      pch = 15,
+      col = "blue",
+      xlim = c(-2,2),
+      cex = 2,
+      bty = 'l',
+      xlab = "Estimate",
+      ylab = "",
+      yaxt = "n",
+      main = names(pnames)[i]
+    )
+    for(j in 1:nrow(par_split[[names(pnames)[i]]])){
+      lines(
+        y = rep(j,2),
+        x = par_split[[i]][j,c(1,3)],
+        col = "blue",
+        lwd = 2
+      )
+    }
+    points(
+      x = pars[[names(pnames)[i]]],
+      y = seq_len(nrow(pars[[names(pnames[i])]])),
+      col = "grey50",
+      pch = 19,
+      cex = 1.5
+    )
+    mtext(
+      row.names(par_split[[i]]),
+      2,
+      at = seq_len(nrow(par_split[[i]])),
+      las = 1,
+      line = 0.75
+    )
+    if(i == length(pnames)){
+    legend(
+      "right",
+      col = c("blue", "grey50"),
+      bty = "n",
+      legend = c("Estimate", "Truth"),
+      pch = c(15,19),
+      pt.cex = c(2,1.5)
+    )
+    }
+  }
 }

@@ -104,7 +104,6 @@ for(ti in 1:nyear){
   # base detection probability
   rho[s, i, ti] <- inprod( f[s, ], rho_cov[i, , ti] ) 
 }
-
 } # close category
 } # closes for loop for i (sites) all the way up at the top of the model
 #####
