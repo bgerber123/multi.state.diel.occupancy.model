@@ -12,6 +12,7 @@ cat("------------------------------------------------------\n")
 cat("Loading run.jags...\n")
 library(runjags)
 
+
 # load utility functions
 source(
   "./simulation study/dynamic_simulations/dynamic_utilities.R"
@@ -19,7 +20,7 @@ source(
 
 cat("Simulating covariates ...\n")
 # create the covariates for the model.
-my_covars <- sim_covariates()
+my_covars <- sim_covariates(nsite = 100, nseason = 10)
 
 # to see default values used to generate data:
 # args(sim_covariates)
@@ -93,7 +94,7 @@ inits_inxs <- function(chain){
 }
 .success("Initial values generated:")
 
-cat("Fitting model..\n")
+cat("Fitting model...\n")
 
 mout <- run.jags(
   model = "./JAGS/jags.dynamic.multistate.covars.R",
@@ -102,13 +103,15 @@ mout <- run.jags(
   n.chains = 4,
   inits = inits_inxs,
   adapt = 400,
-  burnin = 50000,
+  burnin = 30000,
   sample = ceiling(50000/4),
-  thin = 5,
+  thin = 2,
   summarise = FALSE,
   plots = FALSE,
   method = "parallel"
 )
+
+.success("model fit to data.")
 
 msum <- summary(mout)
 
@@ -118,3 +121,4 @@ compare_ests(
   conditional_params = TRUE
 )
 
+.success("script complete.")

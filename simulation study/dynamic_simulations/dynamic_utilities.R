@@ -407,11 +407,11 @@ sim_conditional <- function(
   ) 
   TPM[, 2, 4] <- exp( 
     covars$eps_cov %*% params$eps[2,] +
-    covars$eps_cov %*% params$eps_cond[2,]
+    covars$eps_cov %*% params$eps_cond[1,]
   ) 
   TPM[, 3, 4] <- exp( 
     covars$eps_cov %*% params$eps[1,] + 
-    covars$eps_cov %*% params$eps_cond[1,]
+    covars$eps_cov %*% params$eps_cond[2,]
   ) 
   
   # make into a probability
@@ -515,13 +515,14 @@ sim_data <- function(
 ){
   # set seed based on what is in the covar_list
   if('covar_seed' %in% names(covar_list)){
-    my_seed <- covar_list$seed + 1
+    my_seed <- covar_list$covar_seed + 1
   } else {
     my_seed <- sample(
       1e6,
       1
     )
   }
+  set.seed(my_seed)
   # generate parameters for initial occupancy
   psi <- sim_params(
     covar_list$psi_cov
@@ -684,7 +685,7 @@ compare_ests <- function(
       gam = "b",
       eps = "d",
       rho = "f",
-      #psi_cond = "a_inxs",
+      psi_cond = "a_inxs",
       gam_cond = "g",
       eps_cond = "h"
     )
@@ -698,7 +699,14 @@ compare_ests <- function(
   }
   par_split <- vector("list", length= length(pnames))
   for(i in 1:length(pnames)){
-    par_split[[i]] <- msum[grep(pnames[i], row.names(msum)),1:3]
+    if(pnames[[i]] == "a"){
+      par_split[[i]] <- msum[grep(
+        paste0(pnames[i],"\\["), row.names(msum)),1:3]
+    } else {
+      par_split[[i]] <- msum[grep(
+        pnames[i], row.names(msum)),1:3]
+    }
+    
   }
   names(par_split) <- names(pnames)
   
