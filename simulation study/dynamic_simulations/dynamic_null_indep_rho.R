@@ -116,5 +116,12 @@ compare_ests(
   pars = my_data$parameters
 )
 
+# calculate CPO of model
+
+for_cpo <- calc_binco(
+  my_covars,
+  my_data
+)
+
 .success("script complete.")
 

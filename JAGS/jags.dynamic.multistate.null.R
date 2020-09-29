@@ -3,7 +3,7 @@ model{
 # Detection model
 ######
 for(i in 1:nsite) {
-  for(ti in 1:nyear) {
+  for(ti in 1:nseason) {
     for(survey in 1:nsurvey) {
       y[i, ti, survey] ~ dcat( rdm[i, , z[i, ti], ti ] )
     }
@@ -15,7 +15,7 @@ for(i in 1:nsite) {
 for(i in 1:nsite) {
   # for first season
   z[i, 1] ~ dcat( PSI[i, ] )
-  for(t in 2:nyear) {
+  for(t in 2:nseason) {
     z[i, t] ~ dcat( tpm[i, , z[ i, t-1], t-1] )
   }
 }
@@ -31,7 +31,7 @@ PSI[i, 1] <- 1 #------------------------------------------------------------|U
 PSI[i, 2] <- exp( psi[1, i] ) #---------------------------------------------|D
 PSI[i, 3] <- exp( psi[2, i] ) #---------------------------------------------|N
 PSI[i, 4] <- exp( psi[1, i] + psi[2, i] ) #---------------------------------|DN
-for(t in 2:nyear) {
+for(t in 2:nseason) {
 ######
 # Latent state for dynamic part of model
 # tpm = transition probability matrix. All columns sum to 1.
@@ -67,7 +67,7 @@ tpm[i, 4, 4, t-1] <- 1 #----------------------------------------------------|DN
 # OS along rows, TS along columns
 ######
 # TS = U
-for(ti in 1:nyear) {
+for(ti in 1:nseason) {
 rdm[i, 1, 1, ti] <- 1 #-------------------------------------------------|OS = U
 rdm[i, 2, 1, ti] <- 0 #-------------------------------------------------|OS = D
 rdm[i, 3, 1, ti] <- 0 #-------------------------------------------------|OS = N
@@ -94,7 +94,7 @@ rdm[i, 4, 4, ti] <- exp( rho[1+to_add, i, ti] +  rho[2+to_add, i, ti] )#|OS = DN
 for( s in 1:ncat ) {
 # base occupancy
 psi[s ,i] <- inprod( a[s, ], psi_cov[i, ] )
-for(t in 2:nyear) {
+for(t in 2:nseason) {
 # base colonization
 gam[s, i, t-1] <- inprod( b[s, ], gam_cov[i, ,t-1] ) 
 # base extinction
@@ -102,7 +102,7 @@ eps[s, i, t-1] <- inprod( d[s, ], eps_cov[i, , t-1] )
 } # close t
 } # close category
 for(srho in 1:(ncat+to_add)){
-  for(ti in 1:nyear){
+  for(ti in 1:nseason){
     # base detection probability, allowing for non-independent detections
     rho[srho, i, ti] <- inprod( f[srho, ], rho_cov[i, , ti] ) 
   }
