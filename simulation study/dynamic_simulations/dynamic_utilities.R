@@ -677,12 +677,9 @@ jags_prep <- function(
 compare_ests <- function(
   msum,
   pars,
-  conditional_params = FALSE,
-  independent_detections = FALSE
+  conditional_params = FALSE
 ){
-  if(independent_detections){
-    stop("fix this to allow for independetent detections")
-  }
+
   if(conditional_params){
     pnames <- list(
       psi = "a",
