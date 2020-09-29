@@ -598,7 +598,9 @@ jags_prep <- function(
   independent_detections = FALSE
 ){
   if(independent_detections){
-    stop("fix this to allow for independetent detections")
+    to_add <- 2
+  } else {
+    to_add <- 0
   }
   # make arrays if needed
   if(length(dim(covar_list$gam_cov)) == 2){
@@ -652,7 +654,9 @@ jags_prep <- function(
     nyear = covar_list$nseason,
     nsurvey = covar_list$nrep,
     # observed data
-    y = data_list$data$y
+    y = data_list$data$y,
+    # 0 if non-independent detection, 2 if independent detection
+    to_add = to_add
   )
   if(has_conditionals){
     to_return$n_inxs <- 2
@@ -715,9 +719,15 @@ compare_ests <- function(
   par(mfrow = c(3,3))
   
   for(i in 1:length(pnames)){
+    if(is.null(nrow(par_split[[i]]))){
+      my_y <- 1
+      par_split[[i]] <- t(par_split[[i]])
+    } else {
+      my_y <- seq_len(nrow(par_split[[i]]))
+    }
     plot(
       x = par_split[[i]][,2],
-      y = seq_len(nrow(par_split[[i]])),
+      y = my_y,
       pch = 15,
       col = "blue",
       xlim = c(-2,2),
@@ -738,7 +748,7 @@ compare_ests <- function(
     }
     points(
       x = pars[[names(pnames)[i]]],
-      y = seq_len(nrow(pars[[names(pnames[i])]])),
+      y = my_y,
       col = "grey50",
       pch = 19,
       cex = 1.5

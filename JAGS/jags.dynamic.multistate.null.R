@@ -84,9 +84,9 @@ rdm[i, 3, 3, ti] <- exp( rho[2, i, ti] ) #------------------------------|OS = N
 rdm[i, 4, 3, ti] <- 0 #-------------------------------------------------|OS = DN
 # TS = DN
 rdm[i, 1, 4, ti] <- 1 #-------------------------------------------------|OS = U
-rdm[i, 2, 4, ti] <- exp( rho[1, i, ti] ) #------------------------------|OS = D
-rdm[i, 3, 4, ti] <- exp(                  rho[2, i, ti] ) #-------------|OS = N
-rdm[i, 4, 4, ti] <- exp( rho[1, i, ti] +  rho[2, i, ti] ) #-------------|OS = DN
+rdm[i, 2, 4, ti] <- exp( rho[1+to_add, i, ti] ) #-----------------------|OS = D
+rdm[i, 3, 4, ti] <- exp(                  rho[2+to_add, i, ti] ) #------|OS = N
+rdm[i, 4, 4, ti] <- exp( rho[1+to_add, i, ti] +  rho[2+to_add, i, ti] )#|OS = DN
 } # close ti year
 ######
 # Fill in the linear predictors for the transition matrices
@@ -100,11 +100,13 @@ gam[s, i, t-1] <- inprod( b[s, ], gam_cov[i, ,t-1] )
 # base extinction
 eps[s, i, t-1] <- inprod( d[s, ], eps_cov[i, , t-1] )
 } # close t
-for(ti in 1:nyear){
-  # base detection probability
-  rho[s, i, ti] <- inprod( f[s, ], rho_cov[i, , ti] ) 
-}
 } # close category
+for(srho in 1:(ncat+to_add)){
+  for(ti in 1:nyear){
+    # base detection probability, allowing for non-independent detections
+    rho[srho, i, ti] <- inprod( f[srho, ], rho_cov[i, , ti] ) 
+  }
+}
 } # closes for loop for i (sites) all the way up at the top of the model
 #####
 # Priors
@@ -124,9 +126,11 @@ for(ti in 1:nyear){
       d[s, epsp] ~ dlogis(0, 1)
       #d0[i, epsp] ~ dlogis(0, 1)
     }
-    # Detection
+  }
+  for(srho in 1:(ncat + to_add)){
+  # Detection, allowing for non-independent detections
     for( rhop in 1:ncov_rho ){
-      f[s, rhop] ~ dlogis(0, 1)
+      f[srho, rhop] ~ dlogis(0, 1)
     }
   }
 }
