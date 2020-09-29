@@ -45,17 +45,17 @@ tpm[i, 1, 1, t-1] <- 1 #----------------------------------------------------|U
 tpm[i, 2, 1, t-1] <- exp( gam[1, i, t-1] ) #--------------------------------|D
 tpm[i, 3, 1, t-1] <- exp(                  gam[2, i, t-1] ) #---------------|N
 tpm[i, 4, 1, t-1] <- exp( gam[1, i, t-1] + gam[2, i, t-1] ) #---------------|DN
-# A to ...
+# D to ...
 tpm[i, 1, 2, t-1] <- exp( eps[1, i, t-1] ) #--------------------------------|U
 tpm[i, 2, 2, t-1] <- 1 #----------------------------------------------------|D
 tpm[i, 3, 2, t-1] <- exp( eps[1, i, t-1] + gam_one[2, 1, i, t-1] ) #--------|N
 tpm[i, 4, 2, t-1] <- exp(                  gam_one[2, 1, i, t-1] ) #--------|DN
-# B to ...
+# N to ...
 tpm[i, 1, 3, t-1] <- exp(                         eps[2, i, t-1] ) #--------|U
 tpm[i, 2, 3, t-1] <- exp( gam_one[1, 2, i, t-1] + eps[2, i, t-1] ) #--------|D
 tpm[i, 3, 3, t-1] <- 1 #----------------------------------------------------|N
 tpm[i, 4, 3, t-1] <- exp( gam_one[1, 2, i, t-1] ) #-------------------------|DN
-# AB to ..
+# DN to ..
 tpm[i, 1, 4, t-1] <- exp( eps_one[1, 2, i, t-1] + eps_one[2, 1, i, t-1] ) #-|U
 tpm[i, 2, 4, t-1] <- exp( eps_one[2, 1, i, t-1] ) #-------------------------|D
 tpm[i, 3, 4, t-1] <- exp(                         eps_one[1, 2, i, t-1] ) #-|N
@@ -69,24 +69,24 @@ tpm[i, 4, 4, t-1] <- 1 #----------------------------------------------------|DN
 # TS = U
 for(ti in 1:nyear) {
 rdm[i, 1, 1, ti] <- 1 #--------------------------------------------------|OS = U
-rdm[i, 2, 1, ti] <- 0 #--------------------------------------------------|OS = A
-rdm[i, 3, 1, ti] <- 0 #--------------------------------------------------|OS = B
-rdm[i, 4, 1, ti] <- 0 #--------------------------------------------------|OS = AB
-# TS = A
+rdm[i, 2, 1, ti] <- 0 #--------------------------------------------------|OS = D
+rdm[i, 3, 1, ti] <- 0 #--------------------------------------------------|OS = N
+rdm[i, 4, 1, ti] <- 0 #--------------------------------------------------|OS = DN
+# TS = D
 rdm[i, 1, 2, ti] <- 1 #--------------------------------------------------|OS = U
-rdm[i, 2, 2, ti] <- exp( rho[1, i, ti] ) #-------------------------------|OS = A
-rdm[i, 3, 2, ti] <- 0 #--------------------------------------------------|OS = B
-rdm[i, 4, 2, ti] <- 0 #--------------------------------------------------|OS = AB
-# TS = B
+rdm[i, 2, 2, ti] <- exp( rho[1, i, ti] ) #-------------------------------|OS = D
+rdm[i, 3, 2, ti] <- 0 #--------------------------------------------------|OS = N
+rdm[i, 4, 2, ti] <- 0 #--------------------------------------------------|OS = DN
+# TS = N
 rdm[i, 1, 3, ti] <- 1 #--------------------------------------------------|OS = U
-rdm[i, 2, 3, ti] <- 0 #--------------------------------------------------|OS = A
-rdm[i, 3, 3, ti] <- exp( rho[2, i, ti] ) #-------------------------------|OS = B
-rdm[i, 4, 3, ti] <- 0 #--------------------------------------------------|OS = AB
-# TS = AB
+rdm[i, 2, 3, ti] <- 0 #--------------------------------------------------|OS = D
+rdm[i, 3, 3, ti] <- exp( rho[2, i, ti] ) #-------------------------------|OS = N
+rdm[i, 4, 3, ti] <- 0 #--------------------------------------------------|OS = DN
+# TS = DN
 rdm[i, 1, 4, ti] <- 1 #--------------------------------------------------|OS = U
-rdm[i, 2, 4, ti] <- exp( rho[1, i, ti] ) #-------------------------------|OS = A
-rdm[i, 3, 4, ti] <- exp(                  rho[2, i, ti] ) #--------------|OS = B
-rdm[i, 4, 4, ti] <- exp( rho[1, i, ti] +  rho[2, i, ti] ) #--------------|OS = AB
+rdm[i, 2, 4, ti] <- exp( rho[1+to_add, i, ti] ) #------------------------|OS = D
+rdm[i, 3, 4, ti] <- exp(                  rho[2+to_add, i, ti] ) #-------|OS = N
+rdm[i, 4, 4, ti] <- exp( rho[1+to_add, i, ti] +  rho[2+to_add, i, ti] ) #|OS = DN
 } # close ti year
 ######
 # Fill in the linear predictors for the transition matrices
@@ -137,13 +137,12 @@ eps_one[s, s, i, t-1] <- 0 # fill inxs diagonal with 0's
       inprod( d[rows_vec[k], ], eps_cov[i, ,t-1] ) + tau[rows_vec[k], cols_vec[k], i, t-1]
       } # close inxs
     } # close t
-for(s in 1:ncat){
- for(ti in 1:nyear){
-  # base detection probability
-  rho[s, i, ti] <- inprod( f[s, ], rho_cov[i, , ti] ) 
-}
-
-  } # close category
+for(srho in 1:(ncat+to_add)){
+  for(ti in 1:nyear){
+    # base detection probability
+    rho[srho, i, ti] <- inprod( f[srho, ], rho_cov[i, , ti] ) 
+  }
+} # close category
 psi_one[i] <- psi[1,i] + psi[2,i] + inprod(a_inxs, psi_inxs_cov[i,] )
 } # closes for loop for i (sites) all the way up at the top of the model
 #####
@@ -157,7 +156,6 @@ psi_one[i] <- psi[1,i] + psi[2,i] + inprod(a_inxs, psi_inxs_cov[i,] )
     for( psip in 1:ncov_psi ){
       a[s, psip] ~ dlogis(0, 1)
     }
-   
     # Colonization
     for( gamp in 1:ncov_gam ){
       b[s, gamp] ~ dlogis(0, 1)
@@ -168,9 +166,11 @@ psi_one[i] <- psi[1,i] + psi[2,i] + inprod(a_inxs, psi_inxs_cov[i,] )
       d[s, epsp] ~ dlogis(0, 1)
       #d0[i, epsp] ~ dlogis(0, 1)
     }
-    # Detection
+  }
+  # Detection
+  for(srho in 1:(ncat+to_add)){
     for( rhop in 1:ncov_rho ){
-      f[s, rhop] ~ dlogis(0, 1)
+      f[srho, rhop] ~ dlogis(0, 1)
     }
   }
   for( k in 1:n_inxs ){
