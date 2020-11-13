@@ -30,9 +30,16 @@ source("RNP Fosa/CPO.function.r")
 load("RNP Fosa/RNP2.data")
 
 #assign data to objects
-y=RNP.data[[1]] #detection history
-covs=RNP.data[[2]]
+y=RNP2.data[[1]] #detection history
+covs=RNP2.data[[2]]
 
+#Derive Site/Survey Covariate
+VOH=1:26
+VA=27:53
+CVB=54:95
+survey=c(rep("VOH",length(VOH)),rep("VA",length(VA)),rep("CVB",length(CVB)))
+X.survey=model.matrix(~survey,contrasts = list(survey = "contr.sum"))
+head(X.survey)
 #################################################################
 #################################################################
 

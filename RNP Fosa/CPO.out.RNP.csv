@@ -1,9 +1,18 @@
-M1.full,840.0840774
-M4.red,843.0831905
-M3.red,844.7021939
-M2.full,848.9383259
-M9.red.no.covs,853.607346
-M8.full.no.covs,856.1307511
-M6.null,916.2983403
-M7.null,916.3132768
-M5.null,916.9980612
+M1.full,838.5004071,
+M4.red,843.1185229,
+M9.red.no.covs,843.6406516,
+M8.full2.no.covs,843.7391689,Includes Survey/Site Effect
+M2.full,843.761322,
+M4.red2,844.5840374,Includes Survey/Site Effect
+M3.red,844.6544715,
+M2.full2,844.6813529,Includes Survey/Site Effect
+M9.red2.no.covs,844.8172928,Includes Survey/Site Effect
+M1.full2,845.4954615,Includes Survey/Site Effect
+M3.red2,845.9874098,Includes Survey/Site Effect
+M8.full.no.covs,846.1149346,
+M6.null,916.2542267,
+M7.null,916.2701052,
+M5.null,917.0038784,
+M7.null2,917.0044493,Includes Survey/Site Effect
+M6.null2,917.1883506,Includes Survey/Site Effect
+M5.null2,917.796019,Includes Survey/Site Effect
