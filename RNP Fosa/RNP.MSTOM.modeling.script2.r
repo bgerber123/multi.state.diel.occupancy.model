@@ -5,7 +5,6 @@
 #
 #Specifically, it uses the camera surveys at Sahamalaotra and Valohoaka-Vatoharanana within the park.
 #The states are assigned as,
-
 # 4 States:
 # 1: No use
 # 2: Day only

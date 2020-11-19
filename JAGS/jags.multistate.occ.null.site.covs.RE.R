@@ -1,4 +1,4 @@
-    model  { 
+    model { 
     # Priors
       alpha1.1~dlogis(0,1)
       #Priors for mean population level intercepts and effects
