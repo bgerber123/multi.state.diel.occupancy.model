@@ -9,8 +9,8 @@ library(ggplot2)
 
 
 rm(list=ls())
-load("RNP Fosa/M1.full.out")
-fit <- combine.mcmc(M1.full)
+load("RNP Fosa/M1.full.fit")
+#fit <- combine.mcmc(M1.full)
 #load the prepared data file
 load("RNP Fosa/RNP2.data")
 covs=RNP2.data[[2]]
