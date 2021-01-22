@@ -8,12 +8,9 @@ library(bayesplot)
 library(ggplot2)
 
 
-#for first fit
-load("RNP Fosa/M1.fit")
-
-#rm(list=ls())
-#load("RNP Fosa/M3.red.out")
-#fit <- combine.mcmc(M3.red)
+rm(list=ls())
+load("RNP Fosa/M1.full.out")
+fit <- combine.mcmc(M1.full)
 #load the prepared data file
 load("RNP Fosa/RNP2.data")
 covs=RNP2.data[[2]]
@@ -39,14 +36,23 @@ det.matrix=cbind(pDay,
                  pND.N,
                  pND.ND)
 
+#########################################
 par(mfrow=c(1,2))
 plot(density(pDay),xlim=c(0,0.2),lwd=3)
 lines(density(pNight),xlim=c(0,0.2),lwd=3,col=2)
 plot(density(pND.D),xlim=c(0,0.2),lwd=3)
 lines(density(pND.N),xlim=c(0,0.2),lwd=3,col=2)
 lines(density(pND.ND),xlim=c(0,0.2),lwd=3,col=3)
+#########################################
+#plot detection temporal interaction
+TIF.det=pND.ND/(pND.D*pND.N)
+
+hist(TIF.det)
+abline(v=1,col=2,lwd=3)
 
 
+length(which(TIF.det<1))/length(TIF.det)
+#########################################
 png(file="RNP Fosa/RNP.fosa.det.parms.png",res=200,units = "in",height=8,width=8)
 color_scheme_set("red")
 mcmc_intervals(det.matrix, pars = colnames(det.matrix)[-3],xlab="Detection Parameters")+ labs(x = "Detection Probability",y="State")+
@@ -78,8 +84,6 @@ length(which(fit.matrix[,6]>0))/dim(fit.matrix)[1]
 n.mcmc=dim(fit.matrix)[1]
 n.sites=dim(y)[1]
 
-
-
 alpha1=fit[,which(grepl("alpha[1]",colnames(fit), fixed = TRUE))]
 alpha2=fit[,which(grepl("alpha[2]",colnames(fit), fixed = TRUE))]
 alpha3=fit[,which(grepl("alpha[3]",colnames(fit), fixed = TRUE))]
@@ -88,6 +92,17 @@ alpha5=fit[,which(grepl("alpha[5]",colnames(fit), fixed = TRUE))]
 alpha6=fit[,which(grepl("alpha[6]",colnames(fit), fixed = TRUE))]
 
 
+hist(alpha4)
+hist(alpha6)
+length(which(alpha2<0))/length(alpha2)
+length(which(alpha4<0))/length(alpha4)
+length(which(alpha6>0))/length(alpha6)
+
+quantile(alpha4,probs=c(0.025,0.975))
+quantile(alpha6,probs=c(0.025,0.975))
+
+library(HDInterval)
+hdi(alpha4)
 #cov1.scaled2=cov1.scaled[order(cov1.scaled)]
 #cov1.unscaled2=cov1.unscaled[order(cov1.unscaled)]
 
@@ -164,5 +179,23 @@ densregion(x.pred,y,z4,nlevels = nlevel,colmax = "darkred",pointwise = TRUE)
 lines(x.pred,z4.center,col="white",lwd=2)
 
 dev.off()
+
+
+###################################
+#cov by MCMC by state
+psi.state.mcmc
+#Derive TIF for occ
+
+TIF.occ=matrix(NA, nrow=dim(psi.state.mcmc)[1],ncol=dim(psi.state.mcmc)[2])
+for(i in 1:dim(psi.state.mcmc)[1]){
+  TIF.occ[i,]=psi.state.mcmc[i,,4]/(psi.state.mcmc[i,,2]*psi.state.mcmc[i,,3])
+}
+
+dim(TIF.occ)
+
+
+hist(TIF.occ[1,])
+range(TIF.occ[1,])
+plot(1:100,apply(TIF.occ,1,mean))
 
 
