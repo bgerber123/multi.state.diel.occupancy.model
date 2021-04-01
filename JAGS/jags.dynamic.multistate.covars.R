@@ -149,7 +149,7 @@ psi_one[i] <- psi[1,i] + psi[2,i] + inprod(a_inxs, psi_inxs_cov[i,] )
 # Priors
 ######
   for(psi_inxsp in 1:ncov_psi_inxs){
-    a_inxs ~ dlogis(0, 1)
+    a_inxs[psi_inxsp] ~ dlogis(0, 1)
   }
   for(s in 1:ncat){
     # Initial Occupancy

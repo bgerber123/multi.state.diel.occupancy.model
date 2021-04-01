@@ -861,8 +861,11 @@ calculate_cpo <- function(
   )
   state_count <- binco_list$state_count
   binco <- binco_list$binco
+  my_pb <- txtProgressBar(min = 0, max = nrow(mm)-1)
+  
   for(o in 1:nrow(mm)){ # going through each step of the mcmc chain
     
+    setTxtProgressBar(my_pb, o)
     # initial occupancy
     a <- matrix(
       mm[o,grep("a\\[", colnames(mm))],
@@ -893,7 +896,7 @@ calculate_cpo <- function(
       ncol = list2jags$ncov_psi_inxs,
       nrow = 1
     )
-    if(sum(is.na(a_inxs)>0)) a_inxs[is.na(a_inxs)] <- 0
+    if(sum(is.na(a_inxs))>0) a_inxs[is.na(a_inxs)] <- 0
     # colonization inxs
     g <- matrix(
       mm[o,grep("g", colnames(mm))],
@@ -932,8 +935,8 @@ calculate_cpo <- function(
       )
     )
     for(yr in 2:list2jags$nseason){
-      gam[,,yr-1] <- b %*% list2jags$gam_cov[,,yr-1]
-      eps[,,yr-1] <- d %*% list2jags$eps_cov[,,yr-1]
+      gam[,,yr-1] <- b %*% t(list2jags$gam_cov[,,yr-1])
+      eps[,,yr-1] <- d %*% t(list2jags$eps_cov[,,yr-1])
     }
     rho <- array(
       NA,
@@ -945,7 +948,7 @@ calculate_cpo <- function(
     )
     # detection linear predictor
     for(yr in 1:list2jags$nseason){
-    rho[,,yr] <-f %*% list2jags$rho_cov[,,yr]
+    rho[,,yr] <-f %*% t(list2jags$rho_cov[,,yr])
     }
     # set up arrays for the species interactions.
     # these arrays get filled in this order:
@@ -970,14 +973,21 @@ calculate_cpo <- function(
         list2jags$nseason-1
       )
     )
+    do_transpose <- function(x){
+      if(is.null(dim(x))){
+        return(t(t(x)))
+      } else {
+        return(x)
+      }
+    }
     for(yr in 2:list2jags$nseason){
     for(k in 1:list2jags$n_inxs){
       # inxs on colonization 
       pi[list2jags$rows_vec[k], list2jags$cols_vec[k], ,yr-1] <-  
-        list2jags$pi_cov[j, ,yr-1] %*% g[k, ]
+        do_transpose(list2jags$pi_cov[, ,yr-1]) %*% g[k, ]
       # inxs on extinction 
       tau[list2jags$rows_vec[k], list2jags$cols_vec[k], ,yr-1] <-
-        list2jags$tau_cov[j, ,yr-1] %*% h[k, ] 
+        do_transpose(list2jags$tau_cov[, ,yr-1]) %*% h[k, ] 
       # linear predictor for colonization | one species present at t-1
       gam_one[list2jags$rows_vec[k], list2jags$cols_vec[k], ,yr-1] <- 
         gam[list2jags$rows_vec[k],,yr-1] + 
@@ -1004,7 +1014,7 @@ calculate_cpo <- function(
     PSI[, 1] <- 1 #----------------------------------------------------|U
     PSI[, 2] <- exp( psinit[1, ] ) #-----------------------------------|D
     PSI[, 3] <- exp( psinit[2, ] ) #-----------------------------------|N
-    PSI[, 4] <- exp( psi_one[i]  ) #------------------------------------|DN
+    PSI[, 4] <- exp( psi_one  ) #------------------------------------|DN
     
     tpm <- array(
       1,
@@ -1123,8 +1133,264 @@ calculate_cpo <- function(
         # tpm indexed to site, state at times t, state at t-1 to get likelihood
         # for latent state
         lik[j, yr] <- ( binco[j, yr] * prod( pstate[j, ,yr] ) ) * 
-          ( tpm[ j, z[ j, yr ] , z[ j, yr-1 ],yr ] / # numerator smax
-              sum( tpm[ j, ,z[j, yr-1 ],yr ] ) ) # denominator smax
+          ( tpm[ j, z[ j, yr ] , z[ j, yr-1 ],yr-1 ] / # numerator smax
+              sum( tpm[ j, ,z[j, yr-1 ],yr-1 ] ) ) # denominator smax
+      } # close t (year)
+    } # close j (site)
+    lik_mat[o,] <- as.numeric(lik) # put lik into likelihood matrix
+  }
+  
+  # these are sites by seasons that sampling did not happen
+  # we do not want them to contribute towards the likelihood
+  to_zero <- rep(0, ncol(lik_mat))
+  
+  for(i in 1:length(to_zero)){
+    to_zero[i] <- sum(lik_mat[,i]==0)
+  }
+  # these are all unobserved sites
+  to_go <- which(to_zero == nrow(mm))
+  # remove them from the likelihood matrix
+  lik_mat <- lik_mat[,-to_go]
+  
+  # calculate cpo
+  CPO <--sum(log(nrow(mm) /(apply(1/lik_mat, 2, sum))))
+  # return cpo
+  return(CPO)
+}
+
+
+calculate_cpo_null <- function(
+  mm,
+  list2jags,
+  binco_list
+){
+  if(!"n_inxs" %in% list2jags) list2jags$n_inxs <- list2jags$ncat^2-list2jags$ncat
+  
+  
+  # ensure mm is a matrix
+  if(!is.matrix(mm)) {
+    stop("The object mm must be a matrix")
+  }
+  
+  # This is the likelihood matrix, which stores the likelihood of each
+  # observations based off the parameters in the model for each step
+  # of the mcmc chain.
+  lik_mat <- matrix(
+    0, 
+    ncol = list2jags$nseason * list2jags$nsite,
+    nrow = nrow(mm)
+  )
+  state_count <- binco_list$state_count
+  binco <- binco_list$binco
+  for(o in 1:nrow(mm)){ # going through each step of the mcmc chain
+    
+    # initial occupancy
+    a <- matrix(
+      mm[o,grep("a", colnames(mm))],
+      ncol = list2jags$ncov_psi,
+      nrow = 1
+    )
+    # colonization 
+    b <- matrix(
+      mm[o,grep("b\\[", colnames(mm))],
+      ncol = list2jags$ncov_gam,
+      nrow = 1
+    )
+    # extinction
+    d <- matrix(
+      mm[o,grep("d\\[", colnames(mm))],
+      ncol = list2jags$ncov_eps,
+      nrow = 1
+    )
+    # detection
+    f <- matrix(
+      mm[o,grep("f", colnames(mm))],
+      ncol = list2jags$ncov_rho,
+      nrow = 1
+    )
+    
+    z <- matrix(
+      mm[o,grep("z", colnames(mm))],
+      ncol = list2jags$nseason,
+      nrow = list2jags$nsite
+    )
+    
+    # occupancy linear predictor
+    psinit  <- a %*% t(list2jags$psi_cov)
+    # occupacny at fourth state
+    psi_one <- colSums(psinit) 
+    # colonization linear predictor
+    gam <- eps <- array(
+      NA,
+      dim = c(
+        list2jags$nsite,
+        list2jags$nseason-1
+      )
+    )
+    for(yr in 2:list2jags$nseason){
+      gam[,yr-1] <- b %*% t(list2jags$gam_cov[,,yr-1])
+      eps[,yr-1] <- d %*% t(list2jags$eps_cov[,,yr-1])
+    }
+    rho <- array(
+      NA,
+      dim = c(
+        list2jags$nsite,
+        list2jags$nseason
+      )
+    )
+    # detection linear predictor
+    for(yr in 1:list2jags$nseason){
+      rho[,yr] <-f %*% t(list2jags$rho_cov[,,yr])
+    }
+    # set up arrays for the species interactions.
+    # these arrays get filled in this order:
+    #######
+    #0|4|5#
+    #-|-|-#
+    #1|0|6# Zeros along the diagonal
+    #-|-|-#
+    #2|3|0#
+    #######
+    # We have set it up in the model such that the species in the off-diagonal
+    # influence the species along the diagonal. For example, pi[3,2] is the 
+    # influence species 2 has on the colonization rate of species 3 while 
+    # pi[2, 1] is the influence species 1 has on species 2. More generally it
+    # is pi[species of interest, species conditioning on]. 
+    PSI <- matrix(
+      1, 
+      ncol = list2jags$max_state,
+      nrow = list2jags$nsite
+    )
+    ######
+    # Fill in all of the transition probabilities
+    ######
+    ######
+    # Latent state for first season, fsm = transition vector for season 1
+    ######
+    # First season probabilities for each state
+    PSI[, 1] <- 3 #----------------------------------------------------|U
+    PSI[, 2] <- exp( psi_one ) #---------------------------------------|D
+    PSI[, 3] <- exp( psi_one ) #---------------------------------------|N
+    PSI[, 4] <- exp( psi_one ) #---------------------------------------|DN
+    
+    tpm <- array(
+      1,
+      dim = c(
+        list2jags$nsite,
+        list2jags$max_state,
+        list2jags$max_state,
+        list2jags$nseason - 1
+      )
+    )
+    for(yr in 2:list2jags$nseason) {
+      ######
+      # Latent state for dynamic part of model
+      # tpm = transition probability matrix. All columns sum to 1.
+      # dim(tpm)[1] = site j 
+      # dim(tpm)[2] = state at time t
+      # dim(tpm)[3] = state at time t-1
+      # dim(tpm)[4] = time t (for temporally varying covariates)
+      ######
+      # U to ...
+      tpm[, 1, 1, yr-1] <- 3 #-----------------------------------------------|U
+      tpm[, 2, 1, yr-1] <- exp( gam[ , yr-1] ) #-----------------------------|D
+      tpm[, 3, 1, yr-1] <- exp( gam[ , yr-1] ) #-----------------------------|N
+      tpm[, 4, 1, yr-1] <- exp( gam[ , yr-1]  ) #----------------------------|DN
+      # D to ...
+      tpm[, 1, 2, yr-1] <- exp( eps[ , yr-1] ) * 3 #-------------------------|U
+      tpm[, 2, 2, yr-1] <- 1 #-----------------------------------------------|D
+      tpm[, 3, 2, yr-1] <- 1 #-----------------------------------------------|N
+      tpm[, 4, 2, yr-1] <- 1 #-----------------------------------------------|DN
+      # N to ...
+      tpm[, 1, 3, yr-1] <- exp( eps[ , yr-1] ) * 3 #-------------------------|U
+      tpm[, 2, 3, yr-1] <- 1 #-----------------------------------------------|D
+      tpm[, 3, 3, yr-1] <- 1 #-----------------------------------------------|N
+      tpm[, 4, 3, yr-1] <- 1 #-----------------------------------------------|DN
+      # DN to ..
+      tpm[, 1, 4, yr-1] <- exp( eps[ , yr-1] ) * 3 #-------------------------|U
+      tpm[, 2, 4, yr-1] <- 1 #-----------------------------------------------|D
+      tpm[, 3, 4, yr-1] <- 1 #-----------------------------------------------|N
+      tpm[, 4, 4, yr-1] <- 1 #-----------------------------------------------|DN
+    } # close yr year loop
+    ######
+    # detection matrix (OS = observed state, TS = true state)
+    # rdm = rho detection matrix. Each row sums to 1.
+    # OS along rows, TS along columns
+    ######
+    # TS = U
+    rdm <- array(
+      0,
+      dim = c(
+        list2jags$nsite,
+        list2jags$max_state,
+        list2jags$max_state,
+        list2jags$nseason
+      )
+    )
+    for(ti in 1:list2jags$nseason) {
+      rdm[, 1, 1, ti] <- 1 #-------------------------------------------------|OS = U
+      rdm[, 2, 1, ti] <- 0 #-------------------------------------------------|OS = D
+      rdm[, 3, 1, ti] <- 0 #-------------------------------------------------|OS = N
+      rdm[, 4, 1, ti] <- 0 #-------------------------------------------------|OS = DN
+      # TS = D
+      rdm[, 1, 2, ti] <- 1 #-------------------------------------------------|OS = U
+      rdm[, 2, 2, ti] <- exp( rho[ , ti] ) #------------------------------|OS = D
+      rdm[, 3, 2, ti] <- 0 #-------------------------------------------------|OS = N
+      rdm[, 4, 2, ti] <- 0 #-------------------------------------------------|OS = DN
+      # TS = N
+      rdm[, 1, 3, ti] <- 1 #-------------------------------------------------|OS = U
+      rdm[, 2, 3, ti] <- 0 #-------------------------------------------------|OS = D
+      rdm[, 3, 3, ti] <- exp( rho[ , ti] ) #------------------------------|OS = N
+      rdm[, 4, 3, ti] <- 0 #-------------------------------------------------|OS = DN
+      # TS = DN
+      rdm[, 1, 4, ti] <- 3 #-------------------------------------------------|OS = U
+      rdm[, 2, 4, ti] <- exp( rho[ , ti] ) #-----------------------|OS = D
+      rdm[, 3, 4, ti] <- exp( rho[ , ti] ) #------|OS = N
+      rdm[, 4, 4, ti] <- exp( rho[ , ti] )#|OS = DN
+    } # close ti year
+    
+    # This is the probability of detecting each community state per site
+    pstate <- array(
+      0,
+      dim = c(
+        list2jags$nsite,
+        list2jags$max_state,
+        list2jags$nseason
+      )
+    )
+    # A likelihood matrix to feed back into the full MCMC chain lik_mat
+    lik <- matrix(
+      0,
+      ncol = list2jags$nseason,
+      nrow = list2jags$nsite
+    )
+    
+    for(j in 1:list2jags$nsite){
+      
+      # Product of this times binomial coefficient = 
+      # multinomial likelihood for detection
+      # This is for the first year, which uses the fsm matrix below
+      # divide by the appropriate column sum (indexed by z matrix)
+      # to get the probability, which is then raised to the number
+      # of times each state was observed.
+      pstate[j, , 1] <- (rdm[j, ,z[j, 1] ,1] /
+                           sum(rdm[j, ,z[j, 1],1 ] ) )^state_count[j, 1, ]
+      
+      # fsm indexed to z to get likelihood of latent state
+      # at first season.
+      
+      lik[j,1] <- ( binco[j, 1] * prod( pstate[j, ,1] ) ) * 
+        ( PSI[j, z[j, 1]] / sum(PSI[j, ] ) )
+      for( yr in 2:nseason ){
+        # Product of this x binomial coefficient = 
+        # multinomial likelihood for detection
+        pstate[j, , yr] <-  (rdm[j, , z[j, yr],yr ]/ 
+                               sum( rdm[j, , z[j, yr],yr ]) )^ state_count[j, yr, ] 
+        # tpm indexed to site, state at times t, state at t-1 to get likelihood
+        # for latent state
+        lik[j, yr] <- ( binco[j, yr] * prod( pstate[j, ,yr] ) ) * 
+          ( tpm[ j, z[ j, yr ] , z[ j, yr-1 ],yr-1 ] / # numerator smax
+              sum( tpm[ j, ,z[j, yr-1 ],yr-1 ] ) ) # denominator smax
       } # close t (year)
     } # close j (site)
     lik_mat[o,] <- as.numeric(lik) # put lik into likelihood matrix

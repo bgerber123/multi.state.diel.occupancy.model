@@ -5,3 +5,9 @@
 *.out
 .Rproj.user
 *.data
+
+/Chicago coyote/model_output/*
+/chicago coytoe/simpler_models/*
+Chicago coyote/simpler_models/full_model_urb.RDS
+Chicago coyote/simpler_models/steady_state.RDS
+Chicago coyote/simpler_models/tpm_preds.RDS
