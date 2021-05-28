@@ -23,6 +23,13 @@ yo <-summary(mout, vars = c("a", "a_inxs", "b", "d", "f", "g", "h"))
 mcmc <- as.matrix(as.mcmc.list(mout))
 mcmc <- mcmc[,-grep("z", colnames(mcmc))]
 
+
+above_zero <- round(colMeans(mcmc>0),2)
+less_zero <- round(colMeans(mcmc<0),2)
+
+cbind(round(colMeans(mcmc),2),above_zero, less_zero)
+
+
 # generate ex. occupancy across different states
 
 ex_mat <- matrix(NA, ncol = 4, nrow = nrow(mcmc))
