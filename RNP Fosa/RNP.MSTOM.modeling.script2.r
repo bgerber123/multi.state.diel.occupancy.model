@@ -1,22 +1,8 @@
 #################################################################
 #################################################################
-#This script fits the Ranomafana National Park fosa occupancy camera trap data - Data from Gerber et al. 2012
-#Gerber, B. D., Karpanty, S. M., & Randrianantenaina, J. (2012). The impact of forest logging and fragmentation on carnivore species composition, density and occupancy in Madagascar's rainforests. Oryx, 46(3), 414-422.
-#
-#Specifically, it uses the camera surveys at Sahamalaotra and Valohoaka-Vatoharanana within the park.
-#The states are assigned as,
-# 4 States:
-# 1: No use
-# 2: Day only
-# 3: Night Only
-# 4: Night and Day
 
-
-#Day was assigned as the period between sunrise and sunset
-#Nigt was assigned as the period between sunset and sunrise
-
-#*****THIS script is only different from the first modeling script because
-#it uses a categorical effect for survey in the same models
+#      *****THIS script is only different from the first modeling script (RNP.MSTOM.modeling.script.r) because
+#            it uses a categorical effect for survey in the same models. 
 
 rm(list=ls())
 logit=function(x){log(x/(1-x))}
@@ -28,7 +14,6 @@ source("RNP Fosa/multi.state.likelihood.r")
 source("RNP Fosa/CPO.function.r")
 
 #load the prepared data file
-#load("RNP Fosa/RNP.data")
 load("RNP Fosa/RNP2.data")
 
 #assign data to objects
@@ -45,30 +30,6 @@ X.survey=model.matrix(~survey,contrasts = list(survey = "contr.sum"))
 head(X.survey)
 #################################################################
 #################################################################
-
-#Examine covariate data
-
-#FYI-The Locals covariate- all detections of people are during the day. There are no nighttime detections.
-#Locals covariate is probably not a good measure of overall human/forest disturbance.
-
-#Look at covariate correlations
-cor(covs$DistMatrix,covs$Locals)
-cor(covs$DistMatrix,covs$DistTown)
-cor(covs$DistTown,covs$Locals)
-
-hist(covs$DistMatrix)
-hist(covs$Locals)
-hist(covs$DistTown)
-
-plot(covs$DistMatrix,log(covs$DistMatrix))
-
-#Hypothesis:
-#Each covariate, representing an effect of edge/people will influence fosa occurence where
-#the fosa will have lower occurence near edge/people during the day and this will increase
-#the further a site is from edge/people.
-
-#First consider the FUll MSTOM with each covariate separately. Assume that the major source in
-#detection is based on the states.
 
 #################################################################
 #################################################################

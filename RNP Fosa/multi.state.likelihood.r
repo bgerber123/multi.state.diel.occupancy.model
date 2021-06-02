@@ -1,3 +1,4 @@
+#multi-state likelhood, which is used for WAIC or CPO or k-fold cv
 multi.state.likelihood=function(psi.matrix,det.matrix,data){
   
   pDay=det.matrix[,1]
@@ -50,5 +51,5 @@ if(site.max.state==4 | (states.possible[2]>0 & states.possible[3]>0)){
   
   likelihood= psiND*pND.0^(states.possible[1])*pND.D^(states.possible[2])*pND.N^(states.possible[3])*pND.ND^(states.possible[4])
   }
-likelihood
-}
+likelihood #send this as output from the function
+} #end function

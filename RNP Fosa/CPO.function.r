@@ -46,7 +46,7 @@ CPO.function=function(fit,y,model.type){
                    pND.N,
                    pND.ND)
   
-  #the likelihood is calcaulted for each site k
+  #the likelihood is calculated for each site k
   n.mcmc=length(pDay)
   
   lik.save=matrix(NA, nrow=dim(y)[1],ncol=n.mcmc)
@@ -61,18 +61,18 @@ CPO.function=function(fit,y,model.type){
     
     psi.matrix=fit[,index.occ]
     
-    #calcualte site level likelihood
+    #calculate site level likelihood
     if(all(is.na(y[k,]))==FALSE)(
     lik.save[k,]=multi.state.likelihood(psi.matrix,det.matrix,y[k,])
     )
   }
   
   
-  #CPO calculation from site-level liklihood
+  #CPO calculation from site-level likelihood
   CPO.sites=n.mcmc/(apply(1/lik.save,1,sum,na.rm=TRUE))
   CPO.sites <- CPO.sites[is.finite(CPO.sites)]
   length(CPO.sites)
   CPO=(-1)*sum(log(CPO.sites),na.rm = TRUE)
   CPO
   
-}
+} #End function

@@ -182,20 +182,6 @@ dev.off()
 
 
 ###################################
-#cov by MCMC by state
-psi.state.mcmc
-#Derive TIF for occ
-
-TIF.occ=matrix(NA, nrow=dim(psi.state.mcmc)[1],ncol=dim(psi.state.mcmc)[2])
-for(i in 1:dim(psi.state.mcmc)[1]){
-  TIF.occ[i,]=psi.state.mcmc[i,,4]/(psi.state.mcmc[i,,2]*psi.state.mcmc[i,,3])
-}
-
-dim(TIF.occ)
-
-
-hist(TIF.occ[1,])
-range(TIF.occ[1,])
-plot(1:100,apply(TIF.occ,1,mean))
+#
 
 

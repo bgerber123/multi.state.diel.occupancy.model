@@ -1,12 +1,14 @@
 #################################################################
 #################################################################
-#This script fits the Ranomafana National Park fosa occupancy camera trap data - Data from Gerber et al. 2012
-#Gerber, B. D., Karpanty, S. M., & Randrianantenaina, J. (2012). The impact of forest logging and fragmentation on carnivore species composition, density and occupancy in Madagascar's rainforests. Oryx, 46(3), 414-422.
-#
-#Specifically, it uses the camera surveys at Sahamalaotra and Valohoaka-Vatoharanana within the park.
-#The states are assigned as,
+#This script fits the Ranomafana National Park fosa occupancy camera trap data - Data from Gerber et al. 2012 and Gerber et al. 2010
 
-# 4 States:
+#Gerber, B., Karpanty, S. M., Crawford, C., Kotschwar, M., & Randrianantenaina, J. (2010). An assessment of carnivore relative abundance and density in the eastern rainforests of Madagascar using remotely-triggered camera traps. Oryx, 44(2), 219-222.
+#Gerber, B. D., Karpanty, S. M., & Randrianantenaina, J. (2012). The impact of forest logging and fragmentation on carnivore species composition, density and occupancy in Madagascar's rainforests. Oryx, 46(3), 414-422.
+
+#Specifically, the data are camera surveys at Sahamalaotra and Valohoaka-Vatoharanana within the park.
+
+#The 4 states are assigned as,
+
 # 1: No use
 # 2: Day only
 # 3: Night Only
@@ -16,6 +18,7 @@
 #Day was assigned as the period between sunrise and sunset
 #Nigt was assigned as the period between sunset and sunrise
 
+#Setup the workspace
 rm(list=ls())
 logit=function(x){log(x/(1-x))}
 expit=function(x){exp(x)/(exp(x)+1)}
@@ -26,14 +29,13 @@ source("RNP Fosa/multi.state.likelihood.r")
 source("RNP Fosa/CPO.function.r")
 
 #load the prepared data file
-#load("RNP Fosa/RNP.data")
 load("RNP Fosa/RNP2.data")
 
 #assign data to objects
 y=RNP2.data[[1]] #detection history
 covs=RNP2.data[[2]]
 
-#Derive Site/Survey Covariate
+#Derive Site/Survey Covariates using effect coding, so the intercept is the mean of all
 VOH=1:26
 VA=27:53
 CVB=54:95
@@ -56,13 +58,6 @@ cor(covs$DistTown,covs$Locals)
 hist(covs$DistMatrix)
 hist(covs$Locals)
 hist(covs$DistTown)
-
-plot(covs$DistMatrix,log(covs$DistMatrix))
-
-#Hypothesis:
-#Each covariate, representing an effect of edge/people will influence fosa occurence where
-#the fosa will have lower occurence near edge/people during the day and this will increase
-#the further a site is from edge/people.
 
 #First consider the FUll MSTOM with each covariate separately. Assume that the major source in
 #detection is based on the states.
