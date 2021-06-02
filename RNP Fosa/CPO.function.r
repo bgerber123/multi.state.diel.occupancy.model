@@ -1,5 +1,5 @@
-#Script to calculate CPO from a model. This model can handle site level variation in state
-#occupancy parameters, but assumes no site or survey occasion variaion in detection
+#Script to calculate CPO from a MSDOM model. This model can handle site level variation in state
+#occupancy parameters, but assumes no site or survey occasion variation in detection
 
 CPO.function=function(fit,y,model.type){
   
