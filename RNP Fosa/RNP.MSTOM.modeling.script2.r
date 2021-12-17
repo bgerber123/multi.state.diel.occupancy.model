@@ -1,7 +1,7 @@
 #################################################################
 #################################################################
 
-#      *****THIS script is only different from the first modeling script (RNP.MSTOM.modeling.script.r) because
+#      *****THIS script is only different from the first modeling script (RNP.MSDOM.modeling.script.r) because
 #            it uses a categorical effect for survey in the same models. 
 
 rm(list=ls())

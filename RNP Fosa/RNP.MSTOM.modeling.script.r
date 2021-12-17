@@ -59,7 +59,7 @@ hist(covs$DistMatrix)
 hist(covs$Locals)
 hist(covs$DistTown)
 
-#First consider the FUll MSTOM with each covariate separately. Assume that the major source in
+#First consider the FUll MSDOM with each covariate separately. Assume that the major source in
 #detection is based on the states.
 
 #################################################################
