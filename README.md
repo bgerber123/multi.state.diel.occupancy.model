@@ -33,7 +33,7 @@
 
 ---
 
-<div align="center"><img width="150" height="auto" src="./images/raccoon.JPG" alt="A silhouette of a raccoon." /></div>
+<div align="center"><img width="150" height="auto" src="./images/raccoon.jpg" alt="A silhouette of a raccoon." /></div>
 
 <div align="center"> <h3>Model</h3> </div>
 
@@ -45,6 +45,6 @@
 
 ---
 
-<div align="center"><img width="150" height="auto" src="./images/coyote.JPG" alt="A silhouette of a coyote." /></div>
+<div align="center"><img width="150" height="auto" src="./images/coyote.jpg" alt="A silhouette of a coyote." /></div>
 
 <div align="center"> <h3>Data</h3> </div>
