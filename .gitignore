@@ -4,7 +4,6 @@
 .Ruserdata
 *.out
 .Rproj.user
-*.data
 
 /Chicago coyote/model_output/*
 /chicago coytoe/simpler_models/*
