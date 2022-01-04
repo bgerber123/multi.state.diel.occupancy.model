@@ -1,5 +1,5 @@
 
-# **A repository for the multi-state diel occupancy model (MSDOM) and associated manuscripts:** 
+# **A repository for the multi-state diel occupancy model (MSDOM):** 
 
 ### River, K, Fidino, M, Farris, ZJ, Murphy, A, Magle, SB, and Gerber, BD. Rethinking habitat occupancy modeling and the role of diel activity in an anthropogenic world. In Review.
 ---
