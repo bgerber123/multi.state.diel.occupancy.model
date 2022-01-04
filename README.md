@@ -5,7 +5,7 @@
 ---
 
 
-**This repository includes 6 subfolders: Chicago coyote, Data Processing, JAGS, Makira Fosa2, RNP Fosa, and Simulation Files**
+**This repository includes 6 subfolders: Chicago coyote, Data Processing, JAGS, Makira Fosa2, RNP Fosa, and Simulation Files.**
 1) The **Chicago coyote** folder includes data, R scripts, and plots specific to case study on coyotes that uses the dynamic MSDOM.
 2) The **Data Procesing** folder includes R scripts and example data on how to prepare data for the MSDOM.
 3) The **JAGS** folder includes JAGS models for the static and dynamic MSDOM, including the full, reduced, and null parameterizations.
@@ -73,7 +73,7 @@
 
 <div align="center"><h2>JAGS folder</h2></div>
 
-<div align="left"><h3>Dynamic MSDOM File</h3> </div>
+<div align="left"><h3>Dynamic MSDOM</h3> </div>
 
 **jags.dynamic.fake.multistate.R** - standard dynamic occupancy model generalized to be fit with multi-state data
 
@@ -145,6 +145,7 @@
 **Makira.data2** - R object containing the prepared data for model fitting
 
 **Makira.fosa.det.parms.png** - posterior estimates of detection probabilites from the most supported model
+
 **Makira.fosa.occ.parms.png** - posterior estimates of occupancy probabilites from the most supported model
 
 **makira.modeling.script.r** - static MSDOM model fitting to Makira fosa data
