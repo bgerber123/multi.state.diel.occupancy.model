@@ -26,29 +26,51 @@
 **jags.dynamic.multistate.covars.R**
 
 **jags.dynamic.multistate.null.R**
+
 **temporal_multi_varying_covars.R**
+
+**null_temporal_multi_varying_covars.R**
+
 <div align="left"> <h4>Static MSDOM File</h4> </div>
 **jags.multistate.occ.full.alt.R**- Full MSDOM with probabilities estimated on the logit scale (using transformation).
 **jags.multistate.occ.full.alt.RE.R**
+
 **jags.multistate.occ.full.R** - Full MSDOM with probabilities estimated directly (no logit transformation).
+
 **jags.multistate.occ.full.site.covs.by.state.R**
+
 **jags.multistate.occ.full.site.covs.R**  
+
 **jags.multistate.occ.full.site.covs.RE.R**         
-**jags.multistate.occ.null.alt.R**              
-**jags.multistate.occ.null.alt.RE.R**             
+
+**jags.multistate.occ.null.alt.R**
+
+**jags.multistate.occ.null.alt.RE.R**
+
 **jags.multistate.occ.null.det.null.R**
+
 **jags.multistate.occ.null.R**
+
 **jags.multistate.occ.null.site.covs.by.state.R**
+
 **jags.multistate.occ.null.site.covs.R**
+
 **jags.multistate.occ.null.site.covs.RE.R**
+
 **jags.multistate.occ.red.det.null.R**
+
 **jags.multistate.occ.reduced.alt.R**
+
 **jags.multistate.occ.reduced.alt.RE.R**
+
 **jags.multistate.occ.reduced.R**
+
 **jags.multistate.occ.reduced.site.covs.by.state.R**
+
 **jags.multistate.occ.reduced.site.covs.R**     
+
 **jags.multistate.occ.reduced.site.covs.RE.R**
-**null_temporal_multi_varying_covars.R**
+
 
 
 ---
