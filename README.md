@@ -19,9 +19,12 @@
 
 <div align="center"> <h3>JAGS folder</h3> </div>
 <div align="left"> <h4>Dynamic MSDOM File</h4> </div>
-**jags.dynamic.fake.multistate.R**.                  
-**jags.dynamic.multistate.covars.lasso.R**.         
+**jags.dynamic.fake.multistate.R**
+
+**jags.dynamic.multistate.covars.lasso.R**
+
 **jags.dynamic.multistate.covars.R**
+
 **jags.dynamic.multistate.null.R**
 **temporal_multi_varying_covars.R**
 <div align="left"> <h4>Static MSDOM File</h4> </div>
