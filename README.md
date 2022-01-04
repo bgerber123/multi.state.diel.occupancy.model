@@ -31,7 +31,7 @@
 
 **null_temporal_multi_varying_covars.R**
 
-<div align="left"> <h4><span style="color:red;">Static MSDOM File</span></h4> </div>
+<div align="left"> <h4><span style="color:red">Static MSDOM File</span></h4> </div>
 **jags.multistate.occ.full.alt.R**- Full MSDOM with probabilities estimated on the logit scale (using transformation).
 **jags.multistate.occ.full.alt.RE.R**
 
