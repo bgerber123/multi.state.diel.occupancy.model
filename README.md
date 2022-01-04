@@ -18,9 +18,54 @@
 <div align="center"><img width="150" height="auto" src="coyote.jpg" alt="A silhouette of a coyote." /></div>
 <div align="center"> <h3>Chicago coyote</h3> </div>
 
+**data** - Folder of coyote data files
+
+**figures** - Folder of dynamic MSDOM results using coyote data
+
+**lasso_output** - Folder of R data file of model object output
+
+**mcmc_plots** - Folder of MCMC traceplots of model parameters
+
+**pngs** - Folder of icons
+
+**analysis_utilities.R** - make_model_matrix function
+
+**calculate_steady_state.R** - estimating steady state occupancy from a transition matrix
+
+**dynamic_occupancy_as _fake_multistate.R** - checking how to make a multi-state dynamic occupancy model parameterization without states
+
+**extract_covariates.R** - extracting site-level urbanization covariates
+
+**fit_lasso_models.R** - fitting dynamic MSDOM models with penalizatoin
+
+**fit_models.R** - fitting dynamic MSDOM models
+
+**model_selection.R** - model comparison via CPO
+
+**plot_tpm.R** - evaluating the best fit-model to make figures
+
+**plot_utilities.R** - model output processing
+
+**prep_objects_for_model.R** - to make the fit_models.R and model_selection.R scripts more clear
+
+**scrub_coyote_data.R** - arrange detection non-detction with obseried diel states
+
+**spatial_utilities.R** - spatial data processing script
+
+**summarise_parameters.R** - processing model fit output
+
+
 ---
 
 <div align="center"> <h3>Data Processing</h3> </div>
+
+**Example_Detection_Matrix.csv** - single state detection/non-detection matrix
+
+**Example_Photo_Data.csv** - original photo data relevant to the example detection matrix
+
+**diel.occ.fun.R** - the function called by Diel.Occ.Script.R
+
+**Diel.Occ.Script.R** - script to convert a single-state occupancy detection matrix into a 4 state diel matrix
 
 ---
 

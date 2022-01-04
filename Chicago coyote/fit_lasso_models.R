@@ -10,7 +10,7 @@ library(runjags)
 
 # The simulation code has some helpful utility functions we can
 #  use to set up the analysis.
-source("./simulation study/dynamic_simulations/dynamic_utilities.R")
+source("./Simulation Files/dynamic_simulations/dynamic_utilities.R")
 
 # and there are also a couple ones for this analysis here
 source("./Chicago coyote/analysis_utilities.R")

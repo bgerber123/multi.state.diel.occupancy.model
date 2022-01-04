@@ -6,10 +6,7 @@
 #
 ###############################
 
-# This function calculates the expected occupancy from the transition matrix
-#  in our 3 species coyote, opossum, and raccoon example. As the best fit model
-#  indicated that interactions vary as a function of urbanization, we calculate
-#  the expected occupancy of each commmunity state across this metric.
+# This function calculates the expected occupancy from the transition matrix.
 #  This function requires:
 
 # Arguments for this function
