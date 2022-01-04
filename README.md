@@ -31,9 +31,9 @@
 
 **null_temporal_multi_varying_covars.R**
 
-<div align="left"> <h3>Static MSDOM File</h3> </div>
-<div align="center"> <h4>FULL MSDOM</h3> </div>
-**jags.multistate.occ.full.R** - Full MSDOM with probabilities estimated directly (no logit transformation) without site covariates. 
+<div align="left"> <h3>Static MSDOM</h3> </div>
+<div align="center"> <h4>FULL Model</h3> </div>
+**jags.multistate.occ.full.R** - Full MSDOM with probabilities estimated directly (no logit transformation) without site covariates.
 
 **jags.multistate.occ.full.alt.R**- Full MSDOM with probabilities estimated on the logit scale without site covariates. 
 
