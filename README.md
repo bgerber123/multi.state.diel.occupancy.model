@@ -47,37 +47,37 @@
 
 **jags.multistate.occ.full.site.covs.RE.R** - Full MSDOM with probabilities estimated on the logit scale, in which occupancy parameters are modeled using separate covariates for each state and detection and occupancy parameters are realizations from a higher order Normal distribution (i.e. random effect).   
 
-<div align="center"> <h4>REDUCED MSDOM</h3> </div>
-**jags.multistate.occ.reduced.R**
+<div align="center"> <h4>REDUCED</h3> </div>
 
-**jags.multistate.occ.reduced.alt.R**
+**jags.multistate.occ.reduced.R** - Reduced MSDOM with probabilities estimated directly (no transformation).
 
-**jags.multistate.occ.red.det.null.R**
+**jags.multistate.occ.reduced.alt.R** - Reduced MSDOM with occupancy probabilities estimated directly and detection probabilities estimated on the logit scale.
 
-**jags.multistate.occ.reduced.site.covs.R**     
+**jags.multistate.occ.red.det.full.R** - Reduced MSDOM with a reduced state occupancy parameterization (no transformation) and full state detection probability parameterization (no transformation).
 
-**jags.multistate.occ.reduced.alt.RE.R**
+**jags.multistate.occ.reduced.site.covs.R** - Reduced MSDOM in which logit-scaled occupancy parameters are modeled using the same single site covariate and state detection probabilities are reduced (no transformation).
 
-**jags.multistate.occ.reduced.site.covs.RE.R**
+**jags.multistate.occ.reduced.alt.RE.R** - Reduced MSDOM in which all parameters are estimated on the logit scale and state and detection proabilities are realizations from separate higher order Normal distributions (i.e. random effect).   
 
-**jags.multistate.occ.reduced.site.covs.by.state.R**
+**jags.multistate.occ.reduced.site.covs.RE.R** - Reduced MSDOM in which all parameters are estimated on the logit scale and state occupancy parameters are modeled using separate (single) site covariates; detection and occupancy parameters are realizations from separate higher order Normal distributions (i.e. random effect).   
 
-**jags.multistate.occ.null.R**
+**jags.multistate.occ.reduced.site.covs.by.state.R**- Reduced MSDOM in which all parameters are estimated on the logit scale and state occupancy parameters are modeled using any set and any number of separate site covariates.
 
-**jags.multistate.occ.null.alt.R**
+<div align="center"> <h4>NULL</h3> </div>
 
-**jags.multistate.occ.null.det.null.R**
+**jags.multistate.occ.null.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; parameters are estimated directly (no transformation).
 
-**jags.multistate.occ.null.alt.RE.R**
+**jags.multistate.occ.null.alt.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; parameters are estimated on the logit scale.
 
-**jags.multistate.occ.null.site.covs.R**
+**jags.multistate.occ.null.det.null.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; occupancy parameters are estimated on the logit scale and detection parameters are estiamted without transformation.
 
-**jags.multistate.occ.null.site.covs.by.state.R**
+**jags.multistate.occ.null.alt.RE.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; detection and occupancy parameters are realizations from separate higher order Normal distributions (i.e. random effect).   
 
-**jags.multistate.occ.null.site.covs.RE.R**
+**jags.multistate.occ.null.site.covs.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; occupancy parameters are modeled on the logit scale using the same site-covariate and detection parameters are estimated on the logit scale without covariates.   
 
+**jags.multistate.occ.null.site.covs.by.state.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; occupancy parameters are modeled on the logit scale using any set of the same site-covariates and detection parameters are estimated on the logit scale without covariates. 
 
-
+**jags.multistate.occ.null.site.covs.RE.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; occupancy parameters are modeled on the logit scale using any set of the same site-covariates and detection parameters are estimated on the logit scale without covariates. Detection and occupancy parameters are realizations from separate higher order Normal distributions (i.e. random effect)
 
 ---
 
