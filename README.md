@@ -17,8 +17,8 @@
 
 <div align="center"><img width="150" height="auto" src="raccoon.jpg" alt="A silhouette of a raccoon." /></div>
 
-<div align="center"> <h3>JAGS folder</h3> </div>
-<div align="left"> <h4>Dynamic MSDOM File</h4> </div>
+<div align="center"> <h2>JAGS folder</h2> </div>
+<div align="left"> <h3>Dynamic MSDOM File</h3> </div>
 **jags.dynamic.fake.multistate.R**
 
 **jags.dynamic.multistate.covars.lasso.R**
@@ -31,45 +31,49 @@
 
 **null_temporal_multi_varying_covars.R**
 
-<div align="left"> <h4><span style="color:red">Static MSDOM File</span></h4> </div>
-**jags.multistate.occ.full.alt.R**- Full MSDOM with probabilities estimated on the logit scale (using transformation).
-**jags.multistate.occ.full.alt.RE.R**
+<div align="left"> <h3>Static MSDOM File</h3> </div>
+<div align="center"> <h4>FULL MSDOM</h3> </div>
+**jags.multistate.occ.full.R** - Full MSDOM with probabilities estimated directly (no logit transformation) without site covariates. 
 
-**jags.multistate.occ.full.R** - Full MSDOM with probabilities estimated directly (no logit transformation).
+**jags.multistate.occ.full.alt.R**- Full MSDOM with probabilities estimated on the logit scale without site covariates. 
 
-**jags.multistate.occ.full.site.covs.by.state.R**
+**jags.multistate.occ.full.alt.RE.R** - Full MSDOM with probabilities estimated on the logit scale; detection and occupancy parameters are realizations from a higher order Normal distribution (i.e. random effect). No covariates.
 
-**jags.multistate.occ.full.site.covs.R**  
+**jags.multistate.occ.full.site.covs.by.state.R** - Full MSDOM with probabilities estimated on the logit scale, in which occupancy parameters are modeled using any set or size of site covariates, separately for each state.
 
-**jags.multistate.occ.full.site.covs.RE.R**         
+**jags.multistate.occ.full.site.covs.R** - Full MSDOM with probabilities estimated on the logit scale, in which occupancy parameters are modeled using the same single site covariate, separately for each state.
 
-**jags.multistate.occ.null.alt.R**
+**jags.multistate.occ.full.site.covs.RE.R** - Full MSDOM with probabilities estimated on the logit scale, in which occupancy parameters are modeled using separate covariates for each state and detection and occupancy parameters are realizations from a higher order Normal distribution (i.e. random effect).   
 
-**jags.multistate.occ.null.alt.RE.R**
-
-**jags.multistate.occ.null.det.null.R**
-
-**jags.multistate.occ.null.R**
-
-**jags.multistate.occ.null.site.covs.by.state.R**
-
-**jags.multistate.occ.null.site.covs.R**
-
-**jags.multistate.occ.null.site.covs.RE.R**
-
-**jags.multistate.occ.red.det.null.R**
+<div align="center"> <h4>REDUCED MSDOM</h3> </div>
+**jags.multistate.occ.reduced.R**
 
 **jags.multistate.occ.reduced.alt.R**
 
-**jags.multistate.occ.reduced.alt.RE.R**
-
-**jags.multistate.occ.reduced.R**
-
-**jags.multistate.occ.reduced.site.covs.by.state.R**
+**jags.multistate.occ.red.det.null.R**
 
 **jags.multistate.occ.reduced.site.covs.R**     
 
+**jags.multistate.occ.reduced.alt.RE.R**
+
 **jags.multistate.occ.reduced.site.covs.RE.R**
+
+**jags.multistate.occ.reduced.site.covs.by.state.R**
+
+**jags.multistate.occ.null.R**
+
+**jags.multistate.occ.null.alt.R**
+
+**jags.multistate.occ.null.det.null.R**
+
+**jags.multistate.occ.null.alt.RE.R**
+
+**jags.multistate.occ.null.site.covs.R**
+
+**jags.multistate.occ.null.site.covs.by.state.R**
+
+**jags.multistate.occ.null.site.covs.RE.R**
+
 
 
 
