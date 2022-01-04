@@ -15,22 +15,32 @@
 
 ---
 
+<div align="center"><img width="150" height="auto" src="coyote.jpg" alt="A silhouette of a coyote." /></div>
+<div align="center"> <h3>Chicago coyote</h3> </div>
+
+---
+
+<div align="center"> <h3>Data Processing</h3> </div>
+
+---
+
 <div align="center"><img width="150" height="auto" src="raccoon.jpg" alt="A silhouette of a raccoon." /></div>
 
-<div align="center"> <h2>JAGS folder</h2> </div>
-<div align="left"> <h3>Dynamic MSDOM File</h3> </div>
+<div align="center"><h2>JAGS folder</h2></div>
 
-**jags.dynamic.fake.multistate.R**
+<div align="left"><h3>Dynamic MSDOM File</h3> </div>
 
-**jags.dynamic.multistate.covars.lasso.R**
+**jags.dynamic.fake.multistate.R** - MASON adds description
 
-**jags.dynamic.multistate.covars.R**
+**jags.dynamic.multistate.covars.lasso.R** - MASON adds description
 
-**jags.dynamic.multistate.null.R**
+**jags.dynamic.multistate.covars.R** - MASON adds description
 
-**temporal_multi_varying_covars.R**
+**jags.dynamic.multistate.null.R** - MASON adds description
 
-**null_temporal_multi_varying_covars.R**
+**temporal_multi_varying_covars.R** - MASON adds description
+
+**null_temporal_multi_varying_covars.R** - MASON adds description
 
 <div align="left"> <h3>Static MSDOM</h3> </div>
 <div align="center"> <h4>FULL Model</h3> </div>
@@ -81,11 +91,14 @@
 
 ---
 
-
-**city_mean_occupancy.R:** This is a single-species hierarchical occupancy model with among-city effects.
+<div align="center"> <h3>Makira Fosa2</h3> </div>
 
 ---
 
-<div align="center"><img width="150" height="auto" src="coyote.jpg" alt="A silhouette of a coyote." /></div>
+<div align="center"> <h3>RNP Fosa</h3> </div>
 
-<div align="center"> <h3>Data</h3> </div>
+---
+
+<div align="center"> <h3>Simulation Files</h3> </div>
+
+---
