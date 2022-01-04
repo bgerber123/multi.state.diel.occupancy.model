@@ -13,7 +13,7 @@
 #4: Night and Day
 
 
-#This script comapres the null model multi-state estimates of overall occupancy 
+#This script compares the null model multi-state estimates of overall occupancy 
 # P(state 2)+P(state 3)+ P(state4) with estimates of psi from simple occupancy model
 #without state designations, only occurence and non-occurence. The simple occupancy model
 #is estimated in the likelihood framework using the R package unmarked.

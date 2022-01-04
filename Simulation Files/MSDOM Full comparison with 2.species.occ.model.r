@@ -1,5 +1,5 @@
-#Comparison of the original two species occupancy model (MacKenzie et al. 2004)
-#with that of the MSTOM Full model. These models are equivalent for 4 states (2-species).
+#Comparison of the original unconditional two species occupancy model (MacKenzie et al. 2004)
+#with that of the MSDOM Full model. These models are equivalent for 4 states (2-species).
 #However, the Bayesian MSTOM does not have the same estimation optimization issues, with
 #or without covariates.
 

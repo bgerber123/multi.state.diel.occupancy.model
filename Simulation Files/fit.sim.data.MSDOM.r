@@ -32,9 +32,9 @@
   #Set which data to load "Full", "Red", or "Null
   load.data="Red"
   
-  if(load.data=="Full"){load("simulation study/sim.full.data") }
-  if(load.data=="Red"){load("simulation study/sim.reduced.data") }
-  if(load.data=="Null"){load("simulation study/sim.null.data") }
+  if(load.data=="Full"){load("Simualtion Files/sim.full.data") }
+  if(load.data=="Red"){load("Simualtion Files/sim.reduced.data") }
+  if(load.data=="Null"){load("Simualtion Files/sim.null.data") }
 
   # MCMC settings
   ni <- 10000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000

@@ -75,17 +75,17 @@
 
 <div align="left"><h3>Dynamic MSDOM File</h3> </div>
 
-**jags.dynamic.fake.multistate.R** - MASON adds description
+**jags.dynamic.fake.multistate.R** - standard dynamic occupancy model generalized to be fit with multi-state data
 
-**jags.dynamic.multistate.covars.lasso.R** - MASON adds description
+**jags.dynamic.multistate.covars.lasso.R** - dynamic MSDOM with covariates and hierarchical lasso penalization
 
-**jags.dynamic.multistate.covars.R** - MASON adds description
+**jags.dynamic.multistate.covars.R** - dynamic MSDOM with covariates
 
-**jags.dynamic.multistate.null.R** - MASON adds description
+**jags.dynamic.multistate.null.R** - dynamic MSDOM parameterized without states
 
-**temporal_multi_varying_covars.R** - MASON adds description
+**temporal_multi_varying_covars.R** - dynamic MSDOM with covariates varying by primary periods
 
-**null_temporal_multi_varying_covars.R** - MASON adds description
+**null_temporal_multi_varying_covars.R** - dynamic MSDOM with covariates varying by primary periods and without states
 
 <div align="left"> <h3>Static MSDOM</h3> </div>
 <div align="center"> <h4>FULL Model</h3> </div>
@@ -138,12 +138,90 @@
 
 <div align="center"> <h3>Makira Fosa2</h3> </div>
 
+**AJB-FRK-LKT-MGB-SLJ-SOA-VIN** - Each folder contains site-level diel detection/non-detection data (4 states) and covariate information for the fosa
+
+**makira.data.script.r** - data script to prepare detection data in a format useable for MSDOM model fitting
+
+**Makira.data2** - R object containing the prepared data for model fitting
+
+**Makira.fosa.det.parms.png** - posterior estimates of detection probabilites from the most supported model
+**Makira.fosa.occ.parms.png** - posterior estimates of occupancy probabilites from the most supported model
+
+**makira.modeling.script.r** - static MSDOM model fitting to Makira fosa data
+
+**makira.MSTOM.plotting.r** - basic plotting from model output
+
+**multi.state.likelihood.r** - MSDOM likelihood for 4 states used to compare models
+
+**CPO.function.RE.r** - MSDOM likelihood for 4 states used to compare models
+
+**CPO.out.Makira.csv** - script to calculate CPO from a model with random effects on occupancy and detection parameters
+
+
 ---
 
 <div align="center"> <h3>RNP Fosa</h3> </div>
 
+**CPO.function.r** - model comparison script
+
+**CPO.out.RNP.csv** - results of model comparison using CPO
+
+**GOF.r** - posterior predictive check function
+
+**M1.full.fit** - R object of most supported model used for plotting
+
+**RNP.GOF.r** - script to process posterior predictive check
+
+**RNP.MSDOM.modeling.script.r** - fosa RNP model fitting without an effect for survey
+
+**RNP.MSDOM.modeling.script2.r** - fosa RNP model fitting of the same models but with a categorical effect for survey. 
+
+**RNP.MSTOM.plotting.r** - basic plotting of model object
+
+**RNP.fosa.State.Prob.png** - predicted state probabilities varying by distance to nearest village
+
+**RNP.fosa.det.parms.png** - posterior distributions of detection parameters from the most supported model
+
+**RNP.fosa.parms.png** - posterior distributions of occupancy parameters from the most supported model
+
+**RNP2.data** - R object of fosa RNP data
+
+**RNP2007.csv** - prepared 4-state detection/non-detection data of fosa from RNP
+
+**multi.state.likelihood.r** - MSDOM likelihood function to be used for model comparison 
+
 ---
 
 <div align="center"> <h3>Simulation Files</h3> </div>
+
+**dynamic_simulations** - Folder for simulating dynamic MSDOM data
+
+**MARK.2.species** - Folder containing output results from MARK model fitting using the unconditional 2 species occupancy model
+
+**det.matrix.func.r** - function to put detection parameters into a matrix
+
+**fit.sim.data.MSDOM.r** - fits simulated MSDOM data using JAGS models
+
+**model.comparison.CPO.r** - compares models via CPO
+
+**MSDOM Full comparison with 2.species.occ.model.r** - comparison of the original unconditional two species occupancy model with that of the MSDOM Full model
+
+**MSDOM Full comparison with 2.species.occ.model2.R** - comparison of the conditional two species occupancy model with that of the MSDOM Full model
+
+**multi.state.likelihood.r** - likelihood function for the 4 state MSDOM
+
+**null.model.comparison.r** - compares the null model MSDOM estimates of overall occupancy with estimates of occupancy from simple occupancy model without state designations
+
+**sim.data.MSDOM.full.model.r** - script to simulate data from the full MSDOM
+
+**sim.data.MSDOM.null.model.r** - script to simulate data from the null MSDOM
+
+**sim.data.MSDOM.reduced.model.r** - script to simulate data from the reduced MSDOM
+
+**sim.full.data** - R object of simulated data from the full MSDOM
+
+**sim.null.data** - R object of simulated data from the null MSDOM
+
+**sim.reduced.data** - R object of simulated data from the reduced MSDOM
 
 ---
