@@ -19,6 +19,7 @@
 
 <div align="center"> <h2>JAGS folder</h2> </div>
 <div align="left"> <h3>Dynamic MSDOM File</h3> </div>
+
 **jags.dynamic.fake.multistate.R**
 
 **jags.dynamic.multistate.covars.lasso.R**
@@ -33,6 +34,7 @@
 
 <div align="left"> <h3>Static MSDOM</h3> </div>
 <div align="center"> <h4>FULL Model</h3> </div>
+
 **jags.multistate.occ.full.R** - Full MSDOM with probabilities estimated directly (no logit transformation) without site covariates.
 
 **jags.multistate.occ.full.alt.R**- Full MSDOM with probabilities estimated on the logit scale without site covariates. 
