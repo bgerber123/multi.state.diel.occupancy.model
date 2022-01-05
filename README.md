@@ -54,7 +54,10 @@ the repository is the current working directory.
 
 **plot_utilities.R** - model output processing for plotting
 
-**prep_objects_for_model.R** - Sourced by fit_models.R and model_selection.R scripts more clear. This script essentially prepares all of the data for analysis.
+**prep_objects_for_model.R** - Sourced by fit_models.R and model_selection.R scripts more clear. This script essentially prepares all of the data for analysis. Definitely
+something to look through if you are running `./Chicago coyote/fit_models.R` as 
+a number of objects are created in here that are used (e.g., a `models` data.frame 
+with formulas that specify the models being fit).
 
 **scrub_coyote_data.R** - arrange detection non-detction with observed diel states. This is a good example of how you would prepare your raw camera trap data for analysis with an MSDOM (for the four state model we used).
 
@@ -89,7 +92,7 @@ This folder is for the static MSDOM case studies.
 <div align="left"><h3>Dynamic MSDOMs</h3> </div>
 
 Note: These dynamic models have been written in a way to work with the output
-from the make_model_matrix function that fit_models.R uses in `./Chicago coyote/`. 
+from the make_model_matrix function used in `./Chicago coyote/fit_models.R`.  
 
 **jags.dynamic.fake.multistate.R** - standard dynamic occupancy model generalized to be fit with multi-state data
 
