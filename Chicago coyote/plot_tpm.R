@@ -120,7 +120,7 @@ for(i in 1:16){
     par(xpd = NA)
     ty <- 1.5
     tc <- 1.6
-    text(0, y = ty, "'No use' to...", cex = tc)
+    text(0, y = ty, "'no use' to...", cex = tc)
     mtext("Probability of transition", 2, line = 4.75, at = -1.25 ,cex = 1.6)
     if(add_png){
     dpng <- readPNG("./Chicago coyote/pngs/no_coyote.png")
@@ -129,7 +129,7 @@ for(i in 1:16){
   }
   if(i == 5){
     par(xpd = NA)
-    text(0, y = ty, "'Day use' to...", cex = tc)
+    text(0, y = ty, "'day use' to...", cex = tc)
     if(add_png){
     dpng <- readPNG("./Chicago coyote/pngs/day_coyote.png")
     grid.raster(dpng,x = 0.395, y = 0.92, width = 0.08)
@@ -137,7 +137,7 @@ for(i in 1:16){
   }
   if(i == 9){
     par(xpd = NA)
-    text(0, y = ty, "'Night use' to...", cex = tc)
+    text(0, y = ty, "'night use' to...", cex = tc)
     if(add_png){
     dpng <- readPNG("./Chicago coyote/pngs/night_coyote.png")
     grid.raster(dpng,x = 0.595, y = 0.92, width = 0.064)
@@ -145,8 +145,8 @@ for(i in 1:16){
   }
   if(i == 13){
     par(xpd = NA)
-    text(0, y = ty, "'Day & night use' to...", cex = tc)
-    text(8.85, 0.5, "'No use'", srt = 270, cex = tc)
+    text(0, y = ty, "'night & day use' to...", cex = tc)
+    text(8.85, 0.5, "'no use'", srt = 270, cex = tc)
     if(add_png){
     dpng <- readPNG("./Chicago coyote/pngs/day_night_coyote.png")
     grid.raster(dpng,x = 0.795, y = 0.92, width = 0.08)
@@ -156,21 +156,21 @@ for(i in 1:16){
     }
   }
   if(i == 14){
-    text(8.85, 0.5, "'Day use'", srt = 270, cex = tc)
+    text(8.85, 0.5, "'day use'", srt = 270, cex = tc)
     if(add_png){
     dpng <- readPNG("./Chicago coyote/pngs/day_coyote.png")
     grid.raster(dpng,x = 0.925, y = 0.61, width = 0.08)
     }
   }
   if(i == 15){
-    text(8.85, 0.5, "'Night use'", srt = 270, cex = tc)
+    text(8.85, 0.5, "'night use'", srt = 270, cex = tc)
     if(add_png){
     dpng <- readPNG("./Chicago coyote/pngs/night_coyote.png")
     grid.raster(dpng,x = 0.925, y = 0.41, width = 0.064)
     }
   }
   if(i == 16){
-    text(8.85, 0.5, "'Day & night use'", srt = 270, cex = tc)
+    text(8.85, 0.5, "'night and day use'", srt = 270, cex = tc)
     mtext("Urban intensity", 1, line = 4.5, at = -14.75 ,cex = 1.6)
     if(add_png){
     dpng <- readPNG("./Chicago coyote/pngs/day_night_coyote.png")

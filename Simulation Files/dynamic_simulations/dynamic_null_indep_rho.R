@@ -15,7 +15,7 @@ library(runjags)
 
 # load utility functions
 source(
-  "./simulation study/dynamic_simulations/dynamic_utilities.R"
+  "./Simulation Files/dynamic_simulations/dynamic_utilities.R"
 )
 
 cat("Simulating covariates ...\n")
