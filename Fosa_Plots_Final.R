@@ -257,15 +257,15 @@ tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.ra
   # do the legends for the 95% CI 
   legend(x = 1500,
          y = .999,
-         legend = rep("",4),
+         legend = rep("",3),
          pch = 22,
-         pt.bg = scales::alpha(c(mc[c(3,2,1)],"blue"), alp+0.1), #This is the color for no use
+         pt.bg = scales::alpha(mc[c(3,2,1)], alp+0.1), #This is the color for no use
          pt.cex = 3,
          y.intersp = 1.5,
          bty = "n", cex = 1.1)
   legend(x = 1700,
          y = .999,
-         legend = c("day use", "night use", "day & night use", "no use"),
+         legend = c("day use", "night use", "day & night use"),
          lty = c(3,2,1,4),
          lwd = 3,
          seg.len = 2,
@@ -292,7 +292,7 @@ tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.ra
   
   
 
-  #create for no use 
+  #create for night use 
   y1 <- quants[1,,3]
   y2 <- rev(quants[3,,3])
   
@@ -316,19 +316,11 @@ tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.ra
   y1 <- quants[1,,1]
   y2 <- rev(quants[3,,1])
   
-  polygon(
-    c(x1, x2), c(y1, y2),
-    #col = scales::alpha("blue", alp),
-    col = scales::alpha("blue", alp),
-    border = NA
-  ) 
-  
   
   lines(quants[2,,4] ~ xp[,2], lwd = 3)
   lines(quants[2,,3] ~ xp[,2], lwd = 3, lty = 2)
   lines(quants[2,,2] ~ xp[,2], lwd = 3, lty = 3)
-  lines(quants[2,,1] ~ xp[,2], lwd = 3, lty = 4)
-  
+
   #start the conditional plot here
   plot(1~1, ylim = c(0,1), type = "n", xlim = c(500,4000),
        bty = "l", lwd = 2, xlab = "", 
@@ -425,4 +417,159 @@ mcmc_areas(occ.matrix, pars = colnames(occ.matrix))+
   scale_y_discrete("State Occupancy Parameter", labels = c(expression(psi^2),expression(psi^3), expression(psi^4))) +
   theme(text = element_text(family = "URWTimes", size=26), axis.text.y = element_text(family = "serif")) +
   xlim(0,.6) 
+dev.off()
+
+
+#old
+# Plot both marginal and conditional probabilities together---------------------
+windows(5.5,11) #creates plotting window
+tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.rano.occ.4.state.tiff", height = 11, width = 5.5, units = "in",
+     res = 600, compression = "lzw")
+{
+  par(mar = c(5,5,0.5,0.5)+1, mfrow = c(2,1))
+  
+  
+  plot(1~1, ylim = c(0,1), type = "n", xlim = c(500,4000),
+       bty = "l", lwd = 2, xlab = "", 
+       ylab = "", las = 1, xaxs = "i", yaxs = "i", cex.axis = 1.2) # i allows perfect btw 0,1 & 500&4000
+  axis(1, seq(500,4000, 500), labels = FALSE,  tck = -0.015)
+  axis(2, seq(0,1, 0.1), labels = FALSE,  tck = -0.015)
+  mtext(text = "Distance to Nearest Village (m)", 1 , at = 2250, line = 3.1, cex = 1.5) # at = get center point (500,4000)
+  mtext(text = "Probability of Occupancy",2, las = 0, at = 0.5, line = 3.1,
+        cex = 1.5)
+  
+  # get the plotting margins to place sub-figure symbol
+  u <- par("usr") # plotting window x left x right, x bottom, y top
+  
+  text(x = u[1]+300, u[4]-.05, labels = "(a)", cex = 1.5) # check the movement on x-axis (like 50)
+  # alpha shading
+  alp <- 0.2
+  mc <- c("#24d5f7ff", "gray50" ,"#5ee38bff")
+  #mc <- c("#24d5f7ff", "gray50" ,"springgreen2")
+  
+  
+  # do the legends for the 95% CI 
+  legend(x = 1500,
+         y = .999,
+         legend = rep("",4),
+         pch = 22,
+         pt.bg = scales::alpha(c(mc[c(3,2,1)],"blue"), alp+0.1), #This is the color for no use
+         pt.cex = 3,
+         y.intersp = 1.5,
+         bty = "n", cex = 1.1)
+  legend(x = 1700,
+         y = .999,
+         legend = c("day use", "night use", "day & night use", "no use"),
+         lty = c(3,2,1,4),
+         lwd = 3,
+         seg.len = 2,
+         y.intersp = 1.5,
+         bty = "n", cex = 1.1)
+  par(xpd = NA)
+  text(x = 1400, y = 1.06, labels = "95% CI", pos = 1, cex = 1.1)
+  text(y = 1.06, x = 2200, labels = "E(X)", pos = 1, cex = 1.1)
+  
+  x1 <- xp[,2]
+  x2 <- rev(x1)
+  
+  
+  
+  y1 <- quants[1,,4]
+  y2 <- rev(quants[3,,4])
+  
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    col = scales::alpha(mc[1], alp),
+    border = NA
+  )
+  
+  
+  
+  #create for no use 
+  y1 <- quants[1,,3]
+  y2 <- rev(quants[3,,3])
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    col = scales::alpha(mc[2], alp),
+    border = NA
+  )
+  
+  
+  # day use 
+  y1 <- quants[1,,2]
+  y2 <- rev(quants[3,,2])
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    col = scales::alpha(mc[3], alp),
+    border = NA
+  )
+  
+  y1 <- quants[1,,1]
+  y2 <- rev(quants[3,,1])
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    #col = scales::alpha("blue", alp),
+    col = scales::alpha("blue", alp),
+    border = NA
+  ) 
+  
+  
+  lines(quants[2,,4] ~ xp[,2], lwd = 3)
+  lines(quants[2,,3] ~ xp[,2], lwd = 3, lty = 2)
+  lines(quants[2,,2] ~ xp[,2], lwd = 3, lty = 3)
+  lines(quants[2,,1] ~ xp[,2], lwd = 3, lty = 4)
+  
+  #start the conditional plot here
+  plot(1~1, ylim = c(0,1), type = "n", xlim = c(500,4000),
+       bty = "l", lwd = 2, xlab = "", 
+       ylab = "", las = 1, xaxs = "i", yaxs = "i", cex.axis = 1.2)
+  axis(1, seq(500,4000, 500), labels = FALSE,  tck = -0.015)
+  axis(2, seq(0,1, 0.1), labels = FALSE,  tck = -0.015)
+  mtext(text = "Distance to Nearest Village (m)", 1 , at = 2250, line = 3.1, cex = 1.5) # at = get center point (500,4000)
+  mtext(text = "Conditional probability of use",2, las = 0, at = 0.5, line = 3.1,
+        cex = 1.5)
+  text(x = u[1]+300, u[4]-.05, labels = "(b)", cex = 1.5)
+  # alpha shadeing
+  alp <- 0.2
+  mc <- c("#24d5f7ff", "gray50" ,"#5ee38bff")
+  
+  x1 <- xp[,2]
+  x2 <- rev(x1)
+  y1 <- daynight_cpres[1,]
+  y2 <- rev(daynight_cpres[3,])
+  
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    col = scales::alpha(mc[1], alp),
+    border = NA
+  )
+  
+  y1 <- night_cpres[1,]
+  y2 <- rev(night_cpres[3,])
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    col = scales::alpha(mc[2], alp),
+    border = NA
+  )
+  
+  
+  
+  y1 <- day_cpres[1,]
+  y2 <- rev(day_cpres[3,])
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    col = scales::alpha(mc[3], alp),
+    border = NA
+  )
+  lines(daynight_cpres[2,] ~ xp[,2], lwd = 3)
+  lines(night_cpres[2,] ~ xp[,2], lwd = 3, lty = 2)
+  lines(day_cpres[2,] ~ xp[,2], lwd = 3, lty = 3)
+}
 dev.off()
