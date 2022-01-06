@@ -10,7 +10,7 @@ library(runjags)
 
 # The simulation code has some helpful utility functions we can
 #  use to set up the analysis.
-source("./simulation study/dynamic_simulations/dynamic_utilities.R")
+source("./Simulation Files/dynamic_simulations/dynamic_utilities.R")
 
 # and there are also a couple ones for this analysis here
 source("./Chicago coyote/analysis_utilities.R")
@@ -28,24 +28,19 @@ source("./Chicago coyote/prep_objects_for_model.R")
 #  6. nsurvey: Number of secondary sampling weeks within a season.
 
 # loop through them
-for(mod in 1:20){
+for(mod in 1:3){
   
   gam_cov <- eps_cov <- pi_cov <- tau_cov <- make_model_matrix(
     formula = models$formula[mod],
     df = coyote,
-    rho = FALSE,
-    comp_winter = TRUE
+    rho = FALSE
   )
   pi_cov <- tau_cov <-  array(1, dim = c(105,1,12))
-  
-
-  
   
   rho_cov <- make_model_matrix(
     formula = models$formula[mod],
     df = coyote,
-    rho = TRUE,
-    comp_winter = TRUE
+    rho = TRUE
   )
   has_urb <- length(grep("urb", models$formula[mod])) > 0
   if(has_urb){
@@ -246,29 +241,3 @@ for(mod in 1:20){
   )
 }
 
-
-
-t2 <- extend.jags(t2, sample = 500, method = "parallel", adapt = 400)
-
-t2sum <- summary(t2, vars = c("a", "a_inxs", "b", "d", "f", "g", "h"))
-
-round(t2sum, 2)
-
-test <- as.matrix(as.mcmc.list(hm), chains = TRUE)
-
-plot(test[,27] ~ test[,25], type = "p")
-hey <- 
-plot(test[test[,1]==3,37], type = 'l')
-
-longshot <- as.mcmc.list(t2)
-
-niter(longshot)
-windowed.object <- window(longshot, start=70401)
-
-wo <- combine.mcmc(windowed.object)
-summary(t3, vars = c("a", "a_inxs", "b", "d", "f", "g", "h"))
-
-
-t3 <- t2
-
-t3$mcmc <- windowed.object

@@ -58,26 +58,19 @@ models <- data.frame(
   formula = c(
     rep(
       c(
-        "y ~  season * urb",
-        "y ~  season + urb",
-        "y ~ season",
-        "y ~ urb",
-        "y ~ 1"
+        "y ~ urb"
       ),
-      4
+      3
     )
   ),
-  indep_rho = c(
-    rep(TRUE,5),
-    rep(FALSE, 15)
-    
+  indep_rho = rep(
+    FALSE,
+    3
   ),
   inxs = c(
-    rep(TRUE, 10),
-    rep(FALSE,10)
+    TRUE, FALSE, FALSE
   ),
   true_null = c(
-    rep(FALSE, 15),
-    rep(TRUE, 5)
+    FALSE, FALSE, TRUE
   )
 )

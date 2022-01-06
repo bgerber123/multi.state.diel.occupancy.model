@@ -1,4 +1,4 @@
-#Calculate a Bayesian p-value as a measure of goodness-of-fit
+#Calculates a Bayesian p-value as a measure of goodness-of-fit
 
 GOF=function(fit,y,model.type){
 
@@ -86,49 +86,18 @@ GOF=function(fit,y,model.type){
       linear.pred[[s]]=t(z.pred[,s])%*%det.out[[s]]
     }
 
-  # cl <- parallel::makeCluster(10)
-  # linear.pred= foreach(s = 1:n.mcmc) %dopar% {
-    #     t(z.pred[,s])%*%det.out[[s]]
-  #   }
-    
-    
-      
+
     #Predict samples for each s by each k site
     y.pred=lapply(linear.pred,FUN=function(x){rmultinom(length(y[k,][!is.na(y[k,])]),1,prob=x)})
     state.occurence=lapply(y.pred,FUN=function(x){apply(x,2,FUN=function(y){which(y==1)})})
 
-#Calculate the likelihood of the predicted observations based on the estimates
-#for each parallel
-   #   pred.temp= foreach(s = 1:n.mcmc) %dopar% {
-   #     multi.state.likelihood(t(matrix(psi.matrix[s,])),t(matrix(det.matrix[s,])),state.occurence[[s]])
-   # }
 
-   # predicted.lik.save[k,]=unlist(pred.temp)
-   
- #old for loop 
+ #brute-force for loop 
    for(s in 1:n.mcmc){
      predicted.lik.save[k,s]=multi.state.likelihood(t(matrix(psi.matrix[s,])),t(matrix(det.matrix[s,])),state.occurence[[s]])
    }
 
 
-# #to calculate the predicted deviance, loop over s mcmc samples for site k
-#      for(s in 1:n.mcmc){
-#        #sample the psi.matrix to get z.pred
-#        z.pred=rmultinom(1,1,prob=psi.matrix[s,])
-#        #get p matrix 
-#        p.matrix=det.matrix.func(pNight[s],pDay[s],pND.ND[s],pND.N[s],pND.D[s],pND.0[s])
-#        #dot product of z.pred and p.matrix
-#        linear.pred=t(z.pred)%*%p.matrix
-#        #sample predicted y for the correct number of times (length of occs for site k)
-#        y.pred=rmultinom(length(y[k,][!is.na(y[k,])]),1,prob=linear.pred)
-#        #turn these into a compact site level deteciton history in state designation
-#        state.occurence=apply(y.pred,2,FUN=function(x){which(x==1)})
-#        #calculate the predicted likelihood 
-#       predicted.lik.save[k,s]=multi.state.likelihood(t(matrix(psi.matrix[s,])),t(matrix(det.matrix[s,])),state.occurence)
-#        
-#        
-#      }
-#    print(k)
   }
   
   Deviance.Observed=-2*apply(log(lik.save),2,sum)
@@ -137,6 +106,6 @@ GOF=function(fit,y,model.type){
   
   list(Deviance.Observed=Deviance.Observed,Deviance.Predicted=Deviance.Predicted)
   
-}  
-  
+}  #End function
+   
   

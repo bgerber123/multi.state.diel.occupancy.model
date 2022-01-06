@@ -6,10 +6,7 @@
 #
 ###############################
 
-# This function calculates the expected occupancy from the transition matrix
-#  in our 3 species coyote, opossum, and raccoon example. As the best fit model
-#  indicated that interactions vary as a function of urbanization, we calculate
-#  the expected occupancy of each commmunity state across this metric.
+# This function calculates the expected occupancy from the transition matrix.
 #  This function requires:
 
 # Arguments for this function
@@ -410,10 +407,10 @@ highest_obs[has2[which(has2 %in% has3)]] <- 4
 curb <- data_list$gam_cov[,2,1]
 ccut <- cut(curb, breaks = seq(-3.5, 3.5, length.out = 7))
 
-cdt <- read.csv("../aly_data_request/datetime/datetime_data_chicago.csv")
+cdt <- read.csv("./Chicago coyote/data/coyote_datetime.csv")
 
 # get only coyote
-cdt <- cdt[which(cdt$Species == "coyote"),]
+cdt <- cdt[which(cdt$Species == "Coyote"),]
 
 # get only seasons in our study
 cdt <- cdt[cdt$Season %in% unique(coyote$Season),]
@@ -435,24 +432,62 @@ cdt$rads <- ack * 2 *pi
 # figure out where those lines split
 xp[min(which((daynight_cpres[2,] - night_cpres[2,]) < 0)),2]
 
-above1.56 <- covs$Site[covs$urb>0]
+above1.56 <- covs$Site[covs$urb>=1.5]
 
-cdt <- cdt[-which(duplicated(cdt)),]
+# get average sunrise and sunset
+adays <- seq(mdy("1/1/2021"), mdy("12/31/2021"), by = "1 day")
+
+stimes <- getSunlightTimes(adays, 41.88, -87.62,
+                           tz = "America/Chicago")
+ack <- as.numeric(lubridate::hms(cdt$time)) / 86400
+
+# get just the times
+mean_sunrise <- mean((as.numeric(hms(sapply(strsplit(as.character(stimes$sunrise), " "),
+               "[", 2))) / 86400) * 24)
+mean_sunset <- mean((as.numeric(hms(sapply(strsplit(as.character(stimes$sunset), " "),
+                                           "[", 2))) / 86400) * 24)
+
+
+
+
+# drop out 
+#if(sum(duplicated(cdt))>0){
+#cdt <- cdt[-which(duplicated(cdt)),]
+#}
 library(overlap)
+library(suncalc)
+windows(6,6)
 overlapPlot(
   cdt$rads[cdt$Site %in% above1.56],
   cdt$rads[!cdt$Site %in% above1.56],
   xaxs ="i",
   yaxs = "i",
   bty = "l",
-  main= ""
+  linecol = c("#24d5f7ff" ,"#5ee38bff"),
+  main= "",
+  linewidth = c(5,5),
+  las = 1,
+  cex.lab = 1.2
 )
+#abline(v = min(tmps))
+par(xpd = FALSE)
+abline(v = mean_sunrise, lwd = 2)
+#abline(v = max(tmps))
+abline(v = mean_sunset, lwd = 2)
+par(xpd = NA)
+text(x = mean_sunrise, y = 0.105, "Sunrise", cex = 1.2)
+text(x = mean_sunset, y = 0.105, "Sunset", cex = 1.2)
+
+
+overlapEst(cdt$rads[cdt$Site %in% above1.56],cdt$rads[!cdt$Site %in% above1.56])
 
 legend('top',
-       c("Activity > 1.56 urb", 
-         "Activity < 1.56 urb"),
+       c("Activity > 1.5 urb", 
+         "Activity < 1.5 urb"),
        lty=c(1,2),
-       col=c(1,4), bty='n')
+       col=c("#24d5f7ff" ,"#5ee38bff"), bty='n',
+       lwd = 5, 
+       cex = 1.2)
 ack <- (lubridate::hour(cdt$dt)) + 
   (lubridate::minute(cdt$dt)/60) +
   (lubridate::second(cdt$dt)/(60*2))

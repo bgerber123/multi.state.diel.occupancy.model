@@ -18,8 +18,7 @@
 #Nigt was assigned as the period between sunset and sunrise
 
 rm(list=ls())
-setwd("C:/Users/Brian Gerber/Google Drive/MSTOM Project/multi.state.temporal.activity")
-setwd("C:/Users/bgerber/Google Drive/MSTOM Project/multi.state.temporal.activity")
+setwd("/multi.state.temporal.activity")
 logit=function(x){log(x/(1-x))}
 expit=function(x){exp(x)/(exp(x)+1)}
 library(rjags)

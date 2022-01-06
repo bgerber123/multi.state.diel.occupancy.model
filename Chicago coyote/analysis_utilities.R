@@ -1,31 +1,21 @@
 
 
-make_model_matrix <- function(formula, df, rho = FALSE, comp_winter = FALSE){
+make_model_matrix <- function(formula, df, rho = FALSE){
   
   nsite <- length(unique(df$Site))
   nseason <- length(unique(df$Season))
   form <- as.formula(formula)
   tmp <- rep(1, nrow(df))
   
-  if(comp_winter){
-    seas <- rep(0, nrow(df))
-    seas[grep("JA", df$Season)] <- 1
-  } else {
-    seas <- factor(
-      substr( df$Season, 1, 2 ),
-      levels = c("JA", "AP", "JU", "OC")
-    )
-  }
+
   if(length(grep("urb", formula)) > 0){
     mod_df <- data.frame(
       y = rep(1, nrow(df)),
-      season = seas,
       urb = df$urb
     )
   } else {
     mod_df <- data.frame(
-      y = tmp,
-      season = seas
+      y = tmp
     )
   }
   if(!rho){
