@@ -229,7 +229,7 @@ lines(night_cpres[3,] ~ xp[,2], lty = 2)
 
 # Plot both marginal and conditional probabilities together---------------------
 windows(5.5,11) #creates plotting window
-tiff("C:/Users/Kim Rivera/Documents/Summer Project/fosa.rano.occ.4.state.tiff", height = 11, width = 5.5, units = "in",
+tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.rano.occ.4.state.tiff", height = 11, width = 5.5, units = "in",
      res = 600, compression = "lzw")
 {
   par(mar = c(5,5,0.5,0.5)+1, mfrow = c(2,1))
@@ -251,14 +251,15 @@ tiff("C:/Users/Kim Rivera/Documents/Summer Project/fosa.rano.occ.4.state.tiff", 
   # alpha shading
   alp <- 0.2
   mc <- c("#24d5f7ff", "gray50" ,"#5ee38bff")
-  
+  #mc <- c("#24d5f7ff", "gray50" ,"springgreen2")
+
   
   # do the legends for the 95% CI 
   legend(x = 1500,
          y = .999,
          legend = rep("",4),
          pch = 22,
-         pt.bg = scales::alpha(c(mc[c(3,2,1)],"navy"), alp+0.1),
+         pt.bg = scales::alpha(c(mc[c(3,2,1)],"blue"), alp+0.1), #This is the color for no use
          pt.cex = 3,
          y.intersp = 1.5,
          bty = "n", cex = 1.1)
@@ -301,15 +302,7 @@ tiff("C:/Users/Kim Rivera/Documents/Summer Project/fosa.rano.occ.4.state.tiff", 
     border = NA
   )
   
-  y1 <- quants[1,,1]
-  y2 <- rev(quants[3,,1])
-  
-  polygon(
-    c(x1, x2), c(y1, y2),
-    col = scales::alpha("navy", alp),
-    border = NA
-  ) 
-  
+
   # day use 
   y1 <- quants[1,,2]
   y2 <- rev(quants[3,,2])
@@ -320,6 +313,15 @@ tiff("C:/Users/Kim Rivera/Documents/Summer Project/fosa.rano.occ.4.state.tiff", 
     border = NA
   )
   
+  y1 <- quants[1,,1]
+  y2 <- rev(quants[3,,1])
+  
+  polygon(
+    c(x1, x2), c(y1, y2),
+    #col = scales::alpha("blue", alp),
+    col = scales::alpha("blue", alp),
+    border = NA
+  ) 
   
   
   lines(quants[2,,4] ~ xp[,2], lwd = 3)
