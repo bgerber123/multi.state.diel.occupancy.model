@@ -34,13 +34,13 @@ station.ID = "AJB" # Name of Study Area
 
 #Note- The detection matrix can be 1 (detected), 0 (not detected), and "." (not surveyed).
 # The first row of the detection matrix and photo.data are column names       
-detection.matrix=read_csv(file="Data Processing/Example_Detection_Matrix.csv") # Original Detection matrix
+detection.matrix=read_csv(file="./Data Processing/Example_Detection_Matrix.csv") # Original Detection matrix
 
 #Note- The photo.date dates need to be as YYYY-MM-DD
-photo.data=read_csv(file="Data Processing/Example_Photo_Data.csv", na = ".") # CSV of 'Date', 'Time', and 'Station', of defections
+photo.data=read_csv(file="./Data Processing/Example_Photo_Data.csv", na = ".") # CSV of 'Date', 'Time', and 'Station', of defections
 
 # Run the function -------------------------------------------------------------
-source("Data Processing/diel.occ.fun.R")
+source("./Data Processing/diel.occ.fun.R")
 
 new.det.matrix=diel.occ.fun(photo.data,
                         detection.matrix, 
