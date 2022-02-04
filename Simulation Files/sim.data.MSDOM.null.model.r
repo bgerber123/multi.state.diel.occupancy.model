@@ -22,7 +22,7 @@ rm(list=ls())
 
 #Which file name should we save the simulated data
 #The saved simulations will be saved within the working directory.
-filename="Simulation Files/sim.null.data"
+filename="./Simulation Files/sim.null.data"
 
 #How many datasets to simualte
 n.sim=100
@@ -93,7 +93,7 @@ pND.N=omega.det[3]
 
 
 #This function creates the detection matrix
-source("Simulation Files/det.matrix.func.r")
+source("./Simulation Files/det.matrix.func.r")
 det.matrix=det.matrix.func(pNight,pDay,pND.N,pND.D,pND.ND,pND.0)
 det.matrix
 

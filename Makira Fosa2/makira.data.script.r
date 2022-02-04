@@ -3,41 +3,41 @@
 
 
 #load each survey areas occurence and covariate data
-FRK.occ=read.csv("Makira Fosa2/FRK/Diel.Occ.FRK.csv",row.names = 1,header = TRUE)
-FRK.cov=read.csv("Makira Fosa2/FRK/FRK_Hum.csv",row.names = 1,header = TRUE)
+FRK.occ=read.csv("./Makira Fosa2/FRK/Diel.Occ.FRK.csv",row.names = 1,header = TRUE)
+FRK.cov=read.csv("./Makira Fosa2/FRK/FRK_Hum.csv",row.names = 1,header = TRUE)
 
-LKT.occ=read.csv("Makira Fosa2/LKT/Diel.Occ.LKT.csv",row.names = 1,header = TRUE)
-LKT.cov=read.csv("Makira Fosa2/LKT/LKT_Hum.csv",row.names = 1,header = TRUE)
+LKT.occ=read.csv("./Makira Fosa2/LKT/Diel.Occ.LKT.csv",row.names = 1,header = TRUE)
+LKT.cov=read.csv("./Makira Fosa2/LKT/LKT_Hum.csv",row.names = 1,header = TRUE)
 
-MGB.occ=read.csv("Makira Fosa2/MGB/Diel.Occ.MGB.csv",row.names = 1,header = TRUE)
-MGB.cov=read.csv("Makira Fosa2/MGB/MGB_Hum.csv",row.names = 1,header = TRUE)
+MGB.occ=read.csv("./Makira Fosa2/MGB/Diel.Occ.MGB.csv",row.names = 1,header = TRUE)
+MGB.cov=read.csv("./Makira Fosa2/MGB/MGB_Hum.csv",row.names = 1,header = TRUE)
 
-MGB2.occ=read.csv("Makira Fosa2/MGB/Diel.Occ.2MGB.csv",row.names = 1,header = TRUE)
-MGB2.cov=read.csv("Makira Fosa2/MGB/2MGB_Hum.csv",row.names = 1,header = TRUE)
+MGB2.occ=read.csv("./Makira Fosa2/MGB/Diel.Occ.2MGB.csv",row.names = 1,header = TRUE)
+MGB2.cov=read.csv("./Makira Fosa2/MGB/2MGB_Hum.csv",row.names = 1,header = TRUE)
 
-SLJ.occ=read.csv("Makira Fosa2/SLJ/Diel.Occ.SLJ.csv",row.names = 1,header = TRUE)
-SLJ.cov=read.csv("Makira Fosa2/SLJ/SLJ_Hum.csv",row.names = 1,header = TRUE)
+SLJ.occ=read.csv("./Makira Fosa2/SLJ/Diel.Occ.SLJ.csv",row.names = 1,header = TRUE)
+SLJ.cov=read.csv("./Makira Fosa2/SLJ/SLJ_Hum.csv",row.names = 1,header = TRUE)
 
-SOA.occ=read.csv("Makira Fosa2/SOA/Diel.Occ.SOA.csv",row.names = 1,header = TRUE)
-SOA.cov=read.csv("Makira Fosa2/SOA/SOA_Hum.csv",row.names = 1,header = TRUE)
+SOA.occ=read.csv("./Makira Fosa2/SOA/Diel.Occ.SOA.csv",row.names = 1,header = TRUE)
+SOA.cov=read.csv("./Makira Fosa2/SOA/SOA_Hum.csv",row.names = 1,header = TRUE)
 
-VIN.occ=read.csv("Makira Fosa2/VIN/Diel.Occ.VIN.csv",row.names = 1,header = TRUE)
-VIN.cov=read.csv("Makira Fosa2/VIN/VIN_Hum.csv",row.names = 1,header = TRUE)
+VIN.occ=read.csv("./Makira Fosa2/VIN/Diel.Occ.VIN.csv",row.names = 1,header = TRUE)
+VIN.cov=read.csv("./Makira Fosa2/VIN/VIN_Hum.csv",row.names = 1,header = TRUE)
 
 #AJB has 6 surveys
-AJB.occ1=read.csv("Makira Fosa2/AJB/Diel.Occ.AJB.csv",row.names = 1,header = TRUE)
-AJB.occ2=read.csv("Makira Fosa2/AJB/Diel.Occ.2AJB.csv",row.names = 1,header = TRUE)
-AJB.occ3=read.csv("Makira Fosa2/AJB/Diel.Occ.3AJB.csv",row.names = 1,header = TRUE)
-AJB.occ4=read.csv("Makira Fosa2/AJB/Diel.Occ.4AJB.csv",row.names = 1,header = TRUE)
-AJB.occ5=read.csv("Makira Fosa2/AJB/Diel.Occ.5AJB.csv",row.names = 1,header = TRUE)
-AJB.occ6=read.csv("Makira Fosa2/AJB/Diel.Occ.6AJB.csv",row.names = 1,header = TRUE)
+AJB.occ1=read.csv("./Makira Fosa2/AJB/Diel.Occ.AJB.csv",row.names = 1,header = TRUE)
+AJB.occ2=read.csv("./Makira Fosa2/AJB/Diel.Occ.2AJB.csv",row.names = 1,header = TRUE)
+AJB.occ3=read.csv("./Makira Fosa2/AJB/Diel.Occ.3AJB.csv",row.names = 1,header = TRUE)
+AJB.occ4=read.csv("./Makira Fosa2/AJB/Diel.Occ.4AJB.csv",row.names = 1,header = TRUE)
+AJB.occ5=read.csv("./Makira Fosa2/AJB/Diel.Occ.5AJB.csv",row.names = 1,header = TRUE)
+AJB.occ6=read.csv("./Makira Fosa2/AJB/Diel.Occ.6AJB.csv",row.names = 1,header = TRUE)
 
-AJB.cov1=read.csv("Makira Fosa2/AJB/AJB_Hum.csv",row.names = 1,header = TRUE)
-AJB.cov2=read.csv("Makira Fosa2/AJB/2AJB_Hum.csv",row.names = 1,header = TRUE)
-AJB.cov3=read.csv("Makira Fosa2/AJB/3AJB_Hum.csv",row.names = 1,header = TRUE)
-AJB.cov4=read.csv("Makira Fosa2/AJB/4AJB_Hum.csv",row.names = 1,header = TRUE)
-AJB.cov5=read.csv("Makira Fosa2/AJB/5AJB_Hum.csv",row.names = 1,header = TRUE)
-AJB.cov6=read.csv("Makira Fosa2/AJB/6AJB_Hum.csv",row.names = 1,header = TRUE)
+AJB.cov1=read.csv("./Makira Fosa2/AJB/AJB_Hum.csv",row.names = 1,header = TRUE)
+AJB.cov2=read.csv("./Makira Fosa2/AJB/2AJB_Hum.csv",row.names = 1,header = TRUE)
+AJB.cov3=read.csv("./Makira Fosa2/AJB/3AJB_Hum.csv",row.names = 1,header = TRUE)
+AJB.cov4=read.csv("./Makira Fosa2/AJB/4AJB_Hum.csv",row.names = 1,header = TRUE)
+AJB.cov5=read.csv("./Makira Fosa2/AJB/5AJB_Hum.csv",row.names = 1,header = TRUE)
+AJB.cov6=read.csv("./Makira Fosa2/AJB/6AJB_Hum.csv",row.names = 1,header = TRUE)
 
 
 
@@ -156,4 +156,4 @@ Makira.data2[[1]]=n.sites.per.survey
 Makira.data2[[2]]=Makira.occ
 Makira.data2[[3]]=Makira.cov
 
-save(Makira.data2,file="Makira Fosa2/Makira.data2")
+save(Makira.data2,file="./Makira Fosa2/Makira.data2")

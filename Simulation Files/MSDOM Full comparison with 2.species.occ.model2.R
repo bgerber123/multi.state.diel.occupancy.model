@@ -11,8 +11,7 @@
 
 #Setup the workspace and load the first simulated data set
 rm(list=ls())
-setwd("./multi.state.temporal.activity/Simulation Files")
-load("sim.full.data")
+load("./Simulation Files/sim.full.data")
 #setwd('Simulation Files/MARK.2.species/')
 length(sim.data$obs.matrix)
 
@@ -98,7 +97,7 @@ for (q in 1:length(sim.data$obs.matrix)) {
    #Also, a design matrix that constrains beta parameters is required for the optimization
    #to correctly return the MLE's. An identity matrix will not work.
 
-   fname=paste0("markout",q,".inp")
+   fname=paste0("./Simulation Files/markout",q,".inp")
    write(c(S1,mark.inp,S2),file=fname)
    oname=paste0("markout",q,".out")
    #Note, the MSTOM Reduced model could be fit if MARK allows parameters to be functions
@@ -142,7 +141,7 @@ for (q in 1:length(sim.data$obs.matrix)) {
    ##########################################
    if (FALSE) {
       #Load Bayesian MSTOM FUll model fit
-      load("Simulation Files/fit.simdata.Full.1.out")
+      load("./Simulation Files/fit.simdata.Full.1.out")
 
       #Assign posterior samples to objects
       omega.samples=save.model$models$Full$omega.samples

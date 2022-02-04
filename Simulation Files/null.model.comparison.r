@@ -26,7 +26,7 @@ library(jagsUI)
 library(rjags)
 
 #Load the simulated data - choose one
-load("Simulation Files/sim.null.data") 
+load("./Simulation Files/sim.null.data") 
 
 #This is the simulated true logit coeficient
 alpha=1.2
@@ -65,7 +65,7 @@ ni <- 5000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
   params <- c("psi","PSI","p.overall","alpha","beta","psi.overall")
   #Prepare the model and data
   model.null <- jags.model(
-    file="JAGS/jags.multistate.occ.null.alt.R", 
+    file="./JAGS/jags.multistate.occ.null.alt.R", 
     data = data.list,
     inits=inits,
     n.chains = nc,

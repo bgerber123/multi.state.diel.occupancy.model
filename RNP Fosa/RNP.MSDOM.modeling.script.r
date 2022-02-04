@@ -25,11 +25,11 @@ expit=function(x){exp(x)/(exp(x)+1)}
 library(rjags)
 library(runjags)
 library(coda)
-source("RNP Fosa/multi.state.likelihood.r")
-source("RNP Fosa/CPO.function.r")
+source("./RNP Fosa/multi.state.likelihood.r")
+source("./RNP Fosa/CPO.function.r")
 
 #load the prepared data file
-load("RNP Fosa/RNP2.data")
+load("./RNP Fosa/RNP2.data")
 
 #assign data to objects
 y=RNP2.data[[1]] #detection history
@@ -89,7 +89,7 @@ data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],x=cov1.scaled,Q=Q)
 params <- c("alpha", "pNight", "pDay","pND","PSI")
 
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.full.site.covs.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -103,7 +103,7 @@ M1.full <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M1.full,file="RNP Fosa/M1.full.out")
+save(M1.full,file="./RNP Fosa/M1.full.out")
 
 #load("RNP Fosa/M1.full.out")
 
@@ -125,7 +125,7 @@ colnames(fit)
 #probabilities.
 M1.full.CPO=CPO.function(fit,y,"full")
 CPO.out=t(matrix(c("M1.full",M1.full.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ############################################################################
 ############################################################################
@@ -146,7 +146,7 @@ params <- c("alpha", "pNight", "pDay","pND","PSI")
 
 
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.full.site.covs.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -158,7 +158,7 @@ M2.full <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M2.full,file="RNP Fosa/M2.full.out")
+save(M2.full,file="./RNP Fosa/M2.full.out")
 
 #load("RNP Fosa/M2.full.out")
 
@@ -175,7 +175,7 @@ fit <- combine.mcmc(M2.full)
 #probabilities.
 M2.full.CPO=CPO.function(fit,y,"full")
 CPO.out=t(matrix(c("M2.full",M2.full.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ###################################################################
 ###################################################################
@@ -194,7 +194,7 @@ data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],x=cov1.scaled,Q=Q)
 # Parameters monitored
 params <- c("alpha", "pNight", "pDay","PSI") 
 
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.reduced.site.covs.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -206,7 +206,7 @@ M3.red <- coda.samples(model.jags, variable.names=params,
                        n.iter=ni, 
                        thin=nt,
                        progress.bar="text")
-save(M3.red,file="RNP Fosa/M3.red.out")
+save(M3.red,file="./RNP Fosa/M3.red.out")
 
 #load("RNP Fosa/M3.red")
 
@@ -224,7 +224,7 @@ fit <- combine.mcmc(M3.red)
 #probabilities.
 M3.red.CPO=CPO.function(fit,y,"reduced")
 CPO.out=t(matrix(c("M3.red",M3.red.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 #################################################
 #################################################
 #MODEL 4- DistMatrix covariate - Reduced model
@@ -241,7 +241,7 @@ data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2],x=cov1.scaled,Q=Q)
 # Parameters monitored
 params <- c("alpha", "pNight", "pDay","PSI") 
 
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.reduced.site.covs.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -254,7 +254,7 @@ M4.red <- coda.samples(model.jags, variable.names=params,
                        n.iter=ni, 
                        thin=nt,
                        progress.bar="text")
-save(M4.red,file="RNP Fosa/M4.red.out")
+save(M4.red,file="./RNP Fosa/M4.red.out")
 
 #load("RNP Fosa/M4.red)
 
@@ -270,7 +270,7 @@ fit <- combine.mcmc(M4.red)
 #probabilities.
 M4.red.CPO=CPO.function(fit,y,"reduced")
 CPO.out=t(matrix(c("M4.red",M4.red.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 ######################################################
 ######################################################
 #Need to fit the Null model with covariates
@@ -297,7 +297,7 @@ ni <- 10000  ;       nt <- 2;    nb <- 2000;    nc <- 3;   adapt=1000
 
 #Fit the model to do adapt phase
 #this is the full model
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.null.site.covs.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -312,7 +312,7 @@ M5.null <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M5.null,file="RNP Fosa/M5.null.out")
+save(M5.null,file="./RNP Fosa/M5.null.out")
 
 #load("RNP Fosa/M5.null.out")
 
@@ -332,7 +332,7 @@ fit <- combine.mcmc(M5.null)
 #probabilities.
 M5.null.CPO=CPO.function(fit,y,"null")
 CPO.out=t(matrix(c("M5.null",M5.null.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 #####################################
 #MODEL 6- DistMatrix covariate - Null model
 cov=covs$DistMatrix
@@ -349,7 +349,7 @@ data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2], x=cov1.scaled,Q=Q)
 params <- c("alpha","beta" ,"p.overall", "PSI","psi.overall","psi") 
 
 
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.null.site.covs.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -364,7 +364,7 @@ M6.null <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M6.null,file="RNP Fosa/M6.null.out")
+save(M6.null,file="./RNP Fosa/M6.null.out")
 
 #load("RNP Fosa/M6.null.out")
 
@@ -380,7 +380,7 @@ fit <- combine.mcmc(M6.null)
 #probabilities.
 M6.null.CPO=CPO.function(fit,y,"null")
 CPO.out=t(matrix(c("M6.null",M6.null.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ##########################################
 ##########################################
@@ -397,7 +397,7 @@ ni <- 10000  ;       nt <- 2;    nb <- 2000;    nc <- 3;   adapt=1000
 
 #Fit the model to do adapt phase
 #this is the full model
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.alt.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.null.alt.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -410,7 +410,7 @@ M7.null <- coda.samples(model.jags, variable.names=params,
                         n.iter=ni, 
                         thin=nt,
                         progress.bar="text")
-save(M7.null,file="RNP Fosa/M7.null.out")
+save(M7.null,file="./RNP Fosa/M7.null.out")
 
 #load("RNP Fosa/M7.null")
 
@@ -427,7 +427,7 @@ fit <- combine.mcmc(M7.null)
 #probabilities.
 M7.null.CPO=CPO.function(fit,y,"null")
 CPO.out=t(matrix(c("M7.null",M7.null.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 #############################################################
 #################################################################
@@ -449,7 +449,7 @@ ni <- 20000  ;       nt <- 2;    nb <- 4000;    nc <- 3;   adapt=4000
 
 #Fit the model to do adapt phase
 #this is the full model
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.full.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -462,7 +462,7 @@ M8.full.nocovs <- coda.samples(model.jags, variable.names=params,
                                thin=nt,
                                progress.bar="text")
 
-save(M8.full.nocovs,file="RNP Fosa/M8.full.nocovs.out")
+save(M8.full.nocovs,file="./RNP Fosa/M8.full.nocovs.out")
 
 #load("RNP Fosa/M8.full.nocovs.out")
 
@@ -477,7 +477,7 @@ fit <- combine.mcmc(M8.full.nocovs)
 
 M8.full.no.covs.CPO=CPO.function(fit,y,"full")
 CPO.out=t(matrix(c("M8.full.no.covs",M8.full.no.covs.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ########################################
 ########################################
@@ -488,7 +488,7 @@ data.input <- list(y = y, N = dim(y)[1], K = dim(y)[2])
 # Parameters monitored
 params <- c("psiNight","psiDay", "pNight", "pDay","PSI")
 
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.reduced.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -501,7 +501,7 @@ M9.red.nocovs <- coda.samples(model.jags, variable.names=params,
                               n.iter=ni, 
                               thin=nt,
                               progress.bar="text")
-save(M9.red.nocovs,file="RNP Fosa/M9.red.nocovs.out")
+save(M9.red.nocovs,file="./RNP Fosa/M9.red.nocovs.out")
 
 #load("RNP Fosa/M9.red.nocovs.out")
 
@@ -516,6 +516,6 @@ fit <- combine.mcmc(M9.red.nocovs)
 
 M9.red.no.covs.CPO=CPO.function(fit,y,"reduced")
 CPO.out=t(matrix(c("M9.red.no.covs",M9.red.no.covs.CPO)))
-write.table(CPO.out,file="RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./RNP Fosa/CPO.out.RNP.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 

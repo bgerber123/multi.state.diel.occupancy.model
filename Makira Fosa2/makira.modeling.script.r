@@ -18,19 +18,18 @@
 #Nigt was assigned as the period between sunset and sunrise
 
 rm(list=ls())
-setwd("/multi.state.temporal.activity")
 logit=function(x){log(x/(1-x))}
 expit=function(x){exp(x)/(exp(x)+1)}
 library(rjags)
 library(runjags)
 library(coda)
-source("Makira Fosa2/multi.state.likelihood.r")
-source("Makira Fosa2/CPO.function.RE.r") 
+source("./Makira Fosa2/multi.state.likelihood.r")
+source("./Makira Fosa2/CPO.function.RE.r") 
 
 
 ### Data ############################# 
 #load the prepared data file
-load("Makira Fosa2/Makira.data2")
+load("./Makira Fosa2/Makira.data2")
 
 #assign data to objects
 y=Makira.data2[[2]] #detection history, sites x occs x survey area
@@ -83,7 +82,7 @@ params <- c("alpha1", "alpha2", "alpha3",
             "pND.N","pND.D","pND.0","PSI","PSIM")
 
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.alt.RE.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.full.alt.RE.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -97,7 +96,7 @@ M1.full.no.covs <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M1.full.no.covs,file="Makira Fosa2/M1.full.no.covs.out")
+save(M1.full.no.covs,file="./Makira Fosa2/M1.full.no.covs.out")
 
 #load("Makira Fosa2/M1.full.no.covs.out")
 
@@ -111,7 +110,7 @@ fit <- combine.mcmc(M1.full.no.covs)
 
 M1.full.no.covs.CPO=CPO.function.RE(fit,y)
 CPO.out=t(matrix(c("M1.full.no.covs",M1.full.no.covs.CPO)))
-write.table(CPO.out,file="Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
 ### Model1 -Reduced model - No Covariates ############################# 
@@ -127,7 +126,7 @@ params <- c("alpha1", "alpha2",
             "psiDay","psiNight","psiND","pDay","pNight","pND.ND",
             "pND.N","pND.D","pND.0","PSI","PSIM")
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.alt.RE.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.reduced.alt.RE.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -141,7 +140,7 @@ M1.red.no.covs <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M1.red.no.covs,file="Makira Fosa2/M1.red.no.covs.out")
+save(M1.red.no.covs,file="./Makira Fosa2/M1.red.no.covs.out")
 
 #load("Makira Fosa2/M1.red.no.covs.out")
 
@@ -155,7 +154,7 @@ fit <- combine.mcmc(M1.red.no.covs)
 
 M1.red.no.covs.CPO=CPO.function.RE(fit,y)
 CPO.out=t(matrix(c("M1.red.no.covs",M1.red.no.covs.CPO)))
-write.table(CPO.out,file="Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Model1 -Null model - No Covariates ############################# 
 
@@ -167,7 +166,7 @@ params <- c("alpha", "mu.alpha", "tau.alpha",
             "psiDay","psiNight","psiND","pDay","pNight","pND.ND",
             "pND.N","pND.D","pND.0","PSI","PSIM")
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.alt.RE.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.null.alt.RE.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -181,7 +180,7 @@ M1.null.no.covs <- coda.samples(model.jags, variable.names=params,
                                n.iter=ni, 
                                thin=nt,
                                progress.bar="text")
-save(M1.null.no.covs,file="Makira Fosa2/M1.null.no.covs.out")
+save(M1.null.no.covs,file="./Makira Fosa2/M1.null.no.covs.out")
 
 #load("Makira Fosa2/M1.null.no.covs.out")
 
@@ -195,7 +194,7 @@ fit <- combine.mcmc(M1.null.no.covs)
 
 M1.null.no.covs.CPO=CPO.function.RE(fit,y)
 CPO.out=t(matrix(c("M1.null.no.covs",M1.null.no.covs.CPO)))
-write.table(CPO.out,file="Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Fit Model2 - Full model - Human TS ############################# 
 
@@ -225,7 +224,7 @@ params <- c("alpha1", "alpha2", "alpha3",
             "pND.N","pND.D","pND.0","PSI","PSIM")
 
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.full.site.covs.RE.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.full.site.covs.RE.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -239,7 +238,7 @@ M2.full.covs <- coda.samples(model.jags, variable.names=params,
                                 n.iter=ni, 
                                 thin=nt,
                                 progress.bar="text")
-save(M2.full.covs,file="Makira Fosa2/M2.full.covs.out")
+save(M2.full.covs,file="./Makira Fosa2/M2.full.covs.out")
 
 #load("Makira Fosa2/M2.full.covs.out")
 
@@ -253,7 +252,7 @@ fit <- combine.mcmc(M2.full.covs)
 
 M2.full.covs.CPO=CPO.function.RE(fit,y)
 CPO.out=t(matrix(c("M2.full.covs",M2.full.covs.CPO)))
-write.table(CPO.out,file="Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 ### Fit Model2 - Reduced model - Human TS ############################# 
 
@@ -278,7 +277,7 @@ params <- c("alpha1", "alpha2", "alpha1.1","alpha2.1",
             "pND.N","pND.D","pND.0","PSI","PSIM")
 
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.reduced.site.covs.RE.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.reduced.site.covs.RE.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -292,7 +291,7 @@ M2.red.covs <- coda.samples(model.jags, variable.names=params,
                              n.iter=ni, 
                              thin=nt,
                              progress.bar="text")
-save(M2.red.covs,file="Makira Fosa2/M2.red.covs.out")
+save(M2.red.covs,file="./Makira Fosa2/M2.red.covs.out")
 
 #load("Makira Fosa2/M2.red.covs.out")
 
@@ -306,7 +305,7 @@ fit <- combine.mcmc(M2.red.covs)
 
 M2.red.covs.CPO=CPO.function.RE(fit,y)
 CPO.out=t(matrix(c("M2.red.covs",M2.red.covs.CPO)))
-write.table(CPO.out,file="Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 
 ### Fit Model2 - Null model - Human TS ############################# 
@@ -328,7 +327,7 @@ params <- c("alpha1", "alpha1.1",
             "pND.N","pND.D","pND.0","PSI","PSIM")
 
 #Fit the model to do adapt phase
-model.jags <- jags.model(file="JAGS/jags.multistate.occ.null.site.covs.RE.R", 
+model.jags <- jags.model(file="./JAGS/jags.multistate.occ.null.site.covs.RE.R", 
                          data = data.input,
                          inits=inits,
                          n.chains = nc,
@@ -342,7 +341,7 @@ M2.null.covs <- coda.samples(model.jags, variable.names=params,
                             n.iter=ni, 
                             thin=nt,
                             progress.bar="text")
-save(the,file="Makira Fosa2/M2.null.covs.out")
+save(the,file="./Makira Fosa2/M2.null.covs.out")
 
 #load("Makira Fosa2/M2.null.covs.out")
 
@@ -356,6 +355,6 @@ fit <- combine.mcmc(M2.null.covs)
 
 M2.null.covs.CPO=CPO.function.RE(fit,y)
 CPO.out=t(matrix(c("M2.null.covs",M2.null.covs.CPO)))
-write.table(CPO.out,file="Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
+write.table(CPO.out,file="./Makira Fosa2/CPO.out.Makira.csv",append=TRUE,col.names = FALSE,sep=",",row.names = FALSE)
 
 

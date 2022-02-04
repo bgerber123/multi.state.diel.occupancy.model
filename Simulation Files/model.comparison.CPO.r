@@ -17,7 +17,7 @@
 rm(list=ls())
 
 #The likelihood funciton is defined in separate script. This is used to calculate CPO
-source("Simulation Files/multi.state.likelihood.r")
+source("./Simulation Files/multi.state.likelihood.r")
 
 
 #All three models are fit to each simulated data sets where the underlying true process
@@ -39,7 +39,7 @@ colnames(CPO.save)=c("Null","Reduced","Full")
 #data.full.3.models indicates that the data was simulated under the full model
 
 #load(paste("simulation study/fit.simdata.Null.",q,".out",sep=""))
-load(paste("Simulation Files/fit.simdata.Red.",q,".out",sep=""))
+load(paste("./Simulation Files/fit.simdata.Red.",q,".out",sep=""))
 #load(paste("simulation study/fit.simdata.Full.",q,".out",sep=""))
 
 #extract observed data

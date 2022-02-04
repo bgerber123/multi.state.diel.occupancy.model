@@ -22,7 +22,7 @@ rm(list=ls())
 
 #Which file name should we save the simulated data
 #The saved simulations will be saved within the working directory
-filename="Simulation Files/sim.full.data"
+filename="./Simulation Files/sim.full.data"
 
 #How many datasets to simualte
 n.sim=100
@@ -82,7 +82,7 @@ pND.N=pND.N.marginal-pND.ND                   #Detection of state 3 in state 4
 pND.0=1-pND.ND- pND.D-pND.N                   #Detection of state 1 in state 4
 
 #This function creates the detection matrix
-source("Simulation Files/det.matrix.func.r")
+source("./Simulation Files/det.matrix.func.r")
 det.matrix=det.matrix.func(pNight,pDay,pND.N,pND.D,pND.ND,pND.0)
 det.matrix
 

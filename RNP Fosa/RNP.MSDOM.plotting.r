@@ -9,10 +9,10 @@ library(ggplot2)
 
 
 rm(list=ls())
-load("RNP Fosa/M1.full.fit")
+load("./RNP Fosa/M1.full.fit")
 #fit <- combine.mcmc(M1.full)
 #load the prepared data file
-load("RNP Fosa/RNP2.data")
+load("./RNP Fosa/RNP2.data")
 covs=RNP2.data[[2]]
 cov=covs$DistTown
 hist(cov)
@@ -53,7 +53,7 @@ abline(v=1,col=2,lwd=3)
 
 length(which(TIF.det<1))/length(TIF.det)
 #########################################
-png(file="RNP Fosa/RNP.fosa.det.parms.png",res=200,units = "in",height=8,width=8)
+png(file="./RNP Fosa/RNP.fosa.det.parms.png",res=200,units = "in",height=8,width=8)
 color_scheme_set("red")
 mcmc_intervals(det.matrix, pars = colnames(det.matrix)[-3],xlab="Detection Parameters")+ labs(x = "Detection Probability",y="State")+
      theme(text = element_text(size=20))
@@ -63,7 +63,7 @@ colnames(fit)
 #The first 6 columns are the alpha parameters
 fit.matrix=as.matrix(fit)
 
-png(file="RNP Fosa/RNP.fosa.parms.png",res=200,units = "in",height=8,width=8)
+png(file="./RNP Fosa/RNP.fosa.parms.png",res=200,units = "in",height=8,width=8)
 color_scheme_set("red")
 mcmc_areas(fit.matrix,
            pars = c("alpha[1]", "alpha[2]", "alpha[3]", "alpha[4]","alpha[5]","alpha[6]"),
@@ -158,7 +158,7 @@ library(denstrip)
 nlevel=200
 xlim1=c(min(x.pred),max(x.pred))
 
-png(file="RNP Fosa/RNP.fosa.State.Prob.png",res=200,units = "in",height=10,width=10)
+png(file="./RNP Fosa/RNP.fosa.State.Prob.png",res=200,units = "in",height=10,width=10)
 par(mfrow=c(2,2))
 plot(0, type="n", ylim=c(0, 1),xlim=c(xlim1[1],xlim1[2]),ylab="Probability of Occurence",xlab="Distance to Nearest Village (m)",main="State 1 (No Use)")
 densregion(x.pred,y,z1,nlevels = nlevel,colmax = "black",pointwise = TRUE)

@@ -9,10 +9,10 @@ library(ggplot2)
 
 
 rm(list=ls())
-load("Makira Fosa2/M1.full.no.covs.out")
+load("./Makira Fosa2/M1.full.no.covs.out")
 fit <- combine.mcmc(M1.full.no.covs)
 #load the prepared data file
-load("Makira Fosa2/Makira.data2")
+load("./Makira Fosa2/Makira.data2")
 y=Makira.data2[[2]] #detection history, sites x occs x survey area
 
 #assign covariate data to object
@@ -45,7 +45,7 @@ occ.matrix=cbind(psi.day,
 
 
 #There is not much support for variation in occurence
-png(file="Makira Fosa2/Makira.fosa.occ.parms.png",res=200,units = "in",height=8,width=8)
+png(file="./Makira Fosa2/Makira.fosa.occ.parms.png",res=200,units = "in",height=8,width=8)
 color_scheme_set("red")
 mcmc_intervals(occ.matrix, pars = colnames(occ.matrix))+ 
                labs(x = "Occupancy Probability",y="State")+
@@ -87,7 +87,7 @@ lines(density(pND.N),lwd=3,col=2)
 lines(density(pND.ND),lwd=3,col=3)
 
 
-png(file="Makira Fosa2/Makira.fosa.det.parms.png",res=200,units = "in",height=8,width=8)
+png(file="./Makira Fosa2/Makira.fosa.det.parms.png",res=200,units = "in",height=8,width=8)
 color_scheme_set("red")
 mcmc_intervals(det.matrix, pars = colnames(det.matrix)[-3])+ 
   labs(x = "Detection Probability",y="State")+

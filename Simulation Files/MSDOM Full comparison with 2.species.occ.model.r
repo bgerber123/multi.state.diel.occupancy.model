@@ -15,7 +15,7 @@
 
 #Setup the workspace and load the first simulated data set
 rm(list=ls())
-load("Simulation Files/sim.full.data")
+load("./Simulation Files/sim.full.data")
 length(sim.data$obs.matrix)
 q=1
 y=sim.data$obs.matrix[[1]]
@@ -49,7 +49,7 @@ mark_input <- data.frame(lapply(mark_input, as.character), stringsAsFactors=FALS
 mark.out=cbind(mark_input,rep("1;",dim(mark_input)[1]))
 colnames(mark.out)= NULL
 mark.out
-write.table(mark.out,file="Simulation Files/MARK.2.species/markout1.inp",sep=" ",quote = FALSE,row.names = FALSE)
+write.table(mark.out,file="./Simulation Files/MARK.2.species/markout1.inp",sep=" ",quote = FALSE,row.names = FALSE)
 
 
 #Go to MARK and fit 2-species occupancy model; see the folder MARK.2.species
@@ -64,7 +64,7 @@ write.table(mark.out,file="Simulation Files/MARK.2.species/markout1.inp",sep=" "
 #Read in the saved real parameters estimated from MARK. 
 #A constant model was fit (no site or temporal variation,
 #thus correctly specifying how the data were simulated).
-MARK.est=read.table("Simulation Files/MARK.2.species/real.parms.txt")
+MARK.est=read.table("./Simulation Files/MARK.2.species/real.parms.txt")
 colnames(MARK.est)=c("Parm","MLE","SE","LCL","UCL")
 
 #Derive state-specific probabilities, 
@@ -85,7 +85,7 @@ raB=MARK.est[8,2]
 ##########################################
 
 #Load Bayesian MSTOM FUll model fit
-load("Simulation Files/fit.simdata.Full.1.out")
+load("./Simulation Files/fit.simdata.Full.1.out")
 
 #Assign posterior samples to objects
 omega.samples=save.model$models$Full$omega.samples

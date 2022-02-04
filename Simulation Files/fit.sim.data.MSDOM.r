@@ -32,9 +32,9 @@
   #Set which data to load "Full", "Red", or "Null
   load.data="Red"
   
-  if(load.data=="Full"){load("Simualtion Files/sim.full.data") }
-  if(load.data=="Red"){load("Simualtion Files/sim.reduced.data") }
-  if(load.data=="Null"){load("Simualtion Files/sim.null.data") }
+  if(load.data=="Full"){load("./Simualtion Files/sim.full.data") }
+  if(load.data=="Red"){load("./Simualtion Files/sim.reduced.data") }
+  if(load.data=="Null"){load("./Simualtion Files/sim.null.data") }
 
   # MCMC settings
   ni <- 10000  ;       nt <- 1;        nb <- 1000;  nc <- 1;  adapt <- 1000
@@ -72,7 +72,7 @@ for(q in 1:n.sim){ #
 params <- c("psi","p.overall","alpha","beta","psi.overall")
 
 #Prepare the model and data
-  model.null <- jags.model(file="JAGS/jags.multistate.occ.null.alt.R", 
+  model.null <- jags.model(file="./JAGS/jags.multistate.occ.null.alt.R", 
                          data = data.list,
                          inits=inits,
                          n.chains = nc,
@@ -150,7 +150,7 @@ save.model$models$Null$samples=data.frame(pDet=pdet.samples,
 # We need to derive the state-occurence probabilities
 params <- c("psiDay","psiNight", "pNight", "pDay")
 
-model.reduced <- jags.model(file="JAGS/jags.multistate.occ.reduced.R",
+model.reduced <- jags.model(file="./JAGS/jags.multistate.occ.reduced.R",
                             data = data.list,
                             inits=inits,
                             n.chains = nc,
@@ -214,7 +214,7 @@ params <- c("psi", "pNight", "pDay","pND")
 
 
 #Prepare the model and data
-model.full <- jags.model(file="JAGS/jags.multistate.occ.full.R", 
+model.full <- jags.model(file="./JAGS/jags.multistate.occ.full.R", 
                          data = data.list,
                          inits=inits,
                          n.chains = nc,
@@ -258,7 +258,7 @@ save.model$models$Full$samples=data.frame(psi=psi.samples,pDay=pDay.samples,pNig
 
 
 
-save(save.model,file=paste("Simulation Files/fit.simdata.",load.data,".",q,".out",sep=""))
+save(save.model,file=paste("./Simulation Files/fit.simdata.",load.data,".",q,".out",sep=""))
 
 
 
