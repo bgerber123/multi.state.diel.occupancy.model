@@ -17,7 +17,6 @@ gc() #garbage collection
 # M1 is the most supported model
 # Load the model and plots results
 
-setwd("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/")
 
 # libraries for bayes plotting
 library(rjags)
@@ -32,8 +31,8 @@ library("HDInterval")
 
 
 # load best fit model and data
-load("RNP Fosa/M1.full.fit")
-load("RNP Fosa/RNP2.data")
+load("./RNP Fosa/M1.full.fit")
+load("./RNP Fosa/RNP2.data")
 covs=RNP2.data[[2]]
 cov=covs$DistTown
 cov1.unscaled=as.numeric(cov)
@@ -229,7 +228,7 @@ lines(night_cpres[3,] ~ xp[,2], lty = 2)
 
 # Plot both marginal and conditional probabilities together---------------------
 windows(5.5,11) #creates plotting window
-tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.rano.occ.4.state.tiff", height = 11, width = 5.5, units = "in",
+tiff("./fosa.rano.prob.occ.tiff", height = 11, width = 5.5, units = "in",
      res = 600, compression = "lzw")
 {
   par(mar = c(5,5,0.5,0.5)+1, mfrow = c(2,1))
@@ -251,7 +250,6 @@ tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.ra
   # alpha shading
   alp <- 0.2
   mc <- c("#24d5f7ff", "gray50" ,"#5ee38bff")
-  #mc <- c("#24d5f7ff", "gray50" ,"springgreen2")
 
   
   # do the legends for the 95% CI 
@@ -373,10 +371,10 @@ tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.ra
 dev.off()
 
 # Makira Plotting---------------------------------------------------------------
-load("Makira Fosa2/M1.full.no.covs.out")
+load("./Makira Fosa2/M1.full.no.covs.out")
 fit <- combine.mcmc(M1.full.no.covs)
 #load the prepared data file
-load("Makira Fosa2/Makira.data2")
+load("./Makira Fosa2/Makira.data2")
 y=Makira.data2[[2]] #detection history, sites x occs x survey area
 
 #assign covariate data to object
@@ -423,7 +421,7 @@ dev.off()
 #old
 # Plot both marginal and conditional probabilities together---------------------
 windows(5.5,11) #creates plotting window
-tiff("C:/Users/Kim Rivera/Documents/GitHub/multi.state.temporal.activity/fosa.rano.occ.4.state.tiff", height = 11, width = 5.5, units = "in",
+tiff("./fosa.rano.occ.4.state.tiff", height = 11, width = 5.5, units = "in",
      res = 600, compression = "lzw")
 {
   par(mar = c(5,5,0.5,0.5)+1, mfrow = c(2,1))
