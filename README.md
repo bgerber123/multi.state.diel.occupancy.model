@@ -165,6 +165,25 @@ There are a few other scripts that could be considered part of this workflow, bu
 
 **data** - Folder of coyote data files
 
+The data folder has 6 files.
+
+
+**camera_active.csv**
+
+| Column       | Type            | Explanation                                                                                                                                                                                                         |
+|--------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Site         | categorical     | The site code for a camera trap location                                                                                                                                                                            |
+| Long         | coordinate      | The longitude of a camera trap location                                                                                                                                                                             |
+| Lat          | coordinate      | The latitude of a camera trap location                                                                                                                                                                              |
+| Crs          | numeric         | The coordinate reference system number (crs) for the site coordiantes                                                                                                                                               |
+| Species      | categorical     | The name of the species of this dataset. Should all be 'Coyote'                                                                                                                                                     |
+| Season       | categorical     | The season code for sampling. Sampling occurs in January (JA), April (AP), July (JU) and October (OC). The years since 2000 are also tacked on as well. For example, JU16 represents the July 2016 sampling season. |
+| Start        | Date (yyyy-m-d) | The start date of a given sampling season. If NA sampling did not occur at that site.                                                                                                                               |
+| End          | Date (yyyy-m-d) | The end date of a given sampling season. If NA sampling did not occur at that site.                                                                                                                                 |
+| City         | categorical     | City code. chil = Chicago, Illinois                                                                                                                                                                                 |
+| Day_{number} | logical         | Column names range from Day_1 to Day_59. Day_1 represents the Start date. If NA sampling did not occur. If 0 then sampling did occur at that site and day.                                                          |
+
+
 **figures** - Folder of dynamic MSDOM results using coyote data
 
 **mcmc_plots** - Folder of MCMC traceplots of model parameters
