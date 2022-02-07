@@ -165,7 +165,7 @@ There are a few other scripts that could be considered part of this workflow, bu
 
 **data** - Folder of coyote data files
 
-The data folder has 6 files. These files and their associated metadata are:
+The data folder has 4 files. These files and their associated metadata are:
 
 
 **./Chicago coyote/data/camera_active.csv**
@@ -210,13 +210,30 @@ This file is used in the coyote data cleaning when it initially got prepared for
 | Species  | categorical                    | The species, it just says 'Coyote' all the way down.                                                                                                                                                                |
 | Datetime | datetime (yyyy-mm-dd hh:mm:ss) | The date and time of the associated camera trap photo. Timezone is America/Chicago.                                                                                                                                 |
 
+**./Chicago coyote/data/day_night_detections.csv**
+
+This file is generated via `./Chicago coyote/scrub_coyote_data.R` and is used in the analysis. It is the coyote detection / non-detection data with discretized diel states.
+
+| Column        | Type                         | Explanation                                                                                                                                                                                                                                                |
+|---------------|------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Site          | categorical                  | The site code for a camera trap location                                                                                                                                                                                                                   |
+| Season        | categorical                  | The season code for sampling. Sampling occurs in January (JA), April (AP), July (JU) and October (OC). The years since 2000 are also tacked on as well. For example, JU16 represents the July 2016 sampling season.                                        |
+| lat           | coordinate                   | The latitude of a camera trap location                                                                                                                                                                                                                     |
+| Long          | coordinate                   | The longitude of a camera trap location                                                                                                                                                                                                                    |
+| Start         | date yyyy-mm-dd              | The week that camera trap sampling began for a given season                                                                                                                                                                                                |
+| Week_{number} | Detection/non-detection data | The observed state coyote were detected during a given sampling week. NA = sampling did not occur, 1 = coyote not detected, 2 = coyote only detected during the day, 3 = coyote only detected at night, 4 = coyote detected during the day and the night.  |
+
 
 
 **figures** - Folder of dynamic MSDOM results using coyote data
 
+The explanation of the files is here is not necessary. They are just drafts of figures from the manuscript.
+
 **mcmc_plots** - Folder of MCMC traceplots of model parameters
 
 **pngs** - Folder of icons used in figures
+
+Again, the files here are not necessary for recreating the analysis (unless you are really excited to generate the last figure in the paper).
 
 `./Chicago coyote/` also contains a number of scripts that were used in the coyote case study:
 
