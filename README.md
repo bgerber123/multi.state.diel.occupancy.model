@@ -18,6 +18,13 @@
 	3. [RNP Fosa modeling workflow](#rnp-fosa-modeling-workflow)
 	4. [Makira Fosa modeling workflow](#makira-fosa-modeling-workflow)
 	5. [Plotting Fosa results workflow](#plotting-fosa-results-workflow)
+5. [File and folder descriptions](#file-and-folder-descriptions)
+	1. [Chicago coyote](#chicago-coyote)
+	2. [Data Processing](#data-processing)
+	3. [JAGS](#jags)
+	4. [Makira Fosa2](#makira-fosa2)
+	5. [RNP Fosa](#rnp-fosa)
+	6. [Simulation Files](#simulation-files)
 
 
 
@@ -133,16 +140,22 @@ The results from model outputs can be viewed using the `makira.MSTOM.plotting.r`
 
 These figures are generated within the working directory with the file `Fosa_Plots_Final.R.` This script assumes you have ran through both the RNP Fosa and Makira Fosa modeling workflows, and have saved the model output objects (which are used to plot these results).
 
+#### Chicago coyote modeling workflow
+
+All of the dynamic MSDOM Chicago coyote case study analysis is housed within `./Chicago coyote/`. This folder contains a number of utility functions and sub-folders to store model outputs, data, figures, etc. As the data has already been prepared for analysis, the only script that needs to be opened to fit the models to the coyote data is `./Chicago coyote/fit_models.R`, which sources `./Chicago coyote/prep_objects_for_model.R` to get the data objects ready for modeling in JAGS. The script `./Chicago coyote/fit_models.R` will fit the three seperate models to the data and save the model output in `./Chicago coyote/model_output/`. To calculate the CPO score of each model, open and run through `./Chicago coyote/model_selection.R`. Finally, to generate the plots of the best fit model, there are two scripts that need to be ran (one for each figure). For the probability of use plots, run through `./Chicago coyote/calculate_steady_state.R`. To generate the transition probability matrix figure, open up and run through `./Chicago coyote/plot_tpm.R`.
+
+There are a few other scripts that could be considered part of this workflow, but they are all related to pulling in spatial data (e.g., `./Chicago coyote/extract_covariates.R`) or preparing the raw coyote data for analysis (e.g., `./Chicago coyote/scrub_coyote_data.R`). We have left these scripts in this folder, but they are not necessary to recreate the analysis.
+ 
+[Back to table of contents ⤒](#a-repository-for)
+
+
+### File and folder descriptions
 
 ---
 
-<div align="center"><img width="150" height="auto" src="coyote.jpg" alt="A silhouette of a coyote." /></div>
-<div align="center"> <h3>Chicago coyote</h3> </div>
+#### Chicago coyote
 
-If you are interested in fitting the suite of dynamic MSDOMs we did to the coyote
-data, then all you need to run is `./Chicago coyote/fit_models.R`.
-
-### Sub-folders
+`./Chicago coyote/` contains four sub-folders:
 
 **data** - Folder of coyote data files
 
@@ -152,46 +165,46 @@ data, then all you need to run is `./Chicago coyote/fit_models.R`.
 
 **pngs** - Folder of icons used in figures
 
-### Scripts
+`./Chicago coyote/` also contains a number of scripts that were used in the coyote case study:
 
-**analysis_utilities.R** - A contains the function `make_model_matrix`, which
+**analysis_utilities.R** - Contains the function `make_model_matrix`, which
 is used to make the design matrix for the dynamic MSDOMs across the three models
-fit to the coyote data, which makes it possible to fit all the models in a for
+fit to the coyote data. This function makes it possible to fit all the models in a for
 loop within `./Chicago coyote/fit_models.R`.
 
-**calculate_steady_state.R** - estimating steady state occupancy from a transition matrix, used after a model has been fit.
+**calculate_steady_state.R** - estimates the steady state occupancy from a transition matrix, used after a model has been fit.
 
-**extract_covariates.R** - extracting site-level urbanization covariates. This
-script requires you to have the associated raster or shape files downloaded on
-your local computer (the script outlines where we downloaded them from).
+**extract_covariates.R** - extracts site-level urbanization covariates. This script requires you to have the associated raster or shape files downloaded on
+your local computer (the script outlines where we downloaded them from). Not needed to recreate the analysis, as the covariates are stored in the data sub-folder.
 
-**fit_models.R** - fits the dynamic MSDOM models to the coyote data. Assumes that 
-the repository is the current working directory.
+**fit_models.R** - fits the dynamic MSDOM models to the coyote data. Assumes that the repository is the current working directory.
 
 **model_selection.R** - model comparison via CPO, ran after models are fit.
 
-**plot_tpm.R** - evaluating the best fit-model to make figures
+**plot_tpm.R** - evaluates the best fit-model to make the transition probability matrix figure for the coyote case study.
 
-**plot_utilities.R** - model output processing for plotting
+**plot_utilities.R** - model output processing for plotting and other plotting quality of life improvements.
 
-**prep_objects_for_model.R** - Sourced by fit_models.R and model_selection.R scripts more clear. This script essentially prepares all of the data for analysis. Definitely
-something to look through if you are running `./Chicago coyote/fit_models.R` as 
+**prep_objects_for_model.R** - Sourced by `fit_models.R` and `model_selection.R` to make these scripts more clear. This script essentially prepares all of the data for analysis. Definitely something to look through if you are running `./Chicago coyote/fit_models.R` as 
 a number of objects are created in here that are used (e.g., a `models` data.frame 
 with formulas that specify the models being fit).
 
-**scrub_coyote_data.R** - arrange detection non-detction with observed diel states. This is a good example of how you would prepare your raw camera trap data for analysis with an MSDOM (for the four state model we used).
+**scrub_coyote_data.R** - arrange detection non-detction with observed diel states. This is a good example of how you would prepare your raw camera trap data for analysis with a dynamic MSDOM (for the four state model we used).
 
 **spatial_utilities.R** - This contains a suite of functions to extract covariate
 data. It's an older working version of https://github.com/mfidino/uwinspatialtools.
 
-**summarise_parameters.R** - processing model fit output. We used this to get
-expected parameter estimates for the results section and put them into a 
-transition probability matrix (to make is easier to look at).
+**summarise_parameters.R** - processes model fit output. We used this to get expected parameter estimates for the results section and put them into a transition probability matrix (to make is easier to look at). 
 
 
----
+[Back to table of contents ⤒](#a-repository-for)
 
-<div align="center"> <h3>Data Processing</h3> </div>
+
+### Data Processing
+
+The `./Data Processing/` folder houses some examples of how to format some raw camera trap data for a static MSDOM.
+
+
 
 This folder is for the static MSDOM case studies.
 
@@ -203,13 +216,13 @@ This folder is for the static MSDOM case studies.
 
 **Diel.Occ.Script.R** - script to convert a single-state occupancy detection matrix into a 4 state diel matrix
 
----
+[Back to table of contents ⤒](#a-repository-for)
 
-<div align="center"><img width="150" height="auto" src="raccoon.jpg" alt="A silhouette of a raccoon." /></div>
+### JAGS
 
-<div align="center"><h2>JAGS folder</h2></div>
+The `./JAGS/` sub-folder houses every JAGS script used across both case studies. 
 
-<div align="left"><h3>Dynamic MSDOMs</h3> </div>
+#### Dynamic MSDOMs
 
 Note: These dynamic models have been written in a way to work with the output
 from the make_model_matrix function used in `./Chicago coyote/fit_models.R`.  
@@ -222,8 +235,9 @@ parameters and covariates.
 **jags.dynamic.multistate.null.R** - dynamic MSDOM parameterized without second-order parameters
 
 
-<div align="left"> <h3>Static MSDOM</h3> </div>
-<div align="center"> <h4>FULL Model</h3> </div>
+#### Static MSDOMs
+
+##### Full models
 
 **jags.multistate.occ.full.R** - Full MSDOM with probabilities estimated directly (no logit transformation) without site covariates.
 
@@ -237,7 +251,7 @@ parameters and covariates.
 
 **jags.multistate.occ.full.site.covs.RE.R** - Full MSDOM with probabilities estimated on the logit scale, in which occupancy parameters are modeled using separate covariates for each state and detection and occupancy parameters are realizations from a higher order Normal distribution (i.e. random effect).   
 
-<div align="center"> <h4>REDUCED</h3> </div>
+##### Reduced models
 
 **jags.multistate.occ.reduced.R** - Reduced MSDOM with probabilities estimated directly (no transformation).
 
@@ -253,7 +267,7 @@ parameters and covariates.
 
 **jags.multistate.occ.reduced.site.covs.by.state.R**- Reduced MSDOM in which all parameters are estimated on the logit scale and state occupancy parameters are modeled using any set and any number of separate site covariates.
 
-<div align="center"> <h4>NULL</h3> </div>
+##### Null models
 
 **jags.multistate.occ.null.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; parameters are estimated directly (no transformation).
 
@@ -269,11 +283,17 @@ parameters and covariates.
 
 **jags.multistate.occ.null.site.covs.RE.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; occupancy parameters are modeled on the logit scale using any set of the same site-covariates and detection parameters are estimated on the logit scale without covariates. Detection and occupancy parameters are realizations from separate higher order Normal distributions (i.e. random effect)
 
----
+[Back to table of contents ⤒](#a-repository-for)
 
-<div align="center"> <h3>Makira Fosa2</h3> </div>
+### Makira Fosa2
+
+The `./Makira Fosa2/` folder contains the scripts used for one of the two fosa static MSDOM analyses.
+
+There are 7 sub-folders:
 
 **AJB-FRK-LKT-MGB-SLJ-SOA-VIN** - Each folder contains site-level diel detection/non-detection data (4 states) and covariate information for the fosa
+
+Following this sub-folder there are a number of R scripts and data files:
 
 **makira.data.script.r** - data script to prepare detection data in a format useable for MSDOM model fitting
 
@@ -293,10 +313,11 @@ parameters and covariates.
 
 **CPO.out.Makira.csv** - script to calculate CPO from a model with random effects on occupancy and detection parameters
 
+[Back to table of contents ⤒](#a-repository-for)
 
----
+### RNP Fosa
 
-<div align="center"> <h3>RNP Fosa</h3> </div>
+The `./RNP Fosa/` folder contains the data and scripts for the secondary fosa static model analysis. It contains a number of R scripts and data files.
 
 **CPO.function.r** - model comparison script
 
@@ -326,9 +347,12 @@ parameters and covariates.
 
 **multi.state.likelihood.r** - MSDOM likelihood function to be used for model comparison 
 
----
+[Back to table of contents ⤒](#a-repository-for)
 
-<div align="center"> <h3>Simulation Files</h3> </div>
+### Simulation Files
+
+The `./Simulation Files/` folder is not part of the manuscript, but it does contain a lot of code to simulate and fit static and dynamic MSDOMs, which we hope are useful. 
+
 
 **dynamic_simulations** - Folder for simulating dynamic MSDOM data. There are four simulation scripts, which can be used to fit the full dynamic MSDOM (with or without
 independent detection parameters for the fourth state), as well as the dynamic model
@@ -364,4 +388,8 @@ functions that are even used in `./Chicago coyote/fit_models.R`.
 
 **sim.reduced.data** - R object of simulated data from the reduced MSDOM
 
----
+
+[Back to table of contents ⤒](#a-repository-for)
+
+
+<div align="center"><img width="150" height="auto" src="coyote.jpg" alt="A silhouette of a coyote." /></div>
