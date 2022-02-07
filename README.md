@@ -38,10 +38,7 @@ This is a multistate occupancy model that discretizes diel time into disctinct c
 
 While the application of this class of model to diel categories is novel, the model itself is not "new." In fact, the static MSDOM is a slightly different parameterization of [Rota et al. (2016)](https://doi.org/10.1111/2041-210X.12587) that uses the Categorical distribution instead of the multivariate Bernoulli distribution. The dynamic MSDOM is an expansion of [Fidino et al. (2018)](https://doi.org/10.1111/2041-210X.13117).
 
-If you are interested in a very top-level introduction to this model, we presented on it in 2021 at a couple of different conferences. [Follow this link here](https://www.youtube.com/watch?v=r1ZMLwPQAkM) for a 15 minute presentation by Mason Fidino that is hosted on YouTube.
-
-
-<a href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="This link here"><img src="img_start.jpg" alt="Alternate Text" /></a>
+If you are interested in a very top-level introduction to this model, we presented on it in 2021 at a couple of different conferences. Click on the thumbnail below to watch a 15 minute presentation by Mason Fidino on YouTube. Note: Clicking this link will take you away from this README file.
 
 
 <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="MSDOM presentation">
@@ -49,6 +46,8 @@ If you are interested in a very top-level introduction to this model, we present
     <img width="75%" src="img_start.JPG" alt="MSDOM presentation thumbnail"/>
   </p>
 </a>
+
+
 [Back to table of contents ⤒](#a-repository-for)
 
 
