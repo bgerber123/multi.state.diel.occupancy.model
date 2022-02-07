@@ -44,9 +44,9 @@ If you are interested in a very top-level introduction to this model, we present
 <a href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="This link here"><img src="img_start.jpg" alt="Alternate Text" /></a>
 
 
-<a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="Music Caster Video Demo">
+<a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="MSDOM presentation">
   <p align="center">
-    <img width="75%" src="img_start.JPG" alt="Music Caster Video Demo Thumbnail"/>
+    <img width="75%" src="img_start.JPG" alt="MSDOM presentation thumbnail"/>
   </p>
 </a>
 [Back to table of contents ⤒](#a-repository-for)
