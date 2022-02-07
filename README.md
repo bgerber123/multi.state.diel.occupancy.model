@@ -58,7 +58,9 @@ If you are interested in a very top-level introduction to this model, we present
 [Back to table of contents ⤒](#a-repository-for)
 
 
-### The working directory
+## The working directory
+
+---
 
 For all scripts in this repository, we assume you have set the working directory as the folder that houses the entire repository. All files that are read in or scripts that are run are made relative to this central directory.
 
@@ -74,19 +76,21 @@ Overall, this repository contains 6 subfolders:
 [Back to table of contents ⤒](#a-repository-for)
 
 
-### Workflows in this repository
+## Workflows in this repository
+
+---
 
 As there are multiple analyses, there are multiple workflows in this repository. We describe each of them here, and then leave the more specific file explanations to later in this README file.
 
-#### Data processing workflow
+### Data processing workflow
 
 The data processing is simply meant as an example, but because it is important to know how to process the data before modeling we thought it was a good idea to demonstrate this. Within `./Data processing/`, the script `Diel.Occ.Script.R` is provided as an exemplar on how to convert single-state occupancy detection matrices to a 4 state matrix to be used in the MSDOM. This script uses the function script `diel.occ.fun.R` (**WHICH IS LOCATED WHERE**).
 
 [Back to table of contents ⤒](#a-repository-for)
 
-#### Simulation workflow
+### Simulation workflow
 
-##### Static model simulations (`./Simulation Files/`)
+#### Static model simulations (`./Simulation Files/`)
 
 Simulating and fitting data from a model is perhaps the best way to understand how the model works. There are no simulations in the manuscript. These are provided for folks interested in exploring the workings of the MSDOM.
 To start, choose whether you want to simulate the Null, Reduced, or Full MSDOM. The respective simulations files are `sim.data.MSDOM.null.model.r`, `sim.data.MSDOM.reduced.model.r`, and `sim.data.MSDOM.full.model.r`.
@@ -97,7 +101,7 @@ Once data is simulated, use the script `fit.sim.data.MSDOM.r` to fit models to e
 Model comparison using CPO can be done for each of the three models on each data set using the script `model.comparison.CPO.r`.
 
 
-##### Dynamic model simulations  (`./Simulation Files/dynamic_simulations`)
+#### Dynamic model simulations  (`./Simulation Files/dynamic_simulations`)
 
 The dynamic model simualtions have been set up so that all you need to do is source the respective R script of the different dynamic MSDOM parameterizations. As written, these scripts will simulate the data, fit the model, and then compare the parameter estimates to the true values that generated the data in a plot. We have provided four different parameterizations of the dynamic MSDOM for simulation. For each of these scripts, you can either open it up and run through it on your own, or just source the script relative to the working directory.
 
@@ -116,7 +120,7 @@ All four of these scripts rely on `./Simulation Files/dynamic_simulation/dynamic
 [Back to table of contents ⤒](#a-repository-for)
 
 
-#### RNP Fosa modeling workflow
+### RNP Fosa modeling workflow
 
 
 There are two scripts that model fosa data from Ranomafana National Park used in the manuscript (both of which can be found in `./RNP Fosa/`), `RNP.MSDOM.modeling.script.r` and `RNP.MSDOM.modeling.script2.r`. The difference between the scripts is that `RNP.MSDOM.modeling.script2.r` includes a categorical covariate to indicate the survey each of the data come from, 2007 or 2008. Each script fits 9 models, in which covariates are used or not and the model specification is either Full, Null, or Reduced.  For each model fit, CPO is estimated and appended to the file `CPO.out.RNP.csv`.
@@ -127,7 +131,7 @@ A plotting script, `RNP.MSDOM.plotting.r`, is provided to explore estimated para
 [Back to table of contents ⤒](#a-repository-for)
 
 
-#### Makira Fosa modeling workflow
+### Makira Fosa modeling workflow
 
 The Makira fosa models are fit in `./Makira Fosa2/`. The script `makira.data.script.r` compiles detection non-detection data across sampled to sites into a single R object (`Makira.data2`) that can be used in fitting MSDOMs.
 MSDOMs are fit using the script `makira.modeling.script.r`. There are 6 models fit, with and without a covariate, for each of the Full, Reduced, and Null model specifications. These results are used in the manuscript. Each model object is saved within the `./Makira Fosa2` folder and the CPO value is appended to the file, `CPO.out.Makira.csv`.
@@ -136,11 +140,13 @@ The results from model outputs can be viewed using the `makira.MSTOM.plotting.r`
 
 [Back to table of contents ⤒](#a-repository-for)
 
-#### Plotting Fosa results workflow
+### Plotting Fosa results workflow
 
 These figures are generated within the working directory with the file `Fosa_Plots_Final.R.` This script assumes you have ran through both the RNP Fosa and Makira Fosa modeling workflows, and have saved the model output objects (which are used to plot these results).
 
-#### Chicago coyote modeling workflow
+[Back to table of contents ⤒](#a-repository-for)
+
+### Chicago coyote modeling workflow
 
 All of the dynamic MSDOM Chicago coyote case study analysis is housed within `./Chicago coyote/`. This folder contains a number of utility functions and sub-folders to store model outputs, data, figures, etc. As the data has already been prepared for analysis, the only script that needs to be opened to fit the models to the coyote data is `./Chicago coyote/fit_models.R`, which sources `./Chicago coyote/prep_objects_for_model.R` to get the data objects ready for modeling in JAGS. The script `./Chicago coyote/fit_models.R` will fit the three seperate models to the data and save the model output in `./Chicago coyote/model_output/`. To calculate the CPO score of each model, open and run through `./Chicago coyote/model_selection.R`. Finally, to generate the plots of the best fit model, there are two scripts that need to be ran (one for each figure). For the probability of use plots, run through `./Chicago coyote/calculate_steady_state.R`. To generate the transition probability matrix figure, open up and run through `./Chicago coyote/plot_tpm.R`.
 
@@ -149,11 +155,11 @@ There are a few other scripts that could be considered part of this workflow, bu
 [Back to table of contents ⤒](#a-repository-for)
 
 
-### File and folder descriptions
+## File and folder descriptions
 
 ---
 
-#### Chicago coyote
+### Chicago coyote
 
 `./Chicago coyote/` contains four sub-folders:
 
