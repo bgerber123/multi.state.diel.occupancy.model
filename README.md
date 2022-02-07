@@ -170,6 +170,8 @@ The data folder has 6 files. These files and their associated metadata are:
 
 **./Chicago coyote/data/camera_active.csv**
 
+This file is used to generate the possible days that coyote were not sampled while the camera was active.
+
 | Column       | Type            | Explanation                                                                                                                                                                                                         |
 |--------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Site         | categorical     | The site code for a camera trap location                                                                                                                                                                            |
@@ -182,6 +184,32 @@ The data folder has 6 files. These files and their associated metadata are:
 | End          | Date (yyyy-m-d) | The end date of a given sampling season. If NA sampling did not occur at that site.                                                                                                                                 |
 | City         | categorical     | City code. chil = Chicago, Illinois                                                                                                                                                                                 |
 | Day_{number} | logical         | Column names range from Day_1 to Day_59. Day_1 represents the Start date. If NA sampling did not occur. If 0 then sampling did occur at that site and day.                                                          |
+
+
+**./Chicago coyote/data/chicago_covars.csv**
+
+These data are generated via the script `./Chicago coyote/extract_covariates.R`. The script also provides links to where the data were collected from (and the manuscript has citations).
+
+| Column       | Type        | Explanation                                                                                    |
+|--------------|-------------|------------------------------------------------------------------------------------------------|
+| LocationName | categorical | The site code for a camera trap location                                                       |
+| tree         | coordinate  | The proportion of tree cover within 1000m of a camera site                                     |
+| imperv       | coordinate  | The proportion of impervious cover within 1000m of a camera site                               |
+| HU10         | numeric     | The housing density in units per km squared within 1000m of a camera site                      |
+| urb          | categorical | The urbanization score generated from the other three covariates. Explained in the manuscript. |
+
+**./Chicago coyote/data/coyote_datetime.csv**
+
+This file is used in the coyote data cleaning when it initially got prepared for analysis (i.e., `./Chicago coyote/scrub_coyote_data.R`)
+
+
+| Column   | Type                           | Explanation                                                                                                                                                                                                         |
+|----------|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Site     | categorical                    | The site code for a camera trap location                                                                                                                                                                            |
+| Season   | categorical                    | The season code for sampling. Sampling occurs in January (JA), April (AP), July (JU) and October (OC). The years since 2000 are also tacked on as well. For example, JU16 represents the July 2016 sampling season. |
+| Species  | categorical                    | The species, it just says 'Coyote' all the way down.                                                                                                                                                                |
+| Datetime | datetime (yyyy-mm-dd hh:mm:ss) | The date and time of the associated camera trap photo. Timezone is America/Chicago.                                                                                                                                 |
+
 
 
 **figures** - Folder of dynamic MSDOM results using coyote data
