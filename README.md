@@ -12,8 +12,13 @@
 1. [What's in this repository?](#whats-in-this-repository)
 2. [What does this model do?](#what-does-this-model-do)
 3. [The working directory](#the-working-directory)
-4. [Workflow for fitting the static and dynamic models](#workflow-for-fitting-the-static-and-dynamic-models)
-4
+4. [Workflows in this repository](#workflows-in-this-repository)
+	1. [Data processing workflow](#data-processing-workflow)
+	2. [Simulation workflow](#simulation-workflow)
+	3. [RNP Fosa modeling workflow](#rnp-fosa-modeling-workflow)
+	4. [Makira Fosa modeling workflow](#makira-fosa-modeling-workflow)
+	5. [Plotting Fosa results workflow](#plotting-fosa-results-workflow)
+
 
 
 ## What's in this repository?
@@ -35,6 +40,9 @@ While the application of this class of model to diel categories is novel, the mo
 
 If you are interested in a very top-level introduction to this model, we presented on it in 2021 at a couple of different conferences. [Follow this link here](https://www.youtube.com/watch?v=r1ZMLwPQAkM) for a 15 minute presentation by Mason Fidino that is hosted on YouTube.
 
+
+<a href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="This link here"><img src="img_start.jpg" alt="Alternate Text" /></a>
+
 [Back to table of contents ⤒](#a-repository-for)
 
 
@@ -54,7 +62,7 @@ Overall, this repository contains 6 subfolders:
 [Back to table of contents ⤒](#a-repository-for)
 
 
-### Workflow for fitting the static and dynamic models
+### Workflows in this repository
 
 As there are multiple analyses, there are multiple workflows in this repository. We describe each of them here, and then leave the more specific file explanations to later in this README file.
 
@@ -77,7 +85,7 @@ Once data is simulated, use the script `fit.sim.data.MSDOM.r` to fit models to e
 Model comparison using CPO can be done for each of the three models on each data set using the script `model.comparison.CPO.r`.
 
 
-#### Dynamic model simulations  (`./Simulation Files/dynamic_simulations`)
+##### Dynamic model simulations  (`./Simulation Files/dynamic_simulations`)
 
 The dynamic model simualtions have been set up so that all you need to do is source the respective R script of the different dynamic MSDOM parameterizations. As written, these scripts will simulate the data, fit the model, and then compare the parameter estimates to the true values that generated the data in a plot. We have provided four different parameterizations of the dynamic MSDOM for simulation. For each of these scripts, you can either open it up and run through it on your own, or just source the script relative to the working directory.
 
@@ -96,6 +104,29 @@ All four of these scripts rely on `./Simulation Files/dynamic_simulation/dynamic
 [Back to table of contents ⤒](#a-repository-for)
 
 
+#### RNP Fosa modeling workflow
+
+
+There are two scripts that model fosa data from Ranomafana National Park used in the manuscript (both of which can be found in `./RNP Fosa/`), `RNP.MSDOM.modeling.script.r` and `RNP.MSDOM.modeling.script2.r`. The difference between the scripts is that `RNP.MSDOM.modeling.script2.r` includes a categorical covariate to indicate the survey each of the data come from, 2007 or 2008. Each script fits 9 models, in which covariates are used or not and the model specification is either Full, Null, or Reduced.  For each model fit, CPO is estimated and appended to the file `CPO.out.RNP.csv`.
+
+After a model or models are fit, the `RNP.GOF.r` file can be used to derive a Bayesian p-value for goodness of fit.
+A plotting script, `RNP.MSDOM.plotting.r`, is provided to explore estimated parameters and predict occupancy probability using a supported covariate.
+
+[Back to table of contents ⤒](#a-repository-for)
+
+
+#### Makira Fosa modeling workflow
+
+The Makira fosa models are fit in `./Makira Fosa2/`. The script `makira.data.script.r` compiles detection non-detection data across sampled to sites into a single R object (`Makira.data2`) that can be used in fitting MSDOMs.
+MSDOMs are fit using the script `makira.modeling.script.r`. There are 6 models fit, with and without a covariate, for each of the Full, Reduced, and Null model specifications. These results are used in the manuscript. Each model object is saved within the `./Makira Fosa2` folder and the CPO value is appended to the file, `CPO.out.Makira.csv`.
+The results from model outputs can be viewed using the `makira.MSTOM.plotting.r` script.
+
+
+[Back to table of contents ⤒](#a-repository-for)
+
+#### Plotting Fosa results workflow
+
+These figures are generated within the working directory with the file `Fosa_Plots_Final.R.` This script assumes you have ran through both the RNP Fosa and Makira Fosa modeling workflows, and have saved the model output objects (which are used to plot these results).
 
 
 ---
