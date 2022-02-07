@@ -84,7 +84,7 @@ As there are multiple analyses, there are multiple workflows in this repository.
 
 ### Data processing workflow
 
-The data processing is simply meant as an example, but because it is important to know how to process the data before modeling we thought it was a good idea to demonstrate this. Within `./Data processing/`, the script `Diel.Occ.Script.R` is provided as an exemplar on how to convert single-state occupancy detection matrices to a 4 state matrix to be used in the MSDOM. This script uses the function script `diel.occ.fun.R` (**WHICH IS LOCATED WHERE**).
+The data processing is simply meant as an example, but because it is important to know how to process the data before modeling we thought it was a good idea to demonstrate this. Within `./Data processing/`, the script `Diel.Occ.Script.R` is provided as an exemplar on how to convert single-state occupancy detection matrices to a 4 state matrix to be used in the MSDOM. This script uses the function script `diel.occ.fun.R`, which is also located in `./Data processing/.`
 
 [Back to table of contents ⤒](#a-repository-for)
 
