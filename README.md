@@ -43,6 +43,12 @@ If you are interested in a very top-level introduction to this model, we present
 
 <a href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="This link here"><img src="img_start.jpg" alt="Alternate Text" /></a>
 
+
+<a href="https://www.youtube.com/watch?v=r1ZMLwPQAkM" title="Music Caster Video Demo">
+  <p align="center">
+    <img width="75%" src="img_start.jpg" alt="Music Caster Video Demo Thumbnail"/>
+  </p>
+</a>
 [Back to table of contents ⤒](#a-repository-for)
 
 
