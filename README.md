@@ -165,10 +165,10 @@ There are a few other scripts that could be considered part of this workflow, bu
 
 **data** - Folder of coyote data files
 
-The data folder has 6 files.
+The data folder has 6 files. These files and their associated metadata are:
 
 
-**camera_active.csv**
+**./Chicago coyote/data/camera_active.csv**
 
 | Column       | Type            | Explanation                                                                                                                                                                                                         |
 |--------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
