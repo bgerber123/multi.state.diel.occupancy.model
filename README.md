@@ -1,19 +1,101 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5828410.svg)](https://doi.org/10.5281/zenodo.5828410)
 
 
-# **A repository for the multi-state diel occupancy model (MSDOM):** 
+# A repository for:
 
 ### River, K, Fidino, M, Farris, ZJ, Murphy, A, Magle, SB, and Gerber, BD. Rethinking habitat occupancy modeling and the role of diel activity in an anthropogenic world. In Review.
 ---
 
 
-**This repository includes 6 subfolders: Chicago coyote, Data Processing, JAGS, Makira Fosa2, RNP Fosa, and Simulation Files.**
+## Links to different parts of the readme file
+
+1. [What's in this repository?](#whats-in-this-repository)
+2. [What does this model do?](#what-does-this-model-do)
+3. [The working directory](#the-working-directory)
+4. [Workflow for fitting the static and dynamic models](#workflow-for-fitting-the-static-and-dynamic-models)
+4
+
+
+## What's in this repository?
+
+This repository stores all of the data and code used to fit the various parameterizations of the static and dynamic MSDOMs that we used in the assoicated manuscript. We demonstrated the static MSDOM with a Madagascar fosa case study, while the dynamic MSDOM is applied to a Chicago coyote case study. 
+
+In addition to the code to recreate our analysis, we've inclued a number of other helpful scripts. This includes a script that demonstrates how the MSDOM is equivalent to other multistate occupancy models used to estimate species cooccurrence, scripts for simulating MSDOM data and fitting them, and an example of how to discretize date/time data from a cameratrap dataset to fit an MSDOM. These latter scripts are not especially part of the associated manuscript itself, but they are just some additional files we put together to hopefully make this model easier to understand and use.
+
+This document here serves as a road map that describes the workflows for recreating our analyses and provides information of the files present in this repository.
+
+
+[Back to table of contents ⤒](#a-repository-for)
+
+## What does this model do?
+
+This is a multistate occupancy model that discretizes diel time into disctinct categories so that variation in a species spatial use of different temporal categories can be evaluated over environmental gradients. 
+
+While the application of this class of model to diel categories is novel, the model itself is not "new." In fact, the static MSDOM is a slightly different parameterization of [Rota et al. (2016)](https://doi.org/10.1111/2041-210X.12587) that uses the Categorical distribution instead of the multivariate Bernoulli distribution. The dynamic MSDOM is an expansion of [Fidino et al. (2018)](https://doi.org/10.1111/2041-210X.13117).
+
+If you are interested in a very top-level introduction to this model, we presented on it in 2021 at a couple of different conferences. [Follow this link here](https://www.youtube.com/watch?v=r1ZMLwPQAkM) for a 15 minute presentation by Mason Fidino that is hosted on YouTube.
+
+[Back to table of contents ⤒](#a-repository-for)
+
+
+### The working directory
+
+For all scripts in this repository, we assume you have set the working directory as the folder that houses the entire repository. All files that are read in or scripts that are run are made relative to this central directory.
+
+Overall, this repository contains 6 subfolders:
+
 1) The **Chicago coyote** folder includes data, R scripts, and plots specific to case study on coyotes that uses the dynamic MSDOM.
 2) The **Data Procesing** folder includes R scripts and example data on how to prepare data for the MSDOM.
 3) The **JAGS** folder includes JAGS models for the static and dynamic MSDOM, including the full, reduced, and null parameterizations.
 4) The **Makira Fosa2** folder includes fosa data from Makira Natural Park and R scripts for fitting the static MSDOM, including model comparison using CPO.
 5) The **RNP Fosa** folder includes fosa data from Ranomafana National Park and R scripts for fitting the MSDOM, including model comparison using CPO.
 6) The **Simulation Files** folder includes scripts for simulating data under different versions of the static and dynamic MSDOM (full, reduced, null) and fitting these models using JAGS.
+
+[Back to table of contents ⤒](#a-repository-for)
+
+
+### Workflow for fitting the static and dynamic models
+
+As there are multiple analyses, there are multiple workflows in this repository. We describe each of them here, and then leave the more specific file explanations to later in this README file.
+
+#### Data processing workflow
+
+The data processing is simply meant as an example, but because it is important to know how to process the data before modeling we thought it was a good idea to demonstrate this. Within `./Data processing/`, the script `Diel.Occ.Script.R` is provided as an exemplar on how to convert single-state occupancy detection matrices to a 4 state matrix to be used in the MSDOM. This script uses the function script `diel.occ.fun.R` (**WHICH IS LOCATED WHERE**).
+
+[Back to table of contents ⤒](#a-repository-for)
+
+#### Simulation workflow
+
+##### Static model simulations (`./Simulation Files/`)
+
+Simulating and fitting data from a model is perhaps the best way to understand how the model works. There are no simulations in the manuscript. These are provided for folks interested in exploring the workings of the MSDOM.
+To start, choose whether you want to simulate the Null, Reduced, or Full MSDOM. The respective simulations files are `sim.data.MSDOM.null.model.r`, `sim.data.MSDOM.reduced.model.r`, and `sim.data.MSDOM.full.model.r`.
+
+
+The simulation scripts are setup to simulate a default of 100 datasets from the chosen model and output a model object, for example, `sim.full.data`.
+Once data is simulated, use the script `fit.sim.data.MSDOM.r` to fit models to each data set. The script is setup to fit the Null, Reduced, and Full MSDOMs. Results are automatically output into sequential files, e.g., `fit.simdata.Full.1.out`.
+Model comparison using CPO can be done for each of the three models on each data set using the script `model.comparison.CPO.r`.
+
+
+#### Dynamic model simulations  (`./Simulation Files/dynamic_simulations`)
+
+The dynamic model simualtions have been set up so that all you need to do is source the respective R script of the different dynamic MSDOM parameterizations. As written, these scripts will simulate the data, fit the model, and then compare the parameter estimates to the true values that generated the data in a plot. We have provided four different parameterizations of the dynamic MSDOM for simulation. For each of these scripts, you can either open it up and run through it on your own, or just source the script relative to the working directory.
+
+- `dynamic_conditional.R`: For the full MSDOM that includes second-order parameters. Example of use: `source("./Simulation Files/dynamic_simulation/dynamic_conditional.R")`.
+
+- `dynamic_conditional_indep.rho.R`: Identical to `dynamic_conditional.R` except the detection states are assumed to be independent. Example of use: `source("./Simulation Files/dynamic_simulation/dynamic_conditional_indep_rho.R")`.
+
+- `dynamic_null.R`: This is still a MSDOM, except there are no second-order parameters in the model. Example of use: `source("./Simulation Files/dynamic_simulation/dynamic_null.R")`
+
+- `dynamic_null_indep_rho.R`: Identical to `dynamic_null.R` except the detection states are assumed to be independent.  Example of use: `source("./Simulation Files/dynamic_simulation/dynamic_null_indep_rho.R")`.
+
+
+All four of these scripts rely on `./Simulation Files/dynamic_simulation/dynamic_utilities.R`, which is a bunch of helper functions to simulate the data, store the true parameter values, prepare the data for the analysis, and compare the estimated results to the true values. Currently, these scripts are set up to randomly generate parameter values. If you wanted to input your own, you would have to generalize `sim_covariates()` in `dynamic_utilities.R` to accept the parameter values.
+
+
+[Back to table of contents ⤒](#a-repository-for)
+
+
 
 
 ---
