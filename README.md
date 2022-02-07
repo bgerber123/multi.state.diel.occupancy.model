@@ -30,9 +30,9 @@
 
 ## What's in this repository?
 
-This repository stores all of the data and code used to fit the various parameterizations of the static and dynamic MSDOMs that we used in the assoicated manuscript. We demonstrated the static MSDOM with a Madagascar fosa case study, while the dynamic MSDOM is applied to a Chicago coyote case study. 
+This repository stores all of the data and code used to fit the various parameterizations of the static and dynamic MSDOMs that we used in the associated manuscript. We demonstrated the static MSDOM with a Madagascar fosa case study, while the dynamic MSDOM is applied to a Chicago coyote case study. 
 
-In addition to the code to recreate our analysis, we've inclued a number of other helpful scripts. This includes a script that demonstrates how the MSDOM is equivalent to other multistate occupancy models used to estimate species cooccurrence, scripts for simulating MSDOM data and fitting them, and an example of how to discretize date/time data from a cameratrap dataset to fit an MSDOM. These latter scripts are not especially part of the associated manuscript itself, but they are just some additional files we put together to hopefully make this model easier to understand and use.
+In addition to the code to recreate our analysis, we've included a number of other helpful scripts. This includes a script that demonstrates how the MSDOM is equivalent to other multistate occupancy models used to estimate species cooccurrence, scripts for simulating MSDOM data and fitting them, and an example of how to discretize date/time data from a cameratrap dataset to fit an MSDOM. These latter scripts are not especially part of the associated manuscript itself, but they are just some additional files we put together to hopefully make this model easier to understand and use.
 
 This document here serves as a road map that describes the workflows for recreating our analyses and provides information of the files present in this repository.
 
@@ -41,7 +41,7 @@ This document here serves as a road map that describes the workflows for recreat
 
 ## What does this model do?
 
-This is a multistate occupancy model that discretizes diel time into disctinct categories so that variation in a species spatial use of different temporal categories can be evaluated over environmental gradients. 
+This is a multistate occupancy model that discretizes diel time into distinct categories so that variation in a species spatial use of different temporal categories can be evaluated over environmental gradients. 
 
 While the application of this class of model to diel categories is novel, the model itself is not "new." In fact, the static MSDOM is a slightly different parameterization of [Rota et al. (2016)](https://doi.org/10.1111/2041-210X.12587) that uses the Categorical distribution instead of the multivariate Bernoulli distribution. The dynamic MSDOM is an expansion of [Fidino et al. (2018)](https://doi.org/10.1111/2041-210X.13117).
 
@@ -67,7 +67,7 @@ For all scripts in this repository, we assume you have set the working directory
 Overall, this repository contains 6 subfolders:
 
 1) The **Chicago coyote** folder includes data, R scripts, and plots specific to case study on coyotes that uses the dynamic MSDOM.
-2) The **Data Procesing** folder includes R scripts and example data on how to prepare data for the MSDOM.
+2) The **Data Processing** folder includes R scripts and example data on how to prepare data for the MSDOM.
 3) The **JAGS** folder includes JAGS models for the static and dynamic MSDOM, including the full, reduced, and null parameterizations.
 4) The **Makira Fosa2** folder includes fosa data from Makira Natural Park and R scripts for fitting the static MSDOM, including model comparison using CPO.
 5) The **RNP Fosa** folder includes fosa data from Ranomafana National Park and R scripts for fitting the MSDOM, including model comparison using CPO.
@@ -103,7 +103,7 @@ Model comparison using CPO can be done for each of the three models on each data
 
 #### Dynamic model simulations
 
-The dynamic model simualtions have been set up so that all you need to do is source the respective R script of the different dynamic MSDOM parameterizations. They can all be found in `./Simulation Files/dynamic_simulations`. As written, these scripts will simulate the data, fit the model, and then compare the parameter estimates to the true values that generated the data in a plot. We have provided four different parameterizations of the dynamic MSDOM for simulation. For each of these scripts, you can either open it up and run through it on your own, or just source the script relative to the working directory.
+The dynamic model simulations have been set up so that all you need to do is source the respective R script of the different dynamic MSDOM parameterizations. They can all be found in `./Simulation Files/dynamic_simulations`. As written, these scripts will simulate the data, fit the model, and then compare the parameter estimates to the true values that generated the data in a plot. We have provided four different parameterizations of the dynamic MSDOM for simulation. For each of these scripts, you can either open it up and run through it on your own, or just source the script relative to the working directory.
 
 - `dynamic_conditional.R`: For the full MSDOM that includes second-order parameters. Example of use: `source("./Simulation Files/dynamic_simulation/dynamic_conditional.R")`.
 
@@ -148,7 +148,7 @@ These figures are generated within the working directory with the file `Fosa_Plo
 
 ### Chicago coyote modeling workflow
 
-All of the dynamic MSDOM Chicago coyote case study analysis is housed within `./Chicago coyote/`. This folder contains a number of utility functions and sub-folders to store model outputs, data, figures, etc. As the data has already been prepared for analysis, the only script that needs to be opened to fit the models to the coyote data is `./Chicago coyote/fit_models.R`, which sources `./Chicago coyote/prep_objects_for_model.R` to get the data objects ready for modeling in JAGS. The script `./Chicago coyote/fit_models.R` will fit the three seperate models to the data and save the model output in `./Chicago coyote/model_output/`. To calculate the CPO score of each model, open and run through `./Chicago coyote/model_selection.R`. Finally, to generate the plots of the best fit model, there are two scripts that need to be ran (one for each figure). For the probability of use plots, run through `./Chicago coyote/calculate_steady_state.R`. To generate the transition probability matrix figure, open up and run through `./Chicago coyote/plot_tpm.R`.
+All of the dynamic MSDOM Chicago coyote case study analysis is housed within `./Chicago coyote/`. This folder contains a number of utility functions and sub-folders to store model outputs, data, figures, etc. As the data has already been prepared for analysis, the only script that needs to be opened to fit the models to the coyote data is `./Chicago coyote/fit_models.R`, which sources `./Chicago coyote/prep_objects_for_model.R` to get the data objects ready for modeling in JAGS. The script `./Chicago coyote/fit_models.R` will fit the three separate models to the data and save the model output in `./Chicago coyote/model_output/`. To calculate the CPO score of each model, open and run through `./Chicago coyote/model_selection.R`. Finally, to generate the plots of the best fit model, there are two scripts that need to be ran (one for each figure). For the probability of use plots, run through `./Chicago coyote/calculate_steady_state.R`. To generate the transition probability matrix figure, open up and run through `./Chicago coyote/plot_tpm.R`.
 
 There are a few other scripts that could be considered part of this workflow, but they are all related to pulling in spatial data (e.g., `./Chicago coyote/extract_covariates.R`) or preparing the raw coyote data for analysis (e.g., `./Chicago coyote/scrub_coyote_data.R`). We have left these scripts in this folder, but they are not necessary to recreate the analysis.
  
@@ -195,7 +195,7 @@ your local computer (the script outlines where we downloaded them from). Not nee
 a number of objects are created in here that are used (e.g., a `models` data.frame 
 with formulas that specify the models being fit).
 
-**scrub_coyote_data.R** - arrange detection non-detction with observed diel states. This is a good example of how you would prepare your raw camera trap data for analysis with a dynamic MSDOM (for the four state model we used).
+**scrub_coyote_data.R** - arrange detection non-detection with observed diel states. This is a good example of how you would prepare your raw camera trap data for analysis with a dynamic MSDOM (for the four state model we used).
 
 **spatial_utilities.R** - This contains a suite of functions to extract covariate
 data. It's an older working version of https://github.com/mfidino/uwinspatialtools.
@@ -267,7 +267,7 @@ parameters and covariates.
 
 **jags.multistate.occ.reduced.site.covs.R** - Reduced MSDOM in which logit-scaled occupancy parameters are modeled using the same single site covariate and state detection probabilities are reduced (no transformation).
 
-**jags.multistate.occ.reduced.alt.RE.R** - Reduced MSDOM in which all parameters are estimated on the logit scale and state and detection proabilities are realizations from separate higher order Normal distributions (i.e. random effect).   
+**jags.multistate.occ.reduced.alt.RE.R** - Reduced MSDOM in which all parameters are estimated on the logit scale and state and detection probabilities are realizations from separate higher order Normal distributions (i.e. random effect).   
 
 **jags.multistate.occ.reduced.site.covs.RE.R** - Reduced MSDOM in which all parameters are estimated on the logit scale and state occupancy parameters are modeled using separate (single) site covariates; detection and occupancy parameters are realizations from separate higher order Normal distributions (i.e. random effect).   
 
@@ -279,7 +279,7 @@ parameters and covariates.
 
 **jags.multistate.occ.null.alt.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; parameters are estimated on the logit scale.
 
-**jags.multistate.occ.null.det.null.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; occupancy parameters are estimated on the logit scale and detection parameters are estiamted without transformation.
+**jags.multistate.occ.null.det.null.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; occupancy parameters are estimated on the logit scale and detection parameters are estimated without transformation.
 
 **jags.multistate.occ.null.alt.RE.R** - Null MSDOM, in which there is no state variation in occupancy or detection parameters; detection and occupancy parameters are realizations from separate higher order Normal distributions (i.e. random effect).   
 
