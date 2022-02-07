@@ -90,9 +90,9 @@ The data processing is simply meant as an example, but because it is important t
 
 ### Simulation workflow
 
-#### Static model simulations (`./Simulation Files/`)
+#### Static model simulations
 
-Simulating and fitting data from a model is perhaps the best way to understand how the model works. There are no simulations in the manuscript. These are provided for folks interested in exploring the workings of the MSDOM.
+All of the code for static model simulations are within `./Simulation Files/`. Simulating and fitting data from a model is perhaps the best way to understand how the model works. There are no simulations in the manuscript. These are provided for folks interested in exploring the workings of the MSDOM.
 To start, choose whether you want to simulate the Null, Reduced, or Full MSDOM. The respective simulations files are `sim.data.MSDOM.null.model.r`, `sim.data.MSDOM.reduced.model.r`, and `sim.data.MSDOM.full.model.r`.
 
 
@@ -101,9 +101,9 @@ Once data is simulated, use the script `fit.sim.data.MSDOM.r` to fit models to e
 Model comparison using CPO can be done for each of the three models on each data set using the script `model.comparison.CPO.r`.
 
 
-#### Dynamic model simulations  (`./Simulation Files/dynamic_simulations`)
+#### Dynamic model simulations
 
-The dynamic model simualtions have been set up so that all you need to do is source the respective R script of the different dynamic MSDOM parameterizations. As written, these scripts will simulate the data, fit the model, and then compare the parameter estimates to the true values that generated the data in a plot. We have provided four different parameterizations of the dynamic MSDOM for simulation. For each of these scripts, you can either open it up and run through it on your own, or just source the script relative to the working directory.
+The dynamic model simualtions have been set up so that all you need to do is source the respective R script of the different dynamic MSDOM parameterizations. They can all be found in `./Simulation Files/dynamic_simulations`. As written, these scripts will simulate the data, fit the model, and then compare the parameter estimates to the true values that generated the data in a plot. We have provided four different parameterizations of the dynamic MSDOM for simulation. For each of these scripts, you can either open it up and run through it on your own, or just source the script relative to the working directory.
 
 - `dynamic_conditional.R`: For the full MSDOM that includes second-order parameters. Example of use: `source("./Simulation Files/dynamic_simulation/dynamic_conditional.R")`.
 
