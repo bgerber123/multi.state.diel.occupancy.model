@@ -17,7 +17,6 @@ gc() #garbage collection
 # M1 is the most supported model
 # Load the model and plots results
 
-setwd("./RNP Fosa/")
 
 # libraries for bayes plotting
 library(rjags)
@@ -32,8 +31,8 @@ library("HDInterval")
 
 
 # load best fit model and data
-load("M1.full.fit")
-load("RNP2.data")
+load("./RNP Fosa/M1.full.fit")
+load("./RNP Fosa/RNP2.data")
 covs=RNP2.data[[2]]
 cov=covs$DistTown
 cov1.unscaled=as.numeric(cov)
