@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6012038.svg)](https://doi.org/10.5281/zenodo.6012038)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6014030.svg)](https://doi.org/10.5281/zenodo.6014030)
 # A repository for:
 
 ### Rivera, K, Fidino, M, Farris, ZJ, Murphy, A, Magle, SB, and Gerber, BD. Rethinking habitat occupancy modeling and the role of diel activity in an anthropogenic world. 
