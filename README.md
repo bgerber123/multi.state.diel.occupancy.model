@@ -280,7 +280,14 @@ This folder is for the static MSDOM case studies.
 
 **Example_Detection_Matrix.csv** - single state detection/non-detection matrix
 
+These data are an exmaple of a detection Matrix. Columns indicate a sampling period while rows indicate camera stations.
+
 **Example_Photo_Data.csv** - original photo data relevant to the example detection matrix
+| Column       | Type        | Explanation                          |
+|--------------|-------------|--------------------------------------|
+| Date         | date        | Date fosa was detected               |
+| Time         | time        | Time fosa was deteced                |
+| Station      | character   | Short hand camera station name       |
 
 **diel.occ.fun.R** - the function called by Diel.Occ.Script.R
 
