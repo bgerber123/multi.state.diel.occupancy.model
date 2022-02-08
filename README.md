@@ -283,11 +283,11 @@ This folder is for the static MSDOM case studies.
 These data are an exmaple of a detection matrix. Columns indicate sampling occasion while rows indicate camera stations.
 
 **Example_Photo_Data.csv** - original photo data relevant to the example detection matrix
-| Column       | Type        | Explanation                          |
-|--------------|-------------|--------------------------------------|
-| Date         | date        | Date fosa was detected               |
-| Time         | time        | Time fosa was deteced                |
-| Station      | character   | Short hand camera station name       |
+| Column       | Type              | Explanation                          |
+|--------------|-------------------|--------------------------------------|
+| Date         | date (yyyy/mm/dd) | Date fosa was detected               |
+| Time         | time (hh:mm)      | Time fosa was deteced (GMT+3)        |
+| Station      | character         | Short hand camera station name       |
 
 **diel.occ.fun.R** - the function called by Diel.Occ.Script.R
 
@@ -435,13 +435,14 @@ The `./RNP Fosa/` folder contains the data and scripts for the secondary fosa st
 **RNP2007.csv** - prepared 4-state detection/non-detection data of fosa from RNP
 | Column                    | Type        | Explanation                                    |
 |---------------------------|-------------|------------------------------------------------|
-| Site                      | date        | Short hand camera station name                 |
+| Site                      | character   | Short hand camera station name                 |
 | Easting                   | coordinate  |                                                |
 | Northing                  | coordinate  |                                                |
-| Distance to closest Town  | numeric     | Euclidean distance to Town in meters           |
-| Distance to closest Road  | numeric     | Euclidean distance to Road in meters           |
-| Distance Matrix           | numeric     | Euclidean distance to non-forest in meters     |
-| Dog                       | numeric     | Trap success of dogs                           |
+| Distance to closest Town  | numeric     | Distance to closest Town in meters             |
+| Distance to closest Road  | numeric     | Distance to closest Road in meters             |
+| Distance Matrix           | numeric     |                                                |
+| Dog                       | numeric     |                                                |
+| Human                     | numeric     |                                                |
 | Occ1...                   | numeric     | Detection occasions classified into 1-4 states |
 
 **multi.state.likelihood.r** - MSDOM likelihood function to be used for model comparison 
