@@ -280,7 +280,7 @@ This folder is for the static MSDOM case studies.
 
 **Example_Detection_Matrix.csv** - single state detection/non-detection matrix
 
-These data are an exmaple of a detection matrix. Columns indicate sampling periods while rows indicate camera stations.
+These data are an exmaple of a detection matrix. Columns indicate sampling occasion while rows indicate camera stations.
 
 **Example_Photo_Data.csv** - original photo data relevant to the example detection matrix
 | Column       | Type        | Explanation                          |
@@ -369,6 +369,18 @@ The `./Makira Fosa2/` folder contains the scripts used for one of the two fosa s
 There are 7 sub-folders:
 
 **AJB-FRK-LKT-MGB-SLJ-SOA-VIN** - Each folder contains site-level diel detection/non-detection data (4 states) and covariate information for the fosa
+
+***AJB-FRK-LKT-MGB-SLJ-SOA-VIN_Hum***
+| Column       | Type        | Explanation                                |
+|--------------|-------------|--------------------------------------------|
+| Site         | character   | Short hand camera station name             |
+| HE           | numeric     | Human Event; human detection within 30min  |
+| TN           | numeric     | Number of trap nights                      |
+| TS           | numeric     | Trap success; HE/TN                        |
+| day.TS       | numeric     | Trap success during day state              |
+| night.TS     | numeric     | Trap success during night state            |
+
+***Diel.Occ.AJB-FRK-LKT-MGB-SLJ-SOA-VIN*** - These are detection matrices for fosa. Columns indicate sampling occasion while rows indicate camera stations.
 
 Following this sub-folder there are a number of R scripts and data files:
 
