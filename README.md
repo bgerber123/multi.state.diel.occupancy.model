@@ -438,11 +438,11 @@ The `./RNP Fosa/` folder contains the data and scripts for the secondary fosa st
 | Site                      | date        | Short hand camera station name                 |
 | Easting                   | coordinate  |                                                |
 | Northing                  | coordinate  |                                                |
-| Distance to closest Town  | numeric     | Distance to closest Town in meters             |
-| Distance to closest Road  | numeric     | Distance to closest Road in meters             |
-| Distance Matrix           | numeric     |                                                |
-| Dog                       | numeric     |                                                |
-| Human                     | numeric     |                                                |
+| Distance to closest Town  | numeric     | Euclidean distance to Town in meters           |
+| Distance to closest Road  | numeric     | Euclidean distance to Road in meters           |
+| Distance Matrix           | numeric     | Euclidean distance to non-forest in meters     |
+| Dog                       | numeric     | Trap success of dogs                           |
+| Human                     | numeric     | NA                                             |
 | Occ1...                   | numeric     | Detection occasions classified into 1-4 states |
 
 **multi.state.likelihood.r** - MSDOM likelihood function to be used for model comparison 
