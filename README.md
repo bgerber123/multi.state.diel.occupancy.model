@@ -370,7 +370,7 @@ There are 7 sub-folders:
 
 **AJB-FRK-LKT-MGB-SLJ-SOA-VIN** - Each folder contains site-level diel detection/non-detection data (4 states) and covariate information for the fosa
 
-***AJB-FRK-LKT-MGB-SLJ-SOA-VIN_Hum***
+#### **AJB-FRK-LKT-MGB-SLJ-SOA-VIN_Hum**
 | Column       | Type        | Explanation                                |
 |--------------|-------------|--------------------------------------------|
 | Site         | character   | Short hand camera station name             |
@@ -380,7 +380,7 @@ There are 7 sub-folders:
 | day.TS       | numeric     | Trap success during day state              |
 | night.TS     | numeric     | Trap success during night state            |
 
-***Diel.Occ.AJB-FRK-LKT-MGB-SLJ-SOA-VIN*** - These are detection matrices for fosa. Columns indicate sampling occasion while rows indicate camera stations.
+#### ***Diel.Occ.AJB-FRK-LKT-MGB-SLJ-SOA-VIN** - These are detection matrices for fosa. Columns indicate sampling occasion while rows indicate camera stations.
 
 Following this sub-folder there are a number of R scripts and data files:
 
