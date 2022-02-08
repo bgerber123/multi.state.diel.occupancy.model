@@ -440,8 +440,7 @@ The `./RNP Fosa/` folder contains the data and scripts for the secondary fosa st
 | Distance to closest Town  | numeric     | Distance to closest Town in meters             |
 | Distance to closest Road  | numeric     | Distance to closest Road in meters             |
 | Distance Matrix           | numeric     | Distance to closest non-forest area in meters  |
-| Dog                       | numeric     |                                                |
-| Human                     | numeric     |                                                |
+| Dog                       | numeric     | Trap sucess of domestic dogs (events/effort)   |
 | Occ1...                   | numeric     | Detection occasions classified into 1-4 states |
 
 **multi.state.likelihood.r** - MSDOM likelihood function to be used for model comparison 
