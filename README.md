@@ -1,5 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5828410.svg)](https://doi.org/10.5281/zenodo.5828410)
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6011753.svg)](https://doi.org/10.5281/zenodo.6011753)
 
 # A repository for:
 
