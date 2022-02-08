@@ -439,7 +439,7 @@ The `./RNP Fosa/` folder contains the data and scripts for the secondary fosa st
 | Northing                  | coordinate  |                                                |
 | Distance to closest Town  | numeric     | Distance to closest Town in meters             |
 | Distance to closest Road  | numeric     | Distance to closest Road in meters             |
-| Distance Matrix           | numeric     |                                                |
+| Distance Matrix           | numeric     | Distance to closest non-forest area in meters  |
 | Dog                       | numeric     |                                                |
 | Human                     | numeric     |                                                |
 | Occ1...                   | numeric     | Detection occasions classified into 1-4 states |
