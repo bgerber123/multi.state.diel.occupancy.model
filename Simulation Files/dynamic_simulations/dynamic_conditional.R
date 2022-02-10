@@ -52,7 +52,7 @@ inits_inxs <- function(chain){
     list( 
       z = matrix(
         jags_list$max_state,
-        ncol = jags_list$nyear,
+        ncol = jags_list$nseason,
         nrow = jags_list$nsite
       ),
       a = matrix(rnorm(jags_list$ncat * jags_list$ncov_psi),
