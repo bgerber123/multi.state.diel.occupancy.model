@@ -1,6 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5828410.svg)](https://doi.org/10.5281/zenodo.5828410)
-
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6014030.svg)](https://doi.org/10.5281/zenodo.6014030)
 # A repository for:
 
 ### Rivera, K, Fidino, M, Farris, ZJ, Murphy, A, Magle, SB, and Gerber, BD. Rethinking habitat occupancy modeling and the role of diel activity in an anthropogenic world. 
@@ -280,7 +278,14 @@ This folder is for the static MSDOM case studies.
 
 **Example_Detection_Matrix.csv** - single state detection/non-detection matrix
 
+These data are an exmaple of a detection matrix. Columns indicate sampling occasion while rows indicate camera stations.
+
 **Example_Photo_Data.csv** - original photo data relevant to the example detection matrix
+| Column       | Type              | Explanation                          |
+|--------------|-------------------|--------------------------------------|
+| Date         | date (yyyy/mm/dd) | Date fosa was detected               |
+| Time         | time (hh:mm)      | Time fosa was deteced (GMT+3)        |
+| Station      | character         | Short hand camera station name       |
 
 **diel.occ.fun.R** - the function called by Diel.Occ.Script.R
 
@@ -361,7 +366,19 @@ The `./Makira Fosa2/` folder contains the scripts used for one of the two fosa s
 
 There are 7 sub-folders:
 
-**AJB-FRK-LKT-MGB-SLJ-SOA-VIN** - Each folder contains site-level diel detection/non-detection data (4 states) and covariate information for the fosa
+**AJB-FRK-LKT-MGB-SLJ-SOA-VIN** - Each folder contains site-level diel detection/non-detection data (4 states) and covariate information for the fosa. Csv's contain the following:
+
+***AJB-FRK-LKT-MGB-SLJ-SOA-VIN_Hum***
+| Column       | Type        | Explanation                                |
+|--------------|-------------|--------------------------------------------|
+| Site         | character   | Short hand camera station name             |
+| HE           | numeric     | Human Event; human detection within 30min  |
+| TN           | numeric     | Number of trap nights                      |
+| TS           | numeric     | Trap success; HE/TN                        |
+| day.TS       | numeric     | Trap success during day state              |
+| night.TS     | numeric     | Trap success during night state            |
+
+***Diel.Occ.AJB-FRK-LKT-MGB-SLJ-SOA-VIN*** - These are detection matrices for fosa. Columns indicate sampling occasion while rows indicate camera stations.
 
 Following this sub-folder there are a number of R scripts and data files:
 
@@ -414,6 +431,16 @@ The `./RNP Fosa/` folder contains the data and scripts for the secondary fosa st
 **RNP2.data** - R object of fosa RNP data
 
 **RNP2007.csv** - prepared 4-state detection/non-detection data of fosa from RNP
+| Column                    | Type        | Explanation                                    |
+|---------------------------|-------------|------------------------------------------------|
+| Site                      | character   | Short hand camera station name                 |
+| Easting                   | coordinate  |                                                |
+| Northing                  | coordinate  |                                                |
+| Distance to closest Town  | numeric     | Distance to closest Town in meters             |
+| Distance to closest Road  | numeric     | Distance to closest Road in meters             |
+| Distance Matrix           | numeric     | Distance to closest non-forest area in meters  |
+| Dog                       | numeric     | Trap sucess of domestic dogs (events/effort)   |
+| Occ1...                   | numeric     | Detection occasions classified into 1-4 states |
 
 **multi.state.likelihood.r** - MSDOM likelihood function to be used for model comparison 
 
